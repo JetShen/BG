@@ -1,0 +1,55 @@
+.PfContainer{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border: solid 1px black;
+    gap: 1%;
+}
+.infoContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 19%;
+    height: 100%;
+    border: solid 1px red;
+}
+.miniInfo{
+    display: flex;
+    flex-direction: column;
+    border: solid 1px pink;
+    margin: 1em 0 0 0.1em;
+}
+
+.profileImg{
+    background-color: black;
+    color: white;
+    width: 8em;
+    height: 8em;
+    border: solid 1px orange;
+}
+
+.postContainer{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    border: solid 1px blue;
+    gap: 1%;
+}
+.followContainer{
+    width: 19%;
+    border: solid 1px yellow;
+}
+
+.pfNav{
+    width: 100%;
+    height: 10%;
+    border: solid 1px green;
+}
+
+.pfPost{
+    width: 100%;
+    height: 89%;
+    border: solid 1px purple;
+}
+
+
