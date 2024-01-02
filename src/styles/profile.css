@@ -56,11 +56,25 @@
 }
 
 .pfNav{
+    display: flex;
+    flex-direction: row;
     width: 100%;
     height: 10%;
     border: solid 1px green;
+    gap: 1%;
+    margin: 0.1em;
+    justify-content: center;
+    align-items: center;
+}
+.pfNav button{
+    width: 24.1%;
+    height: 70%;
+    border: solid 1px black;
 }
 
+.pfNav button:hover{
+    cursor: pointer;
+}
 .pfPost{
     width: 100%;
     height: 89%;
