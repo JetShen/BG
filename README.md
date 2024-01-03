@@ -15,3 +15,11 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+# application sketch
+## Index/home
+![image](https://github.com/JetShen/BG/assets/62623196/129458d8-a085-428c-ba95-34aee652793f)
+
+## Profile Page
+![image](https://github.com/JetShen/BG/assets/62623196/a05dadba-ab25-44e5-b440-f155964d2fb5)
+
