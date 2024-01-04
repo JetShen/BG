@@ -1,5 +1,6 @@
 import '@/styles/profile.css'
 import Navbar from '@/component/Navbar'
+import Follow from '@/component/follow'
 
 
 export default function RootLayout({
@@ -24,7 +25,9 @@ export default function RootLayout({
            {children}
         </div>
       </div>
-      <div className="followContainer"></div>
+      <div className="followContainer">
+          <Follow />
+      </div>
     </div>
     </>
   )

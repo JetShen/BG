@@ -1,3 +1,7 @@
+'use client'
+import { useRouter } from "next/navigation"
+
 export default function profile(){
-    return <h1>Profile Page</h1>
+    const router = useRouter()
+    return (router.replace('/profile/posts'))
 }
