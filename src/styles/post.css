@@ -1,0 +1,46 @@
+
+.PostObject{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    min-width: 20%;
+    height: auto;
+    max-height: 60%;
+    border: solid 1px black;
+    border-radius: 0.5em;
+    margin: 0.5em 0 0 0.1em;
+}
+
+.miniSection{
+    display: flex;
+    flex-direction: row;
+    min-width:  10%;
+    min-height: 13%;
+}
+
+.miniSection .section{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.miniSection img{
+    width: 3em;
+    height: 3em;
+    border-radius: 0.2em;
+    margin: 0.5em 0 0 0.1em;
+}
+
+.miniSection p{
+    font-size: 0.2%;
+    margin: 0.5em 0 0 0.1em;
+
+}
+
+.innerContent {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    margin: -0.5em 0 0 3.5em;
+    overflow: hidden;
+}
