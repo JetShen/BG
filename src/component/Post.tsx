@@ -1,6 +1,6 @@
 import '@/styles/post.css';
 
-export default function Post() {
+export default function Post({i}:{i:number}) {
 
     return(
         <div className="PostObject">
@@ -12,9 +12,9 @@ export default function Post() {
             </div>
           </div>
           <div className="innerContent">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus voluptatem aut officia pariatur? Sint at iure, ex quisquam nam rem atque numquam in laudantium officia! Obcaecati similique exercitationem accusantium reiciendis.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus voluptatem aut officia pariatur? Sint at iure, ex quisquam nam rem atque numquam in laudantium officia! Obcaecati similique exercitationem accusantium reiciendis.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus voluptatem aut officia pariatur? Sint at iure, ex quisquam nam rem atque numquam in laudantium officia! Obcaecati similique exercitationem accusantium reiciendis.</p>
+            {Array.from({ length: i }).map((_, j) => (
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores nulla ipsum ipsam voluptatibus harum architecto voluptate nihil similique. Cumque fugit quos, autem ab sed atque. Laboriosam repudiandae nisi fugit qui?</p>
+            ))}
           </div>
         </div>
     );

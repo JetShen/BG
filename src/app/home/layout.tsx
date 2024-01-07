@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from "next/navigation"
 import '@/styles/main.css'
+import Follow from "@/component/follow"
 
 
 export default function RootLayout({
@@ -33,7 +34,9 @@ export default function RootLayout({
         <div className="main">
             {children}
         </div>
-        <div className="follow"></div>
+        <div className="follow">
+          <Follow />
+        </div>
         </div>
       </>
     )

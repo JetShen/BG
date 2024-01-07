@@ -1,0 +1,42 @@
+
+
+.logoSection{
+    display: flex;
+    width: 90%;
+    grid-area: 1 / 1 / 2 / 2; 
+    justify-content: center;
+}
+
+.people{
+    display: flex;
+    flex-direction: column;
+    grid-area: 2 / 1 / 6 / 2;  
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    border: solid 1px black;
+    gap: 0.5em;
+}
+
+.person{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    border: solid 1px black;
+    border-radius: 0.5em;
+    margin: 0.5em 0 0 0.1em;
+    font-size: 0.8em;
+    
+    width: 60%;
+    height: 20%;
+}
+
+
+.person img{
+    width: 50%;
+    height: 100%;
+    border-radius: 0.2em;
+}
