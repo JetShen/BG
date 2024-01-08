@@ -9,7 +9,7 @@ export default function Follow(){
     return (
         <>
         <div className="logoSection">
-          <button type="button" onClick={() => router.replace('/')}>
+          <button type="button" onClick={() => router.push('/')}>
             Home
           </button>
         </div>

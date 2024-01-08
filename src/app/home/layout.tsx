@@ -24,11 +24,11 @@ export default function RootLayout({
             </div>
             <ul className="options">
                 <li>Post</li>  {/* this should open a modal */} 
-                <li className="option" onClick={() => router.replace('/home')}>Home</li>
-                <li className="option" onClick={() => router.replace('/home/notifications')}>Notification</li>
-                <li className="option" onClick={() => router.replace('/home/search')}>Search</li>
-                <li className="option" onClick={() => router.replace('/profile')}>Profile</li>
-                <li className="option" onClick={() => router.replace('/settings')}>Settings</li>
+                <li className="option" onClick={() => router.push('/home')}>Home</li>
+                <li className="option" onClick={() => router.push('/home/notifications')}>Notification</li>
+                <li className="option" onClick={() => router.push('/home/search')}>Search</li>
+                <li className="option" onClick={() => router.push('/profile')}>Profile</li>
+                <li className="option" onClick={() => router.push('/settings')}>Settings</li>
             </ul>
         </div>
         <div className="main">
