@@ -23,3 +23,5 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Profile Page
 ![image](https://github.com/JetShen/BG/assets/62623196/a05dadba-ab25-44e5-b440-f155964d2fb5)
 
+## Relationship diagram
+![image](https://github.com/JetShen/BG/assets/62623196/0b4a74d0-451e-4d99-955e-5b6ea15fc0b5)
