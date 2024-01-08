@@ -1,0 +1,43 @@
+.headOptions{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+    padding: 0.5em;
+    height: 15%;
+    border: solid 1px red;
+}
+.headOptions button{
+    font-size: 0.7em;
+}
+
+.Notifications{
+    width: 100%;
+    height: 85%;
+}
+
+.event{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    border: solid 1px blue;
+}
+
+.eventIcon{
+    border: solid 1px green;
+    width: 8%;
+    height: 100%;
+}
+
+.eventText{
+    border: solid 1px yellow;
+    display: flex;
+    gap: 0.5em;
+    flex-direction: row;
+    margin: 0;
+    padding: 0;
+    margin-left: 0.5em;
+}

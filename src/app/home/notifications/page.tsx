@@ -1,3 +1,16 @@
+import '@/styles/notifications.css'
+import Alert from '@/component/alert'
+
 export default function Notifications(){
-    return <h1>Notifications Page</h1>
+    return (
+        <>
+        <div className="headOptions">
+            <h4>Notifications</h4>
+            <button>Settings</button>
+        </div>
+        <div className="Notifications">
+            <Alert />
+        </div>
+        </>
+    )
 }

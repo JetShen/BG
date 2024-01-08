@@ -81,7 +81,7 @@
 }
 
 .main::-webkit-scrollbar{
-    width: 0.5em;
+    display: none;
 }
 
 .makePost{
