@@ -1,11 +1,17 @@
 "use client"
-import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Profile = () => {
-    const router = useRouter();
-    router.push('/home');
+  const router = useRouter();
 
-    return null;
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      router.push('/home');
+    }
+  }, []);
+
+  return null;
 };
 
 export default Profile;
