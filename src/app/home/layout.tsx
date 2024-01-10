@@ -1,5 +1,6 @@
 'use client'
 import { useRouter } from "next/navigation"
+import Image from 'next/image'
 import '@/styles/main.css'
 import Follow from "@/component/follow"
 
@@ -16,7 +17,7 @@ export default function RootLayout({
         <div className="homeContainer">
         <div className="navegation">
             <div className="miniN">
-            <img src="" alt="cat.jpg" className="profileImg" />
+            <Image src="" alt="cat.jpg" className="profileImg" />
             <div className='section'>
                 <h4 className="name">Name</h4>
                 <p className="username">@username</p>

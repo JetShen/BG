@@ -21,10 +21,10 @@
 .miniSection .section{
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: flex-start;
 }
 
-.miniSection img{
+.miniSection Image{
     width: 3em;
     height: 3em;
     border-radius: 0.2em;

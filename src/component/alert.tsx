@@ -1,8 +1,10 @@
+import Image from 'next/image'
+
 export default function Alert(){
     return(
         <div className="event">
             <div className="eventIcon">
-                <img src="/assets/icons/notifications/like.svg" alt="like" />
+                <Image src="/assets/icons/notifications/like.svg" alt="like" />
             </div>
             <div className="eventText">
                 <h4>John Doe </h4>
