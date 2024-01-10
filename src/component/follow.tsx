@@ -5,13 +5,14 @@ import Person from './person'
 
 export default function Follow(){
     const router = useRouter()
-
+    
     return (
         <>
         <div className="logoSection">
           <button type="button" onClick={() => router.push('/')}>
             Home
           </button>
+
         </div>
         <ul className="people">
             <Person />
