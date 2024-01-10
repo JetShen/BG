@@ -1,7 +1,11 @@
-'use client'
-import { useRouter } from "next/navigation"
+"use client"
+import { useRouter } from "next/navigation";
 
-export default function profile(){
-    const router = useRouter()
-    return (router.replace('/home'))
-}
+const Profile = () => {
+    const router = useRouter();
+    router.push('/home');
+
+    return null;
+};
+
+export default Profile;
