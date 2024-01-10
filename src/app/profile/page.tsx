@@ -1,7 +1,11 @@
-'use client'
-import { useRouter } from "next/navigation"
+"use client"
+import { useRouter } from "next/navigation";
 
-export default function Profile(){
-    const router = useRouter()
-    return (router.replace('/profile/posts'))
-}
+const Profile = () => {
+    const router = useRouter();
+    router.push('/profile/posts');
+
+    return null;
+};
+
+export default Profile;
