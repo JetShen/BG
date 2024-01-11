@@ -1,16 +1,13 @@
-'use client'
-import { useRouter } from "next/navigation"
 import Image from 'next/image'
 import '@/styles/main.css'
 import Follow from "@/component/follow"
-
+import Option from '@/component/option'
 
 export default function RootLayout({
     children,
   }: {
     children: React.ReactNode
   }) {
-    const router = useRouter()
 
     return (
       <>
@@ -24,12 +21,7 @@ export default function RootLayout({
             </div>
             </div>
             <ul className="options">
-                <li>Post</li>  {/* this should open a modal */} 
-                <li className="option" onClick={() => router.push('/home')}>Home</li>
-                <li className="option" onClick={() => router.push('/home/notifications')}>Notification</li>
-                <li className="option" onClick={() => router.push('/home/search')}>Search</li>
-                <li className="option" onClick={() => router.push('/profile')}>Profile</li>
-                <li className="option" onClick={() => router.push('/settings')}>Settings</li>
+                <Option />
             </ul>
         </div>
         <div className="main">
