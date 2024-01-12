@@ -10,7 +10,7 @@ export default function Option() {
         <li className="option" onClick={() => router.push('/home')}>Home</li>
         <li className="option" onClick={() => router.push('/home/notifications')}>Notification</li>
         <li className="option" onClick={() => router.push('/home/search')}>Search</li>
-        <li className="option" onClick={() => router.push('/profile')}>Profile</li>
+        <li className="option" onClick={() => router.push('/profile/posts')}>Profile</li>
         <li className="option" onClick={() => router.push('/settings')}>Settings</li>
         </>
     )

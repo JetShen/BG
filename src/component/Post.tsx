@@ -6,7 +6,7 @@ export default function Post({i}:{i:number}) {
     return(
         <div className="PostObject">
           <div className="miniSection">
-            <Image src="" alt="cat.jpg" className="profileImg" />
+            <Image src="" alt="cat.jpg" className="profilePostImg" />
             <div className='section'>
               <h5 className="name">Name</h5>
               <p className="username">@username</p>

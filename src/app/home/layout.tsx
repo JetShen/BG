@@ -14,11 +14,11 @@ export default function RootLayout({
         <div className="homeContainer">
         <div className="navegation">
             <div className="miniN">
-            <Image src="" alt="cat.jpg" className="profileImg" />
-            <div className='section'>
-                <h4 className="name">Name</h4>
-                <p className="username">@username</p>
-            </div>
+              <Image src="" alt="cat.jpg" className="profileHomeImg" />
+              <div className='section'>
+                  <h1 className="name">Name</h1>
+                  <p className="username">@username</p>
+              </div>
             </div>
             <ul className="options">
                 <Option />
