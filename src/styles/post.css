@@ -1,9 +1,9 @@
 
 .PostObject{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 90%;
-    min-width: 20%;
+    min-height: 15%;
     height: auto;
     max-height: 60%;
     border: solid 1px black;
@@ -11,36 +11,34 @@
     margin: 0.5em 0 0 0.1em;
 }
 
-.miniSection{
+.PostImage{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 15%;
+    height: 100%;
+    border-radius: 0.5em 0 0 0.5em;
+    border: solid 1px red;
+}
+
+.profilePostImg{
+    padding: 1em;
+}
+
+.PostContent{
+    display: flex;
+    flex-direction: column;
+}
+
+.minisection{
     display: flex;
     flex-direction: row;
-    min-width:  10%;
-    min-height: 13%;
+    font-size: 1.2em;
+    gap: 1%;
 }
 
-.miniSection .section{
+.innerContent{
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-}
-
-.miniSection Image{
-    width: 3em;
-    height: 3em;
-    border-radius: 0.2em;
-    margin: 0.5em 0 0 0.1em;
-}
-
-.miniSection p{
-    font-size: 0.2%;
-    margin: 0.5em 0 0 0.1em;
-
-}
-
-.innerContent {
-    display: flex;
-    flex-direction: column;
-    width: 85%;
-    margin: -0.5em 0 0 3.5em;
-    overflow: hidden;
+    font-size: 0.8em;
 }
