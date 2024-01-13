@@ -32,5 +32,11 @@
     
     width: 75%;
     height: 20%;
+    overflow: hidden;
+}
+
+.person:hover{
+    cursor: pointer;
+    background-color: #e6e6e6;
 }
 

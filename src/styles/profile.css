@@ -18,6 +18,8 @@
     flex-direction: column;
     border: solid 1px pink;
     margin: 1em 0 0 0.1em;
+    justify-content: center;
+    align-items: center;
 }
 
 .profileImg{

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import '@/styles/main.css'
 import Follow from "@/component/follow"
 import Option from '@/component/option'
+const ulrTest = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Anime_Girl_with_cat.svg/1200px-Anime_Girl_with_cat.svg.png'
 
 export default function RootLayout({
     children,
@@ -14,11 +15,15 @@ export default function RootLayout({
         <div className="homeContainer">
         <div className="navegation">
             <div className="miniN">
-              <Image src="" alt="cat.jpg" className="profileHomeImg" />
-              <div className='section'>
-                  <h1 className="name">Name</h1>
-                  <p className="username">@username</p>
-              </div>
+            <Image src={ulrTest}
+              alt="Picture of the author"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '50%', height: 'auto' }}
+              className='profilePostImg' />
+            <strong>Username</strong>
+            <p>@username</p>
             </div>
             <ul className="options">
                 <Option />
