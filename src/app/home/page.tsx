@@ -26,11 +26,14 @@ export default function Home(){
   return (
       <>
       <div className="makePost">
-        <textarea name="" id="" cols={30} rows={10}></textarea>
+        <span contentEditable={true} className='PostArea'></span>
+        <div className="PostOptions">
+          <button>test</button>
+        </div>
       </div>
       <Post i={3} />
       <Post i={1} />
-      <Post i={2} />
+      <Post i={5} />
       </>
   )
 }
