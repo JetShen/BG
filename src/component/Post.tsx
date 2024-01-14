@@ -1,9 +1,10 @@
 import '@/styles/post.css';
 import Image from 'next/image'
+import { PostType } from '@/type/post';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
-export default function Post({i}:{i:number}) {
+export default function Post(props: PostType) {
 
     return(
         <div className="PostObject">
@@ -18,13 +19,11 @@ export default function Post({i}:{i:number}) {
             </div>
             <div className="PostContent">
                 <div className="minisection">
-                  <strong className="username">UserName</strong>
-                  <p className="userid">@username</p>
+                  <strong className="username">{props.name}</strong>
+                  <p className="userid">{props.username}</p>
                 </div>
                 <div className="innerContent">
-                {Array.from({ length: i }).map((_, j) => (              
-                  <p key={j} >Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores nulla ipsum ipsam voluptatibus harum architecto voluptate nihil similique. Cumque fugit quos, autem ab sed atque. Laboriosam repudiandae nisi fugit qui?</p>
-                ))}
+                  <p>{props.content}</p>
                 </div>
             </div>
         </div>
