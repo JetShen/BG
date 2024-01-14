@@ -1,39 +1,49 @@
 'use client'
 import Post from '@/component/Post'
+import { useState } from 'react';
+import { PostType } from '@/type/post';
 
-export default function Home(){
+export default function Home() {
+  const [ContentData, setContentData] = useState<string>('');
 
-  async function test(){
-    const res = await fetch('/api/pets',{
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
-    console.log(res);
-  }
+  async function MakePost(event: any) {
+    event.preventDefault();
+    const PostObject: PostType = {
+      content: ContentData,
+      userid: 1,
+    }
 
-  async function test2(){
-    const res = await fetch('/api/insert',{
+    const res = await fetch('/api/post', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
+      body: JSON.stringify(PostObject)
     });
-    console.log(res);
+
+    if (res.ok) {
+      setContentData('');
+    } else {
+      console.error('Error al realizar la solicitud:', res.statusText);
+    }
+
   }
-  
+
+  function update(event: any) {
+    setContentData(event.target.value);
+  }
+
   return (
-      <>
-      <div className="makePost">
-        <span contentEditable={true} className='PostArea'></span>
+    <>
+      <form onSubmit={MakePost} className="makePost">
+        <input contentEditable={true} className='PostArea' onChange={update}></input>
         <div className="PostOptions">
-          <button>test</button>
+          <button type='submit'>Post</button>
         </div>
-      </div>
+      </form>
       <Post i={3} />
       <Post i={1} />
       <Post i={5} />
-      </>
+    </>
   )
 }
