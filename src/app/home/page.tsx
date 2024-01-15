@@ -32,6 +32,7 @@ function Home() {
     });
     const data = await res.json();
     if (data && data.result) {
+      console.log(data.result.rows)
       return data.result.rows;
     } else {
       throw new Error("Unexpected response format");
@@ -55,14 +56,14 @@ function Home() {
       },
       body: JSON.stringify(PostObject)
     });
-    console.log('API Response:', res);
+    
   }
 
   const mutation = useMutation({
     mutationFn: MakePostMutated,
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['post'] })
+      queryClient.refetchQueries({ queryKey: ['posts'], type: 'active' })
     },
   })
 
@@ -73,6 +74,7 @@ function Home() {
 
   function update(event: any) {
     setContentData(event.target.value);
+    console.log(query)
   }
 
   return (
