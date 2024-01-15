@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.17.10",
     "@vercel/postgres": "^0.5.1",
     "next": "14.0.4",
     "react": "^18",
