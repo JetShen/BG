@@ -67,6 +67,7 @@ function Home() {
   })
 
   function makePost(event: any) {
+    event.preventDefault();
     mutation.mutate({ content: ContentData, userid: 1 });
   }
 
