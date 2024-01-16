@@ -21,7 +21,6 @@ function Home() {
   const queryClient = useQueryClient()
 
   
-// Define una función para obtener los posts desde la API
   async function fetchPosts() {
     console.log("fetching posts")
     const res = await fetch('/api/searchP',{
@@ -39,7 +38,6 @@ function Home() {
     }
   }
 
-  // Utiliza useQuery para obtener los 
   const query = useQuery({ queryKey: ['post'], queryFn: fetchPosts })
 
   async function MakePostMutated(event: any) {
@@ -62,8 +60,8 @@ function Home() {
   const mutation = useMutation({
     mutationFn: MakePostMutated,
     onSuccess: () => {
-      // Invalidate and refetch
       queryClient.refetchQueries({ queryKey: ['posts'], type: 'active' })
+      setContentData('')
     },
   })
 
@@ -74,7 +72,6 @@ function Home() {
 
   function update(event: any) {
     setContentData(event.target.value);
-    console.log(query)
   }
 
   return (
