@@ -9,7 +9,6 @@ export async function POST(request: Request): Promise<NextResponse> {
         }
 
         const requestBody = await request.json();
-        console.log(requestBody);
         const content = requestBody.content;
         const userid = requestBody.userid;
 

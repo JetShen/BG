@@ -10,7 +10,8 @@ export async function GET() {
 
         const result = await client.query(`SELECT post.postId, post.Content, user.UserId, user.Name, user.Username
         FROM post
-        JOIN user ON post.UserId = user.UserId`);
+        JOIN user ON post.UserId = user.UserId
+        ORDER BY postId DESC`);
         const posts = result[0];
         return NextResponse.json({ posts }, { status: 200 });
     } catch (error: any ) {

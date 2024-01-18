@@ -45,30 +45,31 @@ function Home() {
       content: ContentData,
       userid: 1,
     }
-    console.log(PostObject);
-
-    const res = await fetch('/api/post', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(PostObject)
-    });
-    
+  
+    try {
+      const res = await fetch('/api/post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(PostObject)
+      });
+  
+      if (res.ok) {
+        queryClient.invalidateQueries({ queryKey: ['post']});
+      } else {
+        throw new Error("Error in post request");
+      }
+    } catch (error) {
+      console.error('Error in MakePostMutated:', error);
+    }
   }
 
   const mutation = useMutation({
     mutationFn: MakePostMutated,
     onSuccess: () => {
-      queryClient.invalidateQueries(
-        {
-          queryKey: ['posts'],
-          exact: true,
-          refetchType: 'active',
-        }
-      )
-      setContentData('')
-    },
+      setContentData('');
+    }
   })
 
   function makePost(event: any) {
