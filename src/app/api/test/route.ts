@@ -8,9 +8,7 @@ export async function GET() {
             return NextResponse.json({ error: 'Database Connection Failed!' }, { status: 500 });
         }
 
-        const result = await client.query(`SELECT post.postId, post.Content, user.UserId, user.Name, user.Username
-        FROM post
-        JOIN user ON post.UserId = user.UserId`);
+        const result = await client.query(`SELECT * from post`);
         const posts = result[0];
         return NextResponse.json({ posts }, { status: 200 });
     } catch (error: any ) {

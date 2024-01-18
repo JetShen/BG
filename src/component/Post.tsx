@@ -19,11 +19,11 @@ export default function Post(props: PostType) {
             </div>
             <div className="PostContent">
                 <div className="minisection">
-                  <strong className="username">{props.name}</strong>
-                  <p className="userid">{props.username}</p>
+                  <strong className="username">{props.Name}</strong>
+                  <p className="userid">{props.Username}</p>
                 </div>
                 <div className="innerContent">
-                  <p>{props.content}</p>
+                  <p>{props.Content}</p>
                 </div>
             </div>
         </div>

@@ -30,9 +30,9 @@ function Home() {
       },
     });
     const data = await res.json();
-    if (data && data.result) {
-      console.log(data.result.rows)
-      return data.result.rows;
+    if (data && data.posts) {
+      console.log(data.posts)
+      return data.posts;
     } else {
       throw new Error("Unexpected response format");
     }
@@ -60,7 +60,13 @@ function Home() {
   const mutation = useMutation({
     mutationFn: MakePostMutated,
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['posts'], type: 'active' })
+      queryClient.invalidateQueries(
+        {
+          queryKey: ['posts'],
+          exact: true,
+          refetchType: 'active',
+        }
+      )
       setContentData('')
     },
   })
@@ -79,7 +85,6 @@ function Home() {
       <form onSubmit={makePost} className="makePost">
         <input
           contentEditable={true}
-          className="PostArea"
           placeholder="Make a Post"
           onChange={update}
           value={ContentData}
@@ -88,16 +93,18 @@ function Home() {
           <button type="submit">Post</button>
         </div>
       </form>
+      <div className="testbox">
       {query.data?.map((post: PostType) => (
         <Post
-          key={post.postid}
-          name={post.name}
-          username={post.username}
-          content={post.content}
-          postid={post.postid}
-          userid={post.userid}
+          key={post.postId}
+          Name={post.Name}
+          Username={post.Username}
+          Content={post.Content}
+          postId={post.postId}
+          UserId={post.UserId}
         />
       ))}
+      </div>
     </>
   );
 }
