@@ -1,9 +1,11 @@
 'use client';
-import { useQuery, useMutation, QueryClientProvider, QueryClient, useQueryClient} from '@tanstack/react-query';
+import React, { useEffect } from 'react';
+import { useMutation, useQueryClient, useInfiniteQuery, QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import { useState } from 'react';
 import Post from '@/component/Post';
 import { PostType } from '@/type/post';
-
+import axios from 'axios'
+import { useInView } from 'react-intersection-observer'
 
 const queryClient = new QueryClient()
 
@@ -17,28 +19,65 @@ export default function App(){
 
 
 function Home() {
+  const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
   const queryClient = useQueryClient()
 
   
-  async function fetchPosts() {
-    console.log("fetching posts")
-    const res = await fetch('/api/searchP',{
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
-    const data = await res.json();
-    if (data && data.posts) {
-      console.log(data.posts)
-      return data.posts;
-    } else {
-      throw new Error("Unexpected response format");
+
+  const trackScrolling = () => {
+    const wrappedElement = document.getElementById('scrollMain');
+    if (wrappedElement === null) {
+      return;
     }
+
+    if (wrappedElement.scrollTop === 0) {
+      fetchPreviousPage();
   }
 
-  const query = useQuery({ queryKey: ['post'], queryFn: fetchPosts })
+    if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
+      fetchNextPage();
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = document.getElementById('scrollMain');
+    scrollElement?.addEventListener('scroll', trackScrolling);
+
+    return () => {
+      scrollElement?.removeEventListener('scroll', trackScrolling);
+    };
+  }, []);
+
+
+  const {
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+  } = useInfiniteQuery({
+    queryKey: ['post'],
+    queryFn: async ({ pageParam }) => {
+      const res = await axios.get('/api/searchP?cursor=' + pageParam)
+      return res.data
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => lastPage.nextId,
+    getPreviousPageParam: (firstPage, pages) => firstPage.previousId,
+  })
+
+  React.useEffect(() => {
+    if (inView) {
+      fetchNextPage()
+    }
+  }, [fetchNextPage, inView])
+
 
   async function MakePostMutated(event: any) {
     const PostObject = {
@@ -54,12 +93,7 @@ function Home() {
         },
         body: JSON.stringify(PostObject)
       });
-  
-      if (res.ok) {
-        queryClient.invalidateQueries({ queryKey: ['post']});
-      } else {
-        throw new Error("Error in post request");
-      }
+
     } catch (error) {
       console.error('Error in MakePostMutated:', error);
     }
@@ -68,9 +102,10 @@ function Home() {
   const mutation = useMutation({
     mutationFn: MakePostMutated,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['post'], refetchType: 'active', });
       setContentData('');
     }
-  })
+  });
 
   function makePost(event: any) {
     event.preventDefault();
@@ -95,16 +130,23 @@ function Home() {
         </div>
       </form>
       <div className="testbox">
-      {query.data?.map((post: PostType) => (
-        <Post
-          key={post.postId}
-          Name={post.Name}
-          Username={post.Username}
-          Content={post.Content}
-          postId={post.postId}
-          UserId={post.UserId}
-        />
+      {data?.pages.map((page, index) => (
+        <React.Fragment key={index}>
+          {page.posts.map((post: PostType) => (
+            <Post
+            key={post.postId}
+            Name={post.Name}
+            Username={post.Username}
+            Content={post.Content}
+            postId={post.postId}
+            UserId={post.UserId}
+          />
+          ))}
+        </React.Fragment>
       ))}
+      </div>
+      <div>
+        {isFetching && !isFetchingNextPage ? 'Background Updating...' : null}
       </div>
     </>
   );

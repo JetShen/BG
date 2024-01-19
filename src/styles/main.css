@@ -83,7 +83,7 @@
     width: 60%;
     height: 100%;
     border: solid 1px green;
-    overflow-y: scroll;
+    overflow-y: auto;
     scrollbar-width: none; /* 'firefox' solution  */
 }
 
