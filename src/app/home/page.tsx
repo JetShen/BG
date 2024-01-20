@@ -26,22 +26,24 @@ function Home() {
   
 
   const trackScrolling = () => {
-    const wrappedElement = document.getElementById('scrollMain');
+    const wrappedElement = document.getElementsByClassName('main')[0]
     if (wrappedElement === null) {
       return;
     }
 
     if (wrappedElement.scrollTop === 0) {
+      console.log('top');
       fetchPreviousPage();
   }
 
     if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
+      console.log('bottom');
       fetchNextPage();
     }
   };
 
   useEffect(() => {
-    const scrollElement = document.getElementById('scrollMain');
+    const scrollElement = document.getElementsByClassName('main')[0]
     scrollElement?.addEventListener('scroll', trackScrolling);
 
     return () => {
