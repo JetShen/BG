@@ -25,6 +25,19 @@ export default function Post(props: PostType) {
                 <div className="innerContent">
                   <p>{props.Content}</p>
                 </div>
+                <div className="interactions">
+                <button className="button comment">
+                    <p>Comment</p>
+                </button>
+
+                <button className="button share">
+                    <p>Share</p>
+                </button>
+
+                <button className="button like">
+                    <p>Like</p>
+                </button>
+                </div>
             </div>
         </div>
     );
