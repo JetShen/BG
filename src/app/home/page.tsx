@@ -135,9 +135,9 @@ function Home() {
       <div className="testbox">
       {data?.pages.map((page, index) => (
         <React.Fragment key={index}>
-          {page.posts.map((post: PostType, indexj:number) => (
+          {page.posts.map((post: PostType) => (
             <Post
-            key={indexj}
+            key={post.PostID}
             Name={post.Name}
             Username={post.Username}
             Content={post.Content}
