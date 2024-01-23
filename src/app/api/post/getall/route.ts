@@ -21,13 +21,26 @@ export async function GET(request: NextRequest){
             return NextResponse.json({ error: 'Database Connection Failed!' }, { status: 500 });
         }
 
-        const result = await client.query(`
-            SELECT post.postId, post.Content, user.UserId, user.Name, user.Username
-            FROM post
-            JOIN user ON post.UserId = user.UserId
-            order by post.postId desc
+        const result = await client.query(
+            `SELECT 
+                post.PostID,
+                post.Content,
+                user.UserID,
+                user.Name,
+                user.Username,
+                COUNT(likes.LikeID) AS cantidad_likes
+            FROM 
+                post
+            JOIN 
+                user ON post.UserID = user.UserID
+            LEFT JOIN 
+                likes ON post.PostID = likes.PostID
+            GROUP BY 
+                post.PostID, post.Content, user.UserID, user.Name, user.Username
+            ORDER BY 
+                post.PostID DESC
             LIMIT ? OFFSET ?
-        `, [pageSize, pageParam]);
+            `, [pageSize, pageParam]);
         const posts: Array<PostType> = result[0] as Array<PostType>;
         const len = Object.keys(posts);
         const ln: number = len.length;

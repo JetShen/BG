@@ -1,8 +1,9 @@
 
 export type PostType = {
-    postId: number,
+    PostID: number,
     Content: string,
-    UserId: number,
+    UserID: number,
     Name: string,
     Username: string
+    cantidad_likes: number
 };

@@ -1,17 +1,17 @@
 import '@/styles/post.css';
 import Image from 'next/image'
 import { PostType } from '@/type/post';
-import { useMutation, useMutationState, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
 export default function Post(props: PostType) {
     const queryClient = useQueryClient()
-
+    const { UserID, PostID } = props;
     const mutation = useMutation({
         mutationKey: ['likePost'],
-        mutationFn: async () =>  await axios.post('/api/post/like', { UserID: props.UserId, PostID: props.postId}),
+        mutationFn: async () =>  await axios.post('/api/post/like', { UserID: UserID, PostID: PostID}),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['post'], refetchType: 'active', });
         },
@@ -56,8 +56,8 @@ export default function Post(props: PostType) {
                     <button className="button share">
                         Share
                     </button>
-                    <button className="button like" onClick={sendlike}>
-                        Like
+                    <button className="button like" onClick={sendlike} >
+                        {props.cantidad_likes} - Like
                     </button>
                 </div>
             </div>
