@@ -126,6 +126,7 @@ function Home() {
           placeholder="Make a Post"
           onChange={update}
           value={ContentData}
+          maxLength={255}
         />
         <div className="PostOptions">
           <button type="submit">Post</button>

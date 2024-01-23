@@ -16,7 +16,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         if (!content || !userid) {
             return NextResponse.json({ error: 'Invalid Request!' }, { status: 400 });
         }
-        const result = await client.query(`INSERT INTO post (Content, Userid) VALUES ('${content}', ${userid})`);
+        const result = await client.query('INSERT INTO post (Content, Userid) VALUES (?, ?)', [content, userid]);
         return NextResponse.json({ result }, { status: 200 });
     } catch (error: any ) {
         console.error('Error:', error);
