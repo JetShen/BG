@@ -9,6 +9,10 @@
     margin: 0.5em 0 0 0.1em;
 }
 
+.PostObject:hover {
+    cursor: pointer;
+}
+
 .PostImage {
     display: flex;
     justify-content: center;

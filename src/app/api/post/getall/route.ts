@@ -5,11 +5,9 @@ import { PostType } from '@/type/post';
 
 
 export async function GET(request: NextRequest){
-    console.log('GET /api/searchP');
     try {
         const client = await GetClient();
         const cursor = request.nextUrl.searchParams.get("cursor")
-        console.log('cursor: ', cursor);
 
         if (cursor === undefined || cursor === null) {
             return NextResponse.json({ error: 'Missing "cursor" parameter' }, { status: 500 });

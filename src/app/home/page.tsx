@@ -66,7 +66,7 @@ function Home() {
   } = useInfiniteQuery({
     queryKey: ['post'],
     queryFn: async ({ pageParam }) => {
-      const res = await axios.get('/api/searchP?cursor=' + pageParam)
+      const res = await axios.get('/api/post/getall?cursor=' + pageParam)
       return res.data
     },
     initialPageParam: 0,
@@ -88,7 +88,7 @@ function Home() {
     }
   
     try {
-      const res = await fetch('/api/post', {
+      const res = await fetch('/api/post/make', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -111,7 +111,7 @@ function Home() {
 
   function makePost(event: any) {
     event.preventDefault();
-    mutation.mutate({ content: ContentData, userid: 1 });
+    mutation.mutate({ content: ContentData, userid: 1 }); // TODO: userid should be dynamic
   }
 
   function update(event: any) {
