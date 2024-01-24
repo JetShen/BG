@@ -1,0 +1,57 @@
+.BoxPost{
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0.5em;
+    flex-direction: row;
+    background-color: black;
+    color: white;
+    width: 100%;
+    height: auto;
+}
+
+.BoxIMG{
+    grid-area: 1 / 1 / 2 / 2; 
+    background-color: red;
+    width: 100%;
+    height: 100%;
+}
+
+.BoxContent{
+    grid-area: 1 / 2 / 2 / 3;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.25fr repeat(2, auto) 0.25fr;
+    grid-row-gap: 0.5em;  
+    background-color: red;
+    width: 100%;
+    height: 100%;
+}
+
+.BoxHeader{
+    grid-area: 1 / 1 / 2 / 2; 
+    background-color: green;
+    width: 100%;
+    height: 100%;
+}
+
+.BoxText{
+    grid-area: 2 / 1 / 3 / 2; 
+    background-color: green;
+    width: 100%;
+    height: 100%;
+}
+
+.BoxGalery{
+    grid-area: 3 / 1 / 4 / 2; 
+    background-color: green;
+    width: 100%;
+    height: 100%;
+}
+
+.BoxOptions{
+    grid-area: 4 / 1 / 5 / 2; 
+    background-color: green;
+    width: 100%;
+    height: 100%;
+}
