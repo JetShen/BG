@@ -1,31 +1,17 @@
 import '@/styles/post.css';
 import Image from 'next/image'
 import { PostType } from '@/type/post';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import LikeFn from '@/client/likefn';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
 export default function Post(props: PostType) {
-    const queryClient = useQueryClient()
     const { UserID, PostID } = props;
-    const mutation = useMutation({
-        mutationKey: ['likePost'],
-        mutationFn: async () =>  await axios.post('/api/post/like', { UserID: UserID, PostID: PostID}),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['post'], refetchType: 'active', });
-        },
-        onError: (error) => {
-            console.log(error)
-        },
-    });
+    const mutationFN = LikeFn({UserID, PostID, Key: 'post'})
 
-    // const like = useMutationState({
-    //     filters: { mutationKey: ['likePost']},
-    //     select: (mutation) => mutation.state.data,
-    //   })
+
     const sendlike = async () => {
-        await mutation.mutateAsync()
+        await mutationFN.mutateAsync()
     }
 
     return (
