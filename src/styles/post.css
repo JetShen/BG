@@ -43,6 +43,10 @@
     gap: 1%;
 }
 
+.username:hover {
+    text-decoration-line: underline;
+}
+
 .innerContent {
     display: flex;
     position: relative;

@@ -14,8 +14,6 @@ export async function GET(request: NextRequest){
             return NextResponse.json({ error: 'Missing "userid" parameter' }, { status: 500 });
         }
         const useridValue = parseInt(userid, 10);
-        console.log('cursor: ', cursor);
-        console.log('userid: ', useridValue);
 
         if (cursor === undefined || cursor === null) {
             return NextResponse.json({ error: 'Missing "cursor" parameter' }, { status: 500 });

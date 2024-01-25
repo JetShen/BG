@@ -24,7 +24,6 @@ function PostPage({params}:any){
 
     async function fetchOnePost(){
         const result = await axios.get(`/api/post/getOne?postId=${postid}`)
-        console.log(result.data.post[0])
         return result.data.post[0]
     }
     
