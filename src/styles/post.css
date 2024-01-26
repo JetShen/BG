@@ -69,3 +69,7 @@
     padding: 0.5em;
     align-self: flex-end;
 }
+
+.interactions button {
+    width: 5em;
+}

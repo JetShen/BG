@@ -14,7 +14,7 @@ export async function GET(request: NextRequest){
         }
 
         const cursorValue = parseInt(cursor as string) || 0;
-        const pageSize = 5;
+        const pageSize = 7;
         const pageParam = cursorValue * pageSize;
 
         if (!client) {
