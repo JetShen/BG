@@ -11,16 +11,17 @@ import '@/styles/postpage.css'
 
 const queryClient = new QueryClient()
 
-export default function App(){
+export default function App({params}:any){
+  const { username } = params;
   return (
     <QueryClientProvider client={queryClient}>
-      <Home />
+      <Home username={username}/>
     </QueryClientProvider>
   )
 }
 
 
-function Home() {
+function Home({username}: {username: string} ) {
   const { ref, inView } = useInView()
   const userId = 1; // test user id
 
@@ -85,7 +86,7 @@ function Home() {
   return (
     <>
       <div className="pfNav">
-        <Navbar />
+        <Navbar username={username} />
       </div>
       <div className='testbox'>
       {data?.pages.map((page, index) => (

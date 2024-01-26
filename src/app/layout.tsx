@@ -36,7 +36,7 @@ export default function RootLayout({
               <p>@username</p>
             </div>
             <ul className="options">
-              <Option />
+              <Option username='Username' />
             </ul>
           </div>
           <div className="main">
