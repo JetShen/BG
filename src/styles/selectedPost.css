@@ -6,6 +6,7 @@
     flex-direction: row;
     width: 100%;
     height: auto;
+    border: solid 1px black;
 }
 
 .BoxIMG{
@@ -28,6 +29,14 @@
     grid-area: 1 / 1 / 2 / 2; 
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+}
+
+.BoxHeader strong:hover{
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .BoxText{
@@ -46,4 +55,7 @@
     grid-area: 4 / 1 / 5 / 2; 
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
 }

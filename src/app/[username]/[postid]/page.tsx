@@ -4,6 +4,7 @@ import axios from "axios"
 import '@/styles/selectedPost.css'
 import LikeFn from "@/client/likefn"
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from "@tanstack/react-query"
+import { useRouter } from 'next/navigation';
 
 const ulrTest = 'https://img.freepik.com/premium-vector/anime-cat-motorcycle-helmet-futuristic-cat-print-your-design-vector-illustration-eps_380711-475.jpg'
 const queryClient = new QueryClient()
@@ -21,6 +22,7 @@ export default function Page({params}:any){
 
 function PostPage({params}:any){
     const { username, postid } = params;
+    const router = useRouter()
 
     async function fetchOnePost(){
         const result = await axios.get(`/api/post/getOne?postId=${postid}`)
@@ -53,6 +55,10 @@ function PostPage({params}:any){
         }
     }
 
+    function redirecToUser(){
+        router.replace(`/${data?.Username}`)
+    }
+
 
     return(
     <>
@@ -70,7 +76,7 @@ function PostPage({params}:any){
             </div>
             <div className="BoxContent">
                 <div className="BoxHeader">
-                    <strong>{data?.Name}</strong>
+                    <strong onClick={redirecToUser}>{data?.Name}</strong>
                     <p>{data?.Username}</p>
                 </div>
                 <div className="BoxText">
@@ -84,7 +90,7 @@ function PostPage({params}:any){
                 </div>
             </div>
         </div>
-        <div className="BoxReply"></div>
+        <div className="BoxReply"></div> {/* TODO update db add reply section  */}
     </>
     )
 }

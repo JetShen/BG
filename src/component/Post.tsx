@@ -12,16 +12,23 @@ export default function Post(props: PostType) {
     const mutationFN = LikeFn({UserID, PostID, Key: 'post'})
     const router = useRouter()
 
-    const sendlike = async () => {
+    async function sendlike(event:any) {
+        event?.stopPropagation()
         await mutationFN.mutateAsync()
     }
 
-    function redirectToPost(){
+    function redirectToPost(event:any){
+        event?.stopPropagation()
         router.replace(`/${props.Username}/${props.PostID}`)
     }
 
+    function redirecToUser(event:any){
+        event?.stopPropagation()
+        router.replace(`/${props.Username}/posts`)
+    }
+
     return (
-        <div className="PostObject" >
+        <div className="PostObject" onClick={redirectToPost}>
             <div className="PostImage">
                 <Image
                     src={ulrTest}
@@ -35,10 +42,10 @@ export default function Post(props: PostType) {
             </div>
             <div className="PostContent">
                 <div className="minisection">
-                    <strong className="username">{props.Name}</strong>
+                    <strong className="username" onClick={redirecToUser}>{props.Name}</strong>
                     <p className="userid">{props.Username}</p>
                 </div>
-                <div className="innerContent" onClick={redirectToPost}>
+                <div className="innerContent" >
                     <p>{props.Content}</p>
                 </div>
                 <div className="interactions">
