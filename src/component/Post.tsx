@@ -19,12 +19,12 @@ export default function Post(props: PostType) {
 
     function redirectToPost(event:any){
         event?.stopPropagation()
-        router.replace(`/${props.Username}/${props.PostID}`)
+        router.push(`/${props.Username}/${props.PostID}`)
     }
 
     function redirecToUser(event:any){
         event?.stopPropagation()
-        router.replace(`/${props.Username}/posts`)
+        router.push(`/${props.Username}/posts`)
     }
 
     return (
