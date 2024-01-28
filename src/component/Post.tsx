@@ -4,12 +4,15 @@ import Image from 'next/image'
 import { PostType } from '@/type/post';
 import LikeFn from '@/client/likefn';
 import { useRouter } from 'next/navigation';
+import ModalReply from './ModalReply';
+import { useState } from 'react';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
 export default function Post(props: PostType) {
     const { UserID, PostID } = props;
     const mutationFN = LikeFn({UserID, PostID, Key: 'post'})
+    const [showModal, setShowModal] = useState(false);
     const router = useRouter()
 
     async function sendlike(event:any) {
@@ -26,6 +29,16 @@ export default function Post(props: PostType) {
         event?.stopPropagation()
         router.push(`/${props.Username}/posts`)
     }
+
+    const openModal = (event:any) => {
+        event.stopPropagation()
+        setShowModal(true);
+    };
+    
+    const closeModal = (event:any) => {
+        event.stopPropagation()
+        setShowModal(false);
+    };
 
     return (
         <div className="PostObject" onClick={redirectToPost}>
@@ -49,7 +62,7 @@ export default function Post(props: PostType) {
                     <p>{props.Content}</p>
                 </div>
                 <div className="interactions">
-                    <button className="button comment">
+                    <button className="button comment" onClick={openModal}>
                         Reply
                     </button>
                     <button className="button share">
@@ -60,6 +73,7 @@ export default function Post(props: PostType) {
                     </button>
                 </div>
             </div>
+            {showModal && <ModalReply closeModal={closeModal} />} 
         </div>
     );
 }

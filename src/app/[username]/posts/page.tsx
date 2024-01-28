@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
 import { useInfiniteQuery, QueryClient, QueryClientProvider,} from '@tanstack/react-query';
-import { useState } from 'react';
 import Post from '@/component/Post';
 import { PostType } from '@/type/post';
 import axios from 'axios'
