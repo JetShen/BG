@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
-import '@/styles/Modalreply.css'
+import '@/styles/modalreply.css'
 
 
 
