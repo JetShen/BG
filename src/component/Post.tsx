@@ -73,7 +73,7 @@ export default function Post(props: PostType) {
                     </button>
                 </div>
             </div>
-            {showModal && <ModalReply closeModal={closeModal} />} 
+            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} />} 
         </div>
     );
 }

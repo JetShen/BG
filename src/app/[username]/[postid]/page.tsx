@@ -5,6 +5,7 @@ import '@/styles/selectedPost.css'
 import LikeFn from "@/client/likefn"
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from "@tanstack/react-query"
 import { useRouter } from 'next/navigation';
+import Post from "@/component/Post"
 
 const ulrTest = 'https://img.freepik.com/premium-vector/anime-cat-motorcycle-helmet-futuristic-cat-print-your-design-vector-illustration-eps_380711-475.jpg'
 const queryClient = new QueryClient()
@@ -32,7 +33,6 @@ function PostPage({params}:any){
     const { isPending, isError, data, error, isSuccess } = useQuery({ 
         queryKey: ['getone'], 
         queryFn: fetchOnePost,
-        
     })
     
     
@@ -59,9 +59,22 @@ function PostPage({params}:any){
         router.replace(`/${data?.Username}`)
     }
 
+    async function fetchAllReplys(){
+        const result = await axios.get(`/api/post/getreplys?postid=${postid}&cursor=${0}`)
+        console.log(result.data?.posts)
+        return result.data?.posts
+    }
+
+    const reply = useQuery({ 
+        queryKey: ['getreplys'], 
+        queryFn: fetchAllReplys,
+    })
+
+
+
 
     return(
-    <>
+    <div className="mainTest">
         <div className="BoxPost">
             <div className="BoxIMG">
                 <Image
@@ -90,7 +103,24 @@ function PostPage({params}:any){
                 </div>
             </div>
         </div>
-        <div className="BoxReply"></div> {/* TODO update db add reply section  */}
-    </>
+        <div className="BoxReply">
+            <div className="BoxReplyHeader">
+                <strong>Replys</strong>
+            </div>
+            <div className="BoxReplyContent">
+                {reply.data?.map((post: any, index: number) => (
+                    <Post
+                        key={index}
+                        Name={post.Name}
+                        Username={post.Username}
+                        Content={post.Content}
+                        PostID={post.PostID}
+                        UserID={post.UserID}
+                        cantidad_likes={post.cantidad_likes}
+                    />
+                ))}
+            </div>
+        </div>
+    </div>
     )
 }

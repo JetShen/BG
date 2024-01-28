@@ -5,7 +5,7 @@ import '@/styles/modalreply.css'
 
 
 
-export default function ModalReply({ closeModal }: { closeModal: any }){
+export default function ModalReply({ closeModal, PostId }: { closeModal: any, PostId: number}){
     const [ContentData, setContentData] = useState<string>('');
     const queryClient = useQueryClient()
 
@@ -23,17 +23,20 @@ export default function ModalReply({ closeModal }: { closeModal: any }){
     
     function makePost(event: any) {
         event.preventDefault();
-        mutation.mutate({ content: ContentData, userid: 1 }); // TODO: userid should be dynamic
+        event.stopPropagation()
+        console.log('makePost')
+        mutation.mutate({ content: ContentData, postid: PostId, userid: 1 }); // TODO: userid should be dynamic
     }
 
     async function MakePostMutated(event: any) {
         const PostObject = {
           content: ContentData,
+          postid: PostId,
           userid: 1,
         }
       
         try {
-            await axios.post('/api/post/make', PostObject)
+            await axios.post('/api/post/reply', PostObject)
     
         } catch (error) {
           console.error('Error in MakePostMutated:', error);
@@ -47,9 +50,10 @@ export default function ModalReply({ closeModal }: { closeModal: any }){
 
     return (
         <div className="modal-overlay" onClick={closeM}>
-            <form onSubmit={makePost}>
+            <form  className="replyBox">
                 <span className="close" onClick={closeM}>&times;</span>
                 <input
+                    onClick={(event) => event.stopPropagation()}
                     contentEditable={true}
                     placeholder="Make a Reply"
                     onChange={update}
@@ -57,7 +61,7 @@ export default function ModalReply({ closeModal }: { closeModal: any }){
                     maxLength={255}
                 />
                 <div className="">
-                    <button type="submit">Reply</button>
+                    <button onClick={makePost}>Reply</button>
                 </div>
             </form>
         </div>

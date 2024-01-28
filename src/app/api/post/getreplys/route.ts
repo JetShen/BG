@@ -8,7 +8,7 @@ export async function GET(request: NextRequest){
     try {
         const client = await GetClient();
         const cursor = request.nextUrl.searchParams.get("cursor")
-
+        const postId = request.nextUrl.searchParams.get("postid")
         if (cursor === undefined || cursor === null) {
             return NextResponse.json({ error: 'Missing "cursor" parameter' }, { status: 500 });
         }
@@ -36,13 +36,13 @@ export async function GET(request: NextRequest){
             LEFT JOIN 
                 likes ON post.PostID = likes.PostID
             WHERE
-                post.ParentPostID IS NULL
+                post.ParentPostID = ?
             GROUP BY 
                 post.PostID, post.Content, user.UserID, user.Name, user.Username
             ORDER BY 
                 post.PostID DESC
             LIMIT ? OFFSET ?
-            `, [pageSize, pageParam]);
+            `, [postId, pageSize, pageParam]);
         const posts: Array<PostType> = result[0] as Array<PostType>;
         const len = Object.keys(posts);
         const ln: number = len.length;
