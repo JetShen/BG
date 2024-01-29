@@ -138,12 +138,8 @@ function Home() {
           {page.posts.map((post: PostType) => (
             <Post
             key={post.PostID}
-            Name={post.Name}
-            Username={post.Username}
-            Content={post.Content}
-            PostID={post.PostID}
-            UserID={post.UserID}
-            cantidad_likes={post.cantidad_likes}
+            props={post}
+            KeyMutation="post"
           />
           ))}
         </React.Fragment>

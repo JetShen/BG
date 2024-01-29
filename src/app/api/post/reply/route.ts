@@ -10,8 +10,8 @@ export async function POST(request: Request): Promise<NextResponse> {
 
         const requestBody = await request.json();
         const content = requestBody.content;
-        const postid = requestBody.postid;
-        const userid = requestBody.userid;
+        const postid = requestBody.PostID;
+        const userid = requestBody.UserID;
 
 
         if (!content || !userid || !postid) {

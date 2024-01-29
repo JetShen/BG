@@ -1,47 +1,31 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useState } from "react";
 import '@/styles/modalreply.css'
+import ReplyFn from "@/client/replyfn";
 
 
 
-export default function ModalReply({ closeModal, PostId }: { closeModal: any, PostId: number}){
+export default function ModalReply({ closeModal, PostId, KeyMutation }: { closeModal: any, PostId: number, KeyMutation: string}){
     const [ContentData, setContentData] = useState<string>('');
-    const queryClient = useQueryClient()
+    const MakePostMutated = ReplyFn({content: ContentData, PostID: PostId, UserID: 1, Key: KeyMutation})
 
     const update = (event: any) => {
         setContentData(event.target.value);
     };
 
-    const mutation = useMutation({
-        mutationFn: MakePostMutated,
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['post'], refetchType: 'active', });
-          setContentData('');
-        }
-    });
     
-    function makePost(event: any) {
+    async function makePost(event: any) {
         event.preventDefault();
         event.stopPropagation()
         console.log('makePost')
-        mutation.mutate({ content: ContentData, postid: PostId, userid: 1 }); // TODO: userid should be dynamic
+        await MakePostMutated.mutateAsync()
+        if(MakePostMutated.isSuccess){
+            console.log('success')
+            setContentData('');
+            closeModal(event)
+        }
     }
 
-    async function MakePostMutated(event: any) {
-        const PostObject = {
-          content: ContentData,
-          postid: PostId,
-          userid: 1,
-        }
-      
-        try {
-            await axios.post('/api/post/reply', PostObject)
     
-        } catch (error) {
-          console.error('Error in MakePostMutated:', error);
-        }
-    }
 
     function closeM(event: any) {
         event?.stopPropagation()

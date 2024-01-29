@@ -28,6 +28,7 @@ export async function GET(request: NextRequest){
                 user.UserID,
                 user.Name,
                 user.Username,
+                COUNT(respuestas.PostID) AS cantidad_respuestas,
                 COUNT(likes.LikeID) AS cantidad_likes
             FROM 
                 post
@@ -35,6 +36,8 @@ export async function GET(request: NextRequest){
                 user ON post.UserID = user.UserID
             LEFT JOIN 
                 likes ON post.PostID = likes.PostID
+            LEFT JOIN 
+                Post respuestas ON post.PostID = respuestas.ParentPostID
             WHERE
                 post.ParentPostID = ?
             GROUP BY 

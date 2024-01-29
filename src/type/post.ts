@@ -5,5 +5,6 @@ export type PostType = {
     UserID: number,
     Name: string,
     Username: string
-    cantidad_likes: number
+    cantidad_likes: number,
+    cantidad_respuestas: number,
 };

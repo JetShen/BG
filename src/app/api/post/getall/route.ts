@@ -28,19 +28,22 @@ export async function GET(request: NextRequest){
                 user.UserID,
                 user.Name,
                 user.Username,
+                COUNT(respuestas.PostID) AS cantidad_respuestas,
                 COUNT(likes.LikeID) AS cantidad_likes
             FROM 
-                post
+                Post post
             JOIN 
-                user ON post.UserID = user.UserID
+                User user ON post.UserID = user.UserID
             LEFT JOIN 
-                likes ON post.PostID = likes.PostID
+                Likes likes ON post.PostID = likes.PostID
+            LEFT JOIN 
+                Post respuestas ON post.PostID = respuestas.ParentPostID
             WHERE
                 post.ParentPostID IS NULL
             GROUP BY 
                 post.PostID, post.Content, user.UserID, user.Name, user.Username
             ORDER BY 
-                post.PostID DESC
+                post.PostID DESC        
             LIMIT ? OFFSET ?
             `, [pageSize, pageParam]);
         const posts: Array<PostType> = result[0] as Array<PostType>;

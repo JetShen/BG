@@ -111,12 +111,8 @@ function PostPage({params}:any){
                 {reply.data?.map((post: any, index: number) => (
                     <Post
                         key={index}
-                        Name={post.Name}
-                        Username={post.Username}
-                        Content={post.Content}
-                        PostID={post.PostID}
-                        UserID={post.UserID}
-                        cantidad_likes={post.cantidad_likes}
+                        props={post}
+                        KeyMutation="getreplys"
                     />
                 ))}
             </div>

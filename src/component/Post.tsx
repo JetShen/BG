@@ -9,9 +9,9 @@ import { useState } from 'react';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
-export default function Post(props: PostType) {
+export default function Post({props, KeyMutation}: {props: PostType, KeyMutation: string}) {
     const { UserID, PostID } = props;
-    const mutationFN = LikeFn({UserID, PostID, Key: 'post'})
+    const mutationFN = LikeFn({UserID, PostID, Key: KeyMutation})
     const [showModal, setShowModal] = useState(false);
     const router = useRouter()
 
@@ -63,7 +63,7 @@ export default function Post(props: PostType) {
                 </div>
                 <div className="interactions">
                     <button className="button comment" onClick={openModal}>
-                        Reply
+                        {props.cantidad_respuestas} - Reply
                     </button>
                     <button className="button share">
                         Share
@@ -73,7 +73,7 @@ export default function Post(props: PostType) {
                     </button>
                 </div>
             </div>
-            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} />} 
+            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} KeyMutation={KeyMutation} />} 
         </div>
     );
 }
