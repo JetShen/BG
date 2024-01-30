@@ -27,7 +27,8 @@ function PostPage({params}:any){
 
     async function fetchOnePost(){
         const result = await axios.get(`/api/post/getOne?postId=${postid}`)
-        return result.data.post[0]
+        console.log(result.data.post)
+        return result.data.post
     }
     
     const { isPending, isError, data, error, isSuccess } = useQuery({ 
@@ -61,7 +62,6 @@ function PostPage({params}:any){
 
     async function fetchAllReplys(){
         const result = await axios.get(`/api/post/getreplys?postid=${postid}&cursor=${0}`)
-        console.log(result.data?.posts)
         return result.data?.posts
     }
 
@@ -76,32 +76,13 @@ function PostPage({params}:any){
     return(
     <div className="mainTest">
         <div className="BoxPost">
-            <div className="BoxIMG">
-                <Image
-                    src={ulrTest}
-                    alt="Picture of the author"
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    style={{ width: '100%', height: 'auto' }}
-                    className='profilePostImg'
+            {data?.map((post: any, index: number) => (
+                <Post
+                    key={index}
+                    props={post}
+                    KeyMutation="getone"
                 />
-            </div>
-            <div className="BoxContent">
-                <div className="BoxHeader">
-                    <strong onClick={redirecToUser}>{data?.Name}</strong>
-                    <p>{data?.Username}</p>
-                </div>
-                <div className="BoxText">
-                    <p>{data?.Content}</p>
-                </div>
-                <div className="BoxGalery"></div>
-                <div className="BoxOptions">
-                    <button>Coment</button>
-                    <button>Share</button>
-                    <button onClick={sendlike}>{data?.cantidad_likes} - Like</button>
-                </div>
-            </div>
+            ))}
         </div>
         <div className="BoxReply">
             <div className="BoxReplyHeader">

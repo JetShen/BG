@@ -12,17 +12,20 @@ async function getPostById(postId: number, client: any, posts: any[] = []) {
             user.UserID,
             user.Name,
             user.Username,
+            COUNT(respuestas.PostID) AS cantidad_respuestas,
             COUNT(likes.LikeID) AS cantidad_likes
         FROM 
-            post
+            Post post
         JOIN 
-            user ON post.UserID = user.UserID
+            User user ON post.UserID = user.UserID
         LEFT JOIN 
-            likes ON post.PostID = likes.PostID
-        WHERE 
+            Likes likes ON post.PostID = likes.PostID
+        LEFT JOIN 
+            Post respuestas ON post.PostID = respuestas.ParentPostID
+        WHERE
             post.PostID = ?
         GROUP BY 
-            post.PostID, post.Content, post.ParentPostId, user.UserID, user.Name, user.Username
+            post.PostID, post.Content, user.UserID, user.Name, user.Username
         `, [postId]);
 
     const post = result[0];

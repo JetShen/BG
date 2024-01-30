@@ -7,11 +7,8 @@
 }
 
 .BoxPost{
-    display: grid;
-    grid-template-columns: 0.25fr 1fr;
-    grid-template-rows: 1fr;
-    grid-column-gap: 0.5em;
-    flex-direction: row;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: auto;
     border: solid 1px black;
