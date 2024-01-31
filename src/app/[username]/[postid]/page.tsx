@@ -49,17 +49,6 @@ function PostPage({params}:any){
     //     mutationFN = LikeFn({UserID: data.UserID, PostID: data.PostID})
     // }
     
-    const sendlike = async () => {
-        await mutationFN.mutateAsync()
-        if(mutationFN.isSuccess){
-            console.log('like')
-        }
-    }
-
-    function redirecToUser(){
-        router.replace(`/${data?.Username}`)
-    }
-
     async function fetchAllReplys(){
         const result = await axios.get(`/api/post/getreplys?postid=${postid}&cursor=${0}`)
         return result.data?.posts
