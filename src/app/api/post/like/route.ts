@@ -17,16 +17,13 @@ export async function POST(request: Request): Promise<NextResponse> {
             return NextResponse.json({ error: 'Invalid Request!' }, { status: 400 });
         }
 
-        await client.beginTransaction();
 
         try {
             await client.query('INSERT INTO likes (PostId, UserId) VALUES (?, ?)', [postId, userId]);
-            await client.commit();
             return NextResponse.json({ message: 'Like inserted successfully' }, { status: 200 });
         } catch (error: any) {
             if (error.code === 'ER_DUP_ENTRY') {
                 await client.query('DELETE FROM likes WHERE PostId = ? AND UserId = ?', [postId, userId]);
-                await client.commit();
                 return NextResponse.json({ message: 'Like removed successfully (unlike)' }, { status: 200 });
             } else {
                 await client.rollback();
@@ -36,7 +33,6 @@ export async function POST(request: Request): Promise<NextResponse> {
     } catch (error: any) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
-    } finally {
-        await client.end();
     }
+
 }
