@@ -135,6 +135,7 @@ input::placeholder {
 
 .PostOptions{
     display: flex;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-end;
     border-top: solid 2px gray;

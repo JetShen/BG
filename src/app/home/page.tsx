@@ -6,6 +6,7 @@ import Post from '@/component/Post';
 import { PostType } from '@/type/post';
 import axios from 'axios'
 import { useInView } from 'react-intersection-observer'
+import ModalTopic from '@/component/ModalTopic';
 
 const queryClient = new QueryClient()
 
@@ -22,6 +23,7 @@ function Home() {
   const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
   const queryClient = useQueryClient()
+  const [topicModal, setTopicModal] = useState<boolean>(false);
 
   
 
@@ -110,6 +112,7 @@ function Home() {
   });
 
   function makePost(event: any) {
+    console.log('makePost');
     event.preventDefault();
     mutation.mutate({ content: ContentData, userid: 1 }); // TODO: userid should be dynamic
   }
@@ -118,9 +121,21 @@ function Home() {
     setContentData(event.target.value);
   }
 
+  // Modal topic section
+  const openTopicModal = (event: any ) => {
+    event.stopPropagation();
+    setTopicModal(true);
+  };
+  
+
+  const closeTopicModal = (event:any) => {
+    event.stopPropagation()
+    setTopicModal(false);
+  };
+
   return (
     <>
-      <form onSubmit={makePost} className="makePost">
+      <div className="makePost">
         <input
           contentEditable={true}
           placeholder="Make a Post"
@@ -129,9 +144,10 @@ function Home() {
           maxLength={255}
         />
         <div className="PostOptions">
-          <button type="submit">Post</button>
+          <button onClick={openTopicModal}>Add Topic</button>
+          <button onClick={makePost}>Post</button>
         </div>
-      </form>
+      </div>
       <div className="testbox">
       {data?.pages.map((page, index) => (
         <React.Fragment key={index}>
@@ -148,6 +164,7 @@ function Home() {
       <div>
         {isFetching && !isFetchingNextPage ? 'Background Updating...' : null}
       </div>
+      {topicModal && <ModalTopic close={closeTopicModal} />}
     </>
   );
 }
