@@ -24,6 +24,7 @@ function Home() {
   const [ContentData, setContentData] = useState<string>('');
   const queryClient = useQueryClient()
   const [topicModal, setTopicModal] = useState<boolean>(false);
+  const [topic, setTopic] = useState<string>('');
 
   
 
@@ -136,6 +137,7 @@ function Home() {
   return (
     <>
       <div className="makePost">
+        <span>Topic:{topic}</span>
         <input
           contentEditable={true}
           placeholder="Make a Post"
@@ -164,7 +166,7 @@ function Home() {
       <div>
         {isFetching && !isFetchingNextPage ? 'Background Updating...' : null}
       </div>
-      {topicModal && <ModalTopic close={closeTopicModal} />}
+      {topicModal && <ModalTopic close={closeTopicModal} topic={setTopic} />}
     </>
   );
 }
