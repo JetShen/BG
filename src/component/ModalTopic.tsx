@@ -1,14 +1,16 @@
-import '@/styles/modaltopic.css'
+import '@/styles/modaltopic.css';
+import TopicFn from '@/client/topicfn';
+import { useState } from 'react';
 
 export default function ModalTopic({close}: { close: Function}){
-    const AddTopic = (event: any) => {
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const mutationTopic = TopicFn({name: name, description: description, Key: 'post'});
+
+    async function AddTopic(event: any){
         event.preventDefault();
-        const Toppic = {
-            name: event.target[0].value,
-            description: event.target[1].value
-        }
-        console.log('Add Topic');
-        console.log(Toppic);
+        await mutationTopic.mutateAsync();
+        close(event);
     }
 
 
@@ -18,9 +20,9 @@ export default function ModalTopic({close}: { close: Function}){
                 <button onClick={()=>close(event)}>Close</button>
             </div>
             <form onSubmit={AddTopic}>
-                <input type="text" placeholder="Name of Topic"/>
+                <input type="text" onChange={(event) => setName(event.target.value) } placeholder="Name of Topic"/>
                 <label htmlFor="Description">
-                    <textarea name="Description" cols={30} rows={10}></textarea>
+                    <textarea name="Description" onChange={(event) => setDescription(event.target.value) } cols={30} rows={10}></textarea>
                 </label>
                 <button type="submit">Add</button>
             </form>
