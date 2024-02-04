@@ -18,7 +18,7 @@ export default function App(){
   )
 }
 
-
+// TODO make this page more readable and clean
 function Home() {
   const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
