@@ -1,12 +1,13 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useMutation, useQueryClient, useInfiniteQuery, QueryClient, QueryClientProvider,} from '@tanstack/react-query';
+import { useEffect, Fragment } from 'react';
+import { QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import { useState } from 'react';
 import Post from '@/component/Post';
 import { PostType } from '@/type/post';
-import axios from 'axios'
 import { useInView } from 'react-intersection-observer'
 import ModalTopic from '@/component/ModalTopic';
+import FetchPostFn from '@/client/fetchpostfn';
+import MakePostFn from '@/client/makepostfn';
 
 const queryClient = new QueryClient()
 
@@ -17,112 +18,68 @@ export default function App(){
     </QueryClientProvider>
   )
 }
-
-// TODO make this page more readable and clean
+// Todo: Add postState to the Home component this will be used to store the post data and make the code more readable
 function Home() {
   const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
-  const queryClient = useQueryClient()
   const [topicModal, setTopicModal] = useState<boolean>(false);
   const [topic, setTopic] = useState<string>('');
 
   
 
-  const trackScrolling = () => {
-    const wrappedElement = document.getElementsByClassName('main')[0]
-    if (wrappedElement === null) {
-      return;
-    }
-
-    if (wrappedElement.scrollTop === 0) {
-      console.log('top');
+  const handleScroll = () => {
+    const mainElement = document.querySelector('.main');
+    if (!mainElement) return;
+  
+    const { scrollTop, scrollHeight, clientHeight } = mainElement;
+    if (scrollTop === 0) { // top of the page 
       fetchPreviousPage();
-  }
-
-    if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
-      console.log('bottom');
+    }
+  
+    if (scrollHeight - scrollTop === clientHeight) { // bottom of the page
       fetchNextPage();
     }
   };
 
   useEffect(() => {
-    const scrollElement = document.getElementsByClassName('main')[0]
-    scrollElement?.addEventListener('scroll', trackScrolling);
+    const mainElement = document.querySelector('.main') as HTMLElement;
+    if (!mainElement) return;
+
+    mainElement.addEventListener('scroll', handleScroll);
 
     return () => {
-      scrollElement?.removeEventListener('scroll', trackScrolling);
+      mainElement.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
 
   const {
-    status,
     data,
-    error,
     isFetching,
     isFetchingNextPage,
-    isFetchingPreviousPage,
     fetchNextPage,
     fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery({
-    queryKey: ['post'],
-    queryFn: async ({ pageParam }) => {
-      const res = await axios.get('/api/post/getall?cursor=' + pageParam)
-      return res.data
-    },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => lastPage.nextId,
-    getPreviousPageParam: (firstPage, pages) => firstPage.previousId,
-  })
+  } = FetchPostFn();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (inView) {
       fetchNextPage()
     }
   }, [fetchNextPage, inView])
 
+  const mutationPost = MakePostFn({key: 'post', Post: {content: ContentData, userid: 1}});
 
-  async function MakePostMutated(event: any) {
-    const PostObject = {
-      content: ContentData,
-      userid: 1,
-    }
-  
-    try {
-      const res = await fetch('/api/post/make', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(PostObject)
-      });
-
-    } catch (error) {
-      console.error('Error in MakePostMutated:', error);
-    }
-  }
-
-  const mutation = useMutation({
-    mutationFn: MakePostMutated,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['post'], refetchType: 'active', });
-      setContentData('');
-    }
-  });
-
-  function makePost(event: any) {
+  async function makePost(event: any) {
     console.log('makePost');
     event.preventDefault();
-    mutation.mutate({ content: ContentData, userid: 1 }); // TODO: userid should be dynamic
+    const inpuutElement = document.querySelector('.makePost input') as HTMLInputElement;
+    const status = await mutationPost.mutateAsync();
+    if (status.status === 200) {
+      setContentData('');
+      inpuutElement.value = '';
+    }
   }
 
-  function update(event: any) {
-    setContentData(event.target.value);
-  }
-
-  // Modal topic section
   const openTopicModal = (event: any ) => {
     event.stopPropagation();
     setTopicModal(true);
@@ -141,8 +98,7 @@ function Home() {
         <input
           contentEditable={true}
           placeholder="Make a Post"
-          onChange={update}
-          value={ContentData}
+          onChange={(event) => { setContentData(event.target.value) }}
           maxLength={255}
         />
         <div className="PostOptions">
@@ -152,7 +108,7 @@ function Home() {
       </div>
       <div className="testbox">
       {data?.pages.map((page, index) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           {page.posts.map((post: PostType) => (
             <Post
             key={post.PostID}
@@ -160,7 +116,7 @@ function Home() {
             KeyMutation="post"
           />
           ))}
-        </React.Fragment>
+        </Fragment>
       ))}
       </div>
       <div>
