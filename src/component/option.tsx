@@ -11,7 +11,7 @@ export default function Option({username}: {username: string}) {
         <li className="option" onClick={() => router.push('/home/notifications')}>Notification</li>
         <li className="option" onClick={() => router.push('/home/search')}>Search</li>
         <li className="option" onClick={() => router.push(`/${username}/posts`)}>Profile</li>
-        <li className="option" onClick={() => router.push('/settings')}>Settings</li>
+        <li className="option" onClick={() => router.push('/home/settings')}>Settings</li>
         </>
     )
 }
