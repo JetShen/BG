@@ -5,6 +5,12 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.searchDiv::-webkit-scrollbar{  /* temporary 'google' solution  */
+    display: none;
 }
 
 .SearchInput{
@@ -34,8 +40,6 @@
     gap: 1em;
     align-items: center;
     margin-top: 1em;
-    border: solid 1px green;
     width: 98%;
     height: 75%;
-    overflow-x: auto;
 }
