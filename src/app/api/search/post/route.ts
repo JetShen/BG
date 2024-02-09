@@ -10,7 +10,7 @@ export async function GET(request: NextRequest){
         const client = await GetClient();
         const cursor = request.nextUrl.searchParams.get("cursor")
         const query = request.nextUrl.searchParams.get("query")
-        if (query === undefined || query === null) {
+        if (query === undefined || query === null || query === '') {
             return NextResponse.json({ error: 'Missing "query" parameter' }, { status: 500 });
         }
 
@@ -54,8 +54,6 @@ export async function GET(request: NextRequest){
         
         const nextId = ln < pageSize ? null : cursorValue + 1;
         const previousId = cursorValue > 0 ? cursorValue -1 : null;
-
-        
 
         return NextResponse.json({ posts, nextId, previousId }, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error: any) {
