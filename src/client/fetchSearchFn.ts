@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 
-export default function fetchSearchFn(query: string){
+export default function FetchSearchFn(query: string){
 
     const {
         data,
