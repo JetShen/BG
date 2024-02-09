@@ -1,6 +1,6 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import fetchSearchFn from "@/client/fetchSearchFn";
+import FetchSearchFn from "@/client/fetchSearchFn";
 import { Fragment, useEffect } from "react";
 import { PostType } from "@/type/post";
 import Post from "./Post";
@@ -18,7 +18,7 @@ export default function App({query}:{query:string}){
 
 
 function SearchPage({query }:{query:string}){
-    const {data, isFetching, isFetchingNextPage, fetchNextPage, fetchPreviousPage, refetch, isLoading, isFetched, isError} = fetchSearchFn(query);
+    const {data, isFetching, isFetchingNextPage, fetchNextPage, fetchPreviousPage, refetch, isLoading, isFetched, isError} = FetchSearchFn(query);
     const [ref, isView] = useInView();
 
 
