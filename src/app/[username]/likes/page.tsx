@@ -1,12 +1,12 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useInfiniteQuery, QueryClient, QueryClientProvider,} from '@tanstack/react-query';
+import { Fragment, useEffect } from 'react';
+import { QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import Post from '@/component/Post';
 import { PostType } from '@/type/post';
-import axios from 'axios'
 import { useInView } from 'react-intersection-observer'
 import Navbar from '@/component/Navbar';
 import '@/styles/postpage.css'
+import FetchLikeFn from '@/client/fetchLikeFn';
 
 const queryClient = new QueryClient()
 
@@ -23,6 +23,7 @@ export default function App({params}:any){
 function Home({username}: {username: string} ) {
   const { ref, inView } = useInView()
   const userId = 1; // test user id
+  const { data, fetchNextPage, fetchPreviousPage } = FetchLikeFn(userId);
 
   
 
@@ -53,29 +54,9 @@ function Home({username}: {username: string} ) {
   }, []);
 
 
-  const {
-    status,
-    data,
-    error,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery({
-    queryKey: ['post'],
-    queryFn: async ({ pageParam }) => {
-      const res = await axios.get('/api/profile/likes?cursor='+pageParam+'&userid='+ userId)
-      return res.data
-    },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => lastPage.nextId,
-    getPreviousPageParam: (firstPage, pages) => firstPage.previousId,
-  })
+  
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (inView) {
       fetchNextPage()
     }
@@ -89,15 +70,15 @@ function Home({username}: {username: string} ) {
       </div>
       <div className='testbox'>
       {data?.pages.map((page, index) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           {page.posts.map((post: PostType, indexj:number) => (
             <Post
             key={indexj}
             props={post}
-            KeyMutation='post'
+            KeyMutation='postLikes'
           />
           ))}
-        </React.Fragment>
+        </Fragment>
       ))}
       </div>
     </>
