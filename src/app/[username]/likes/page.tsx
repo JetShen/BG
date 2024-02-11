@@ -22,7 +22,7 @@ export default function App({params}:any){
 
 function Home({username}: {username: string} ) {
   const { ref, inView } = useInView()
-  const userId = 1; // test user id
+  const userId:number = 1; // test user id
   const { data, fetchNextPage, fetchPreviousPage } = FetchLikeFn(userId);
 
   
