@@ -23,7 +23,7 @@ function Home() {
   const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
   const [topicModal, setTopicModal] = useState<boolean>(false);
-  const [topic, setTopic] = useState<string>('');
+  const [topic, setTopic] = useState({name: '', id: 0});
   
 
   
@@ -68,7 +68,7 @@ function Home() {
     }
   }, [fetchNextPage, inView])
 
-  const mutationPost = MakePostFn({key: 'post', Post: {content: ContentData, userid: 1}});
+  const mutationPost = MakePostFn({key: 'post', Post: {content: ContentData, userid: 1, topicId: topic.id}});
 
   async function makePost(event: any) {
     console.log('makePost');
@@ -95,7 +95,7 @@ function Home() {
   return (
     <>
       <div className="makePost">
-        <span>Topic:{topic}</span>
+        <span>Topic:{topic.name}</span>
         <input
           contentEditable={true}
           placeholder="Make a Post"

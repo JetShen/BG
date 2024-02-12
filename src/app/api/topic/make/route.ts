@@ -17,11 +17,14 @@ export async function POST(request: Request): Promise<NextResponse> {
         }
         
         try {
-            await client.query(
-                `insert into topic(Name, Description) values (?, ?)`, 
+            await client.query('START TRANSACTION');
+            const result = await client.query(
+                'INSERT INTO topic(Name, Description) VALUES (?, ?)',
                 [Name, Description]
             );
-            return NextResponse.json({ message: 'Status: 200' }, { status: 200 });
+            const topicId = result[0]?.insertId;
+            await client.query('COMMIT');
+            return NextResponse.json({ topicId: topicId }, { status: 200 });
         } catch (error:any) {
             if (error.code === 'ER_DUP_ENTRY') {
                 return NextResponse.json({ error: 'Duplicate entry for Name field' }, { status: 400 });

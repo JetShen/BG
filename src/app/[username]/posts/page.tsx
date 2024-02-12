@@ -1,12 +1,12 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useInfiniteQuery, QueryClient, QueryClientProvider,} from '@tanstack/react-query';
+import  { Fragment, useEffect } from 'react';
+import { QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import Post from '@/component/Post';
 import { PostType } from '@/type/post';
-import axios from 'axios'
 import { useInView } from 'react-intersection-observer'
 import Navbar from '@/component/Navbar';
 import '@/styles/postpage.css'
+import FetchPostByFn from '@/client/fetchPostByfn'
 
 const queryClient = new QueryClient()
 
@@ -23,6 +23,7 @@ export default function App({params}:any){
 function Home({username}: {username: string} ) {
   const { ref, inView } = useInView()
   const userId = 1; // test user id
+  const { data, fetchNextPage, fetchPreviousPage } = FetchPostByFn(userId);
 
   
 
@@ -33,12 +34,10 @@ function Home({username}: {username: string} ) {
     }
 
     if (wrappedElement.scrollTop === 0) {
-      console.log('top');
       fetchPreviousPage();
   }
 
     if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
-      console.log('bottom');
       fetchNextPage();
     }
   };
@@ -53,29 +52,7 @@ function Home({username}: {username: string} ) {
   }, []);
 
 
-  const {
-    status,
-    data,
-    error,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery({
-    queryKey: ['post'],
-    queryFn: async ({ pageParam }) => {
-      const res = await axios.get('/api/profile/posts?cursor='+pageParam+'&userid='+ userId)
-      return res.data
-    },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => lastPage.nextId,
-    getPreviousPageParam: (firstPage, pages) => firstPage.previousId,
-  })
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (inView) {
       fetchNextPage()
     }
@@ -89,7 +66,7 @@ function Home({username}: {username: string} ) {
       </div>
       <div className='testbox'>
       {data?.pages.map((page, index) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           {page.posts.map((post: PostType, indexj:number) => (
             <Post
             key={indexj}
@@ -97,7 +74,7 @@ function Home({username}: {username: string} ) {
             KeyMutation='post'
           />
           ))}
-        </React.Fragment>
+        </Fragment>
       ))}
       </div>
     </>

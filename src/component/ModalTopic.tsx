@@ -11,8 +11,9 @@ export default function ModalTopic({close, topic}: { close: Function, topic: Fun
         event.preventDefault();
         const success = await mutationTopic.mutateAsync();
         if(success.status === 200){
+            console.log('Topic added successfully');
             close(event)
-            topic(name)
+            topic({name: name, id: success.data.topicId});
         }
     }
 
