@@ -19,18 +19,42 @@ export default function App(){
     </QueryClientProvider>
   )
 }
-// Todo: Add postState to the Home component this will be used to store the post data and make the code more readable
+
+
+//idk if this is the best way to do this but it works
+function useMakeTopic(topic: {name: string, description: string}) {
+  const mutationTopic = TopicFn({name: topic.name, description: topic.description, Key: 'post'});
+  const makeTopic = async () => {
+    const status = await mutationTopic.mutateAsync();
+    if (status.status === 200) {
+      return status.data.topicId;
+    }
+    return 0;
+  };
+  
+  return makeTopic;
+}
+
+function useMakePost() {
+  const mutationPost = MakePostFn({ key: 'post'});
+  const makePost = async (postData: { userid: number, content: string, topicId?: number }) => {
+    const status = await mutationPost.mutateAsync(postData);
+    return status;
+  };
+  return makePost;
+}
+
+
+// Todo: Add postState to the Home component this will be used to store the post data and make the code more readable. 
+// idk what i want to say with the above comment
 function Home() {
   const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
   const [topicModal, setTopicModal] = useState<boolean>(false);
   const [topic, setTopic] = useState({name: '', description: '', id: 0});
+  const makeTopic = useMakeTopic(topic); // this hook is used to make a topic and return the topicId
+  const makePost = useMakePost(); // this hook is used to make a post
   
-  const mutationTopic = TopicFn({name: topic.name, description: topic.description, Key: 'post'});
-  
-
-  
-
   const handleScroll = () => {
     const mainElement = document.querySelector('.main');
     if (!mainElement) return;
@@ -71,25 +95,18 @@ function Home() {
     }
   }, [fetchNextPage, inView])
 
-  const mutationPost = MakePostFn({key: 'post', Post: {content: ContentData, userid: 1, topicId: topic.id}});
-
-  async function makePost(event: any) {
-    console.log('makePost');
-    event.preventDefault();
+  async function ResolveMake(event: any) {
+    event.stopPropagation();
     const inpuutElement = document.querySelector('.makePost input') as HTMLInputElement;
-    const topicStatus = await mutationTopic.mutateAsync();
-    if(topicStatus.status === 200){
-      console.log('Topic added successfully');
-      setTopic({name: topic.name, description: topic.description, id: topicStatus.data.topicId});
-      const status = await mutationPost.mutateAsync();
-      if(status.status === 200){
-        console.log('Post added successfully');
-        inpuutElement.value = '';
+    makeTopic().then(async (topicId) => {
+      const postData = { userid: 1, content: ContentData, topicId: topicId };
+      const status = await makePost(postData);
+      if (status.status === 200) {
         setContentData('');
+        inpuutElement.value = '';
         setTopic({name: '', description: '', id: 0});
       }
-    }
-
+    });
   }
 
   const openTopicModal = (event: any ) => {
@@ -115,7 +132,7 @@ function Home() {
         />
         <div className="PostOptions">
           <button onClick={openTopicModal}>Add Topic</button>
-          <button onClick={makePost}>Post</button>
+          <button onClick={ResolveMake}>Post</button>
         </div>
       </div>
       <div className="testbox">
