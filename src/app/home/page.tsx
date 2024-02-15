@@ -8,6 +8,7 @@ import { useInView } from 'react-intersection-observer'
 import ModalTopic from '@/component/ModalTopic';
 import FetchPostFn from '@/client/fetchpostfn';
 import MakePostFn from '@/client/makepostfn';
+import TopicFn from '@/client/topicfn';
 
 const queryClient = new QueryClient()
 
@@ -23,7 +24,9 @@ function Home() {
   const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
   const [topicModal, setTopicModal] = useState<boolean>(false);
-  const [topic, setTopic] = useState({name: '', id: 0});
+  const [topic, setTopic] = useState({name: '', description: '', id: 0});
+  
+  const mutationTopic = TopicFn({name: topic.name, description: topic.description, Key: 'post'});
   
 
   
@@ -74,11 +77,19 @@ function Home() {
     console.log('makePost');
     event.preventDefault();
     const inpuutElement = document.querySelector('.makePost input') as HTMLInputElement;
-    const status = await mutationPost.mutateAsync();
-    if (status.status === 200) {
-      setContentData('');
-      inpuutElement.value = '';
+    const topicStatus = await mutationTopic.mutateAsync();
+    if(topicStatus.status === 200){
+      console.log('Topic added successfully');
+      setTopic({name: topic.name, description: topic.description, id: topicStatus.data.topicId});
+      const status = await mutationPost.mutateAsync();
+      if(status.status === 200){
+        console.log('Post added successfully');
+        inpuutElement.value = '';
+        setContentData('');
+        setTopic({name: '', description: '', id: 0});
+      }
     }
+
   }
 
   const openTopicModal = (event: any ) => {

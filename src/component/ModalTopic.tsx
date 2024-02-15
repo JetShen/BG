@@ -1,20 +1,14 @@
 import '@/styles/modaltopic.css';
-import TopicFn from '@/client/topicfn';
 import { useState } from 'react';
 
 export default function ModalTopic({close, topic}: { close: Function, topic: Function}){
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const mutationTopic = TopicFn({name: name, description: description, Key: 'post'});
 
     async function AddTopic(event: any){
         event.preventDefault();
-        const success = await mutationTopic.mutateAsync();
-        if(success.status === 200){
-            console.log('Topic added successfully');
-            close(event)
-            topic({name: name, id: success.data.topicId});
-        }
+        topic({name: name, description: description});
+        close(event)
     }
 
 

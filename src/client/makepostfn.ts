@@ -8,7 +8,6 @@ export default function MakePostFn({key, Post}:{key:string, Post: {userid: numbe
         mutationKey: ['makePost'],
         mutationFn: async () =>  await axios.post('/api/post/make', Post),
         onSuccess: () => {
-            console.log('Post added successfully in ', key);
             queryClient.invalidateQueries({ queryKey: [key], refetchType: 'active', });
         },
         onError: (error) => {
