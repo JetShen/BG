@@ -1,11 +1,11 @@
 import { GetClient } from "@/client/mysql";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { PostType } from '@/type/post';
+import { TopicType } from '@/type/post';
 
 
 export async function GET(request: NextRequest){
-    console.log('GET /api/searchP');
+    console.log('GET /api/profile/topics');
     try {
         const client = await GetClient();
         const cursor = request.nextUrl.searchParams.get("cursor")
@@ -28,28 +28,24 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT 
-                post.PostID,
-                post.Content,
-                user.UserID,
-                user.Name,
-                user.Username,
-                COUNT(likes.LikeID) AS cantidad_likes
+                Post.TopicId,
+                Topic.Name,
+                Topic.Description,
+                COUNT(*) AS PostCount
             FROM 
-                post
+                Post
             JOIN 
-                user ON post.UserID = user.UserID
-            LEFT JOIN 
-                likes ON post.PostID = likes.PostID
-            WHERE
-                user.Name = ?
+                Topic ON Post.TopicId = Topic.TopicId
+            JOIN 
+                User ON Post.UserId = User.UserID
+            WHERE 
+                User.Name = ?
             GROUP BY 
-                post.PostID, post.Content, user.UserID, user.Name, user.Username
-            ORDER BY 
-                post.PostID DESC
+                Post.TopicId, Topic.Name
             LIMIT ? OFFSET ?
             `, [username, pageSize, pageParam]);
-        const posts: Array<PostType> = result[0] as Array<PostType>;
-        const len = Object.keys(posts);
+        const topics: Array<TopicType> = result[0] as Array<TopicType>;
+        const len = Object.keys(topics);
         const ln: number = len.length;
         
         const nextId = ln < pageSize ? null : cursorValue + 1;
@@ -57,7 +53,7 @@ export async function GET(request: NextRequest){
 
         
 
-        return NextResponse.json({ posts, nextId, previousId }, { status: 200, headers: { 'Content-Type': 'application/json' } });
+        return NextResponse.json({ topics, nextId, previousId }, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error: any) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });

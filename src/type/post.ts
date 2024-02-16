@@ -8,3 +8,11 @@ export type PostType = {
     cantidad_likes: number,
     cantidad_respuestas: number,
 };
+
+
+export type TopicType = {
+    TopicId: number,
+    Name: string,
+    Description: string,
+    PostCount: number,
+};

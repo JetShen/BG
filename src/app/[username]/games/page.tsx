@@ -1,57 +1,67 @@
+"use client";
 import '@/styles/topicPage.css';
 import Topic from "@/component/topic";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import FetchTopicsFn from '@/client/fetchTopicsFn';
+import { useInView } from 'react-intersection-observer';
+import { TopicType } from '@/type/post';
 
-const data = [
-    {
-        name: 'Topic 1',
-        details: 'Details 1',
-    },
-    {
-        name: 'Topic 2',
-        details: 'Details 2',
-    },
-    {
-        name: 'Topic 3',
-        details: 'Details 3',
-    },
-    {
-        name: 'Topic 4',
-        details: 'Details 4',
-    },
-    {
-        name: 'Topic 5',
-        details: 'Details 5',
-    },
-    {
-        name: 'Topic 6',
-        details: 'Details 6',
-    },
-    {
-        name: 'Topic 7',
-        details: 'Details 7',
-    },
-    {
-        name: 'Topic 8',
-        details: 'Details 8',
-    },
-    {
-        name: 'Topic 9',
-        details: 'Details 9',
-    },
-    {
-        name: 'Topic 10',
-        details: 'Details 10',
-    },
-]
+const queryClient = new QueryClient()
 
+export default function App({params}:any){
+    const { username } = params;
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TopicPage username={username}/>
+      </QueryClientProvider>
+    )
+  }
 
-export default function Games() {
+function TopicPage({username}: {username: string} ) {
+    const { ref, inView } = useInView()
+    const {data, fetchNextPage, fetchPreviousPage} = FetchTopicsFn(username);
+
+    const trackScrolling = () => {
+      const wrappedElement = document.getElementsByClassName('ContainerPost')[0]
+      if (wrappedElement === null) {
+        return;
+      }
+  
+      if (wrappedElement.scrollTop === 0) {
+        fetchPreviousPage();
+    }
+  
+      if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
+        fetchNextPage();
+      }
+    };
+  
+    useEffect(() => {
+      const scrollElement = document.getElementsByClassName('ContainerPost')[0]
+      scrollElement?.addEventListener('scroll', trackScrolling);
+  
+      return () => {
+        scrollElement?.removeEventListener('scroll', trackScrolling);
+      };
+    }, []);
+
+    
+    useEffect(() => {
+      if (inView) {
+        fetchNextPage();
+      }
+    }, [fetchNextPage, inView])
+
     return(
         <div className="ContainerPost">
-        {data.map((topic, index) => {
-            return <Topic key={index} topic={topic} />
-        })}
+          {data?.pages.map((page, index) => (
+            <Fragment key={index}>
+              {page.topics.map((topic: TopicType, indexj:number) => (
+                <Topic key={indexj} topic={topic} />
+              ))}
+            </Fragment>
+          ))}
         </div>
     )
 }
