@@ -63,16 +63,15 @@ function Topic({ topicname, username }: { topicname: string, username: string })
     return (
         <div className="TopicContainter">
             <div className="TopicMain">
-                <button onClick={test}>test</button>
             </div>
             <div className="ContainerPost">
-                {/* {data?.pages.map((page, index) => (
+                {data?.pages.map((page, index) => (
                     <div key={index}>
-                        {page.posts.map((post: PostType, indexj: number) => (
+                        {page.topics.map((post: PostType, indexj: number) => (
                             <Post KeyMutation="Topicpost" key={indexj} props={post} />
                         ))}
                     </div>
-                ))} */}
+                ))}
             </div>
         </div>
     )
