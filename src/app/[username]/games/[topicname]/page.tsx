@@ -55,11 +55,6 @@ function Topic({ topicname, username }: { topicname: string, username: string })
     }, [fetchNextPage, inView])
 
 
-    const test = () => {
-        console.log(data);
-        console.log(topicname);
-    }
-
     return (
         <div className="TopicContainter">
             <div className="TopicMain">
