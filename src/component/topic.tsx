@@ -1,12 +1,20 @@
 import '@/styles/topic.css'
 import { TopicType } from '@/type/post'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 const dsUrl = 'https://myhotposters.com/cdn/shop/products/mL1833_1024x1024.jpg?v=1571445492'
 // this component should be a card that displays the topic name and the number of Posts in that topic by the username
-export default function Topic({topic}: {topic: TopicType}) {
+export default function Topic({topic, username}: {topic: TopicType, username: string}) {
+    const router = useRouter()    
+
+    function goToTopic(event:any) {
+        event.stopPropagation();
+        router.push(`/${username}/games/${topic.Name}`)
+    }
+    
     return (
-        <div className="TopicCard">
+        <div className="TopicCard" onClick={goToTopic}>
             <Image
                 src={dsUrl}
                 alt="Picture of the author"

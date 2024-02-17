@@ -9,59 +9,59 @@ import { TopicType } from '@/type/post';
 
 const queryClient = new QueryClient()
 
-export default function App({params}:any){
-    const { username } = params;
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TopicPage username={username}/>
-      </QueryClientProvider>
-    )
-  }
+export default function App({ params }: any) {
+  const { username } = params;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TopicPage username={username} />
+    </QueryClientProvider>
+  )
+}
 
-function TopicPage({username}: {username: string} ) {
-    const { ref, inView } = useInView()
-    const {data, fetchNextPage, fetchPreviousPage} = FetchTopicsFn(username);
+function TopicPage({ username }: { username: string }) {
+  const { ref, inView } = useInView()
+  const { data, fetchNextPage, fetchPreviousPage } = FetchTopicsFn(username);
 
-    const trackScrolling = () => {
-      const wrappedElement = document.getElementsByClassName('ContainerPost')[0]
-      if (wrappedElement === null) {
-        return;
-      }
-  
-      if (wrappedElement.scrollTop === 0) {
-        fetchPreviousPage();
+  const trackScrolling = () => {
+    const wrappedElement = document.getElementsByClassName('ContainerPost')[0]
+    if (wrappedElement === null) {
+      return;
     }
-  
-      if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
-        fetchNextPage();
-      }
+
+    if (wrappedElement.scrollTop === 0) {
+      fetchPreviousPage();
+    }
+
+    if (wrappedElement.scrollHeight - wrappedElement.scrollTop === wrappedElement.clientHeight) {
+      fetchNextPage();
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = document.getElementsByClassName('ContainerPost')[0]
+    scrollElement?.addEventListener('scroll', trackScrolling);
+
+    return () => {
+      scrollElement?.removeEventListener('scroll', trackScrolling);
     };
-  
-    useEffect(() => {
-      const scrollElement = document.getElementsByClassName('ContainerPost')[0]
-      scrollElement?.addEventListener('scroll', trackScrolling);
-  
-      return () => {
-        scrollElement?.removeEventListener('scroll', trackScrolling);
-      };
-    }, []);
+  }, []);
 
-    
-    useEffect(() => {
-      if (inView) {
-        fetchNextPage();
-      }
-    }, [fetchNextPage, inView])
 
-    return(
-        <div className="ContainerPost">
-          {data?.pages.map((page, index) => (
-            <Fragment key={index}>
-              {page.topics.map((topic: TopicType, indexj:number) => (
-                <Topic key={indexj} topic={topic} />
-              ))}
-            </Fragment>
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, inView])
+
+  return (
+    <div className="ContainerPost">
+      {data?.pages.map((page, index) => (
+        <Fragment key={index}>
+          {page.topics.map((topic: TopicType, indexj: number) => (
+            <Topic key={indexj} topic={topic} username={username} />
           ))}
-        </div>
-    )
+        </Fragment>
+      ))}
+    </div>
+  )
 }
