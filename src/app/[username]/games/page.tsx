@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FetchTopicsFn from '@/client/fetchTopicsFn';
 import { useInView } from 'react-intersection-observer';
 import { TopicType } from '@/type/post';
+import Navbar from '@/component/Navbar';
 
 const queryClient = new QueryClient()
 
@@ -54,7 +55,11 @@ function TopicPage({ username }: { username: string }) {
   }, [fetchNextPage, inView])
 
   return (
-    <div className="ContainerPost">
+    <>
+    <div className="pfNav">
+        <Navbar username={username} />
+    </div>
+    <div className="testbox">
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
           {page.topics.map((topic: TopicType, indexj: number) => (
@@ -63,5 +68,6 @@ function TopicPage({ username }: { username: string }) {
         </Fragment>
       ))}
     </div>
+    </>
   )
 }
