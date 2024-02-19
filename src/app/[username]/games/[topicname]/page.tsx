@@ -1,11 +1,13 @@
 "use client";
-import { TopicType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import FetchTopicByfn from "@/client/fetchTopicByfn";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { PostType } from "@/type/post";
 import Post from "@/component/Post";
+import FetchTopicFn from "@/client/fetchTopicFn";
+import Image from 'next/image'
+import '@/styles/topicPageOne.css'
 
 const queryClient = new QueryClient()
 
@@ -14,14 +16,16 @@ export default function App({ params }: any) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <Topic topicname={topicname} username={username} />
+            <TopicPage topicname={topicname} username={username} />
         </QueryClientProvider>
     )
 }
+const dsUrl = 'https://myhotposters.com/cdn/shop/products/mL1833_1024x1024.jpg?v=1571445492' // img test url
 
-function Topic({ topicname, username }: { topicname: string, username: string }) {
+function TopicPage({ topicname, username }: { topicname: string, username: string }) {
     const { ref, inView } = useInView()
     const { data, fetchNextPage, fetchPreviousPage } = FetchTopicByfn(username, topicname);
+    const TopicData = FetchTopicFn(topicname, username);
 
     const trackScrolling = () => {
         const wrappedElement = document.getElementsByClassName('TopicContainter')[0]
@@ -58,6 +62,21 @@ function Topic({ topicname, username }: { topicname: string, username: string })
     return (
         <div className="TopicContainter">
             <div className="TopicMain">
+                <div className="TopicImageMain">
+                    <Image
+                        src={dsUrl}
+                        alt="Picture of the author"
+                        width={0}
+                        height={0}
+                        sizes="20%"
+                        style={{ width: '100%', height: 'auto' }}
+                    />
+                </div>
+                <div className="TopicDetailsMain">
+                    <span>Post: {TopicData?.PostCount}</span>
+                    <h3>Name: {TopicData?.Name}</h3>
+                    <h2>Details: {TopicData?.Description}</h2>
+                </div>
             </div>
             <div className="ContainerPost">
                 {data?.pages.map((page, index) => (

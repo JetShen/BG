@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-
+// This function is used to fetch the posts of a user in a specific topic
 export default function FetchTopicByfn(username: string, topicName: string){
     const {
         data,

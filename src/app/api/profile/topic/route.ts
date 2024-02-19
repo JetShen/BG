@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { TopicType } from '@/type/post';
 
-
+//get all post related to a topic and a user
 export async function GET(request: NextRequest){
     console.log('GET /api/profile/topic');
     try {
@@ -37,13 +37,16 @@ export async function GET(request: NextRequest){
                 user.UserID,
                 user.Name,
                 user.Username,
-                COUNT(likes.LikeID) AS cantidad_likes
+                COUNT(likes.LikeID) AS cantidad_likes,
+                COUNT(respuestas.PostID) AS cantidad_respuestas
             FROM 
                 post
             JOIN 
                 user ON post.UserID = user.UserID
             LEFT JOIN 
                 likes ON post.PostID = likes.PostID
+            LEFT JOIN 
+                Post respuestas ON post.PostID = respuestas.ParentPostID
             JOIN
                 Topic ON post.TopicID = Topic.TopicID
             WHERE
