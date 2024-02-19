@@ -97,17 +97,22 @@ function Home() {
 
   async function ResolveMake(event: any) {
     event.stopPropagation();
-    const inpuutElement = document.querySelector('.makePost input') as HTMLInputElement;
-    makeTopic().then(async (topicId) => {
-      const postData = { userid: 1, content: ContentData, topicId: topicId };
-      const status = await makePost(postData);
-      if (status.status === 200) {
-        setContentData('');
-        inpuutElement.value = '';
-        setTopic({name: '', description: '', id: 0});
-      }
-    });
+  
+    const inputElement = document.querySelector('.makePost input') as HTMLInputElement;
+  
+    const topicId = topic.name !== '' ? await makeTopic() : 0;
+    const postData = { userid: 1, content: ContentData, topicId };
+    
+    const status = await makePost(postData);
+  
+    if (status.status === 200) {
+      setContentData('');
+      inputElement.value = '';
+      setTopic({ name: '', description: '', id: 0 });
+    }
   }
+  
+  
 
   const openTopicModal = (event: any ) => {
     event.stopPropagation();
