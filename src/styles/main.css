@@ -96,13 +96,42 @@
     display: flex;
     flex-direction: column;
     width: 90%;
-    height: 9.5em;
+    min-height: 20em;
+    height: auto;
     margin: 0.5em 0 0 0.1em;
     border: solid 2px black;
     border-radius: 0.5em;
     padding: 0.5em;
 }
 
+.contentInput{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+    width: 100%;
+    scrollbar-width: none; /* 'firefox' solution  */
+    resize: none;
+    border: none;
+    padding: 0.5em;
+}
+
+.contentInput::-webkit-scrollbar{  /* temporary 'google' solution  */
+    display: none;
+}
+
+.contentInput:not(:focus):is(:empty){
+    padding-top: 2.5em;
+}
+.contentInput:is(:focus)::placeholder {
+    opacity: 0;
+}
+
+.Galery{
+    border: 2px solid red;
+    display: flex;
+    height: 50em;
+}
 
 .makePost textarea:focus{
     outline: none;

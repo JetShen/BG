@@ -54,6 +54,7 @@ function Home() {
   const [topic, setTopic] = useState({name: '', description: '', id: 0});
   const makeTopic = useMakeTopic(topic); // this hook is used to make a topic and return the topicId
   const makePost = useMakePost(); // this hook is used to make a post
+  const [files, setFiles] = useState<FileList | null>(null);
   
   const handleScroll = () => {
     const mainElement = document.querySelector('.main');
@@ -98,7 +99,7 @@ function Home() {
   async function ResolveMake(event: any) {
     event.stopPropagation();
   
-    const inputElement = document.querySelector('.makePost input') as HTMLInputElement;
+    const inputElement = document.querySelector('.contentInput') as HTMLInputElement;
   
     const topicId = topic.name !== '' ? await makeTopic() : 0;
     const postData = { userid: 1, content: ContentData, topicId };
@@ -125,16 +126,38 @@ function Home() {
     setTopicModal(false);
   };
 
+  const handleDragOver = (event: any) => {
+    event.preventDefault();
+    // console.log('dragging over');
+    // console.log(event);
+  };
+
+  const handleDrop = (event: any) => {
+    event.preventDefault();
+    console.log('dropped');
+    console.log(event.dataTransfer.files);
+    setFiles(event.dataTransfer.files);
+  };
+
   return (
     <>
       <div className="makePost">
         <span>Topic:{topic.name}</span>
-        <input
+        <textarea
+          typeof='testbox'
+          className='contentInput'
           contentEditable={true}
-          placeholder="Make a Post"
-          onChange={(event) => { setContentData(event.target.value) }}
+          placeholder='What is on your mind?'
+          onChange={(event) => setContentData(event.target.value)}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          value={ContentData}
           maxLength={255}
-        />
+        >
+        </textarea>
+        <div className="Galery">
+
+        </div>
         <div className="PostOptions">
           <button onClick={openTopicModal}>Add Topic</button>
           <button onClick={ResolveMake}>Post</button>
