@@ -128,7 +128,6 @@
 }
 
 .Galery{
-    border: 2px solid red;
     display: flex;
     height: 50em;
 }
