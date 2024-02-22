@@ -9,6 +9,7 @@ import ModalTopic from '@/component/ModalTopic';
 import FetchPostFn from '@/client/fetchpostfn';
 import MakePostFn from '@/client/makepostfn';
 import TopicFn from '@/client/topicfn';
+import Image from 'next/image'
 
 const queryClient = new QueryClient()
 
@@ -155,9 +156,12 @@ function Home() {
           maxLength={255}
         >
         </textarea>
-        <div className="Galery">
-
-        </div>
+        {files?.length ?? 0 > 0 ? <div className="Galery">
+          {files &&  Array.from(files).map((file, index) => (
+            <img 
+            className={'GaleryImg-'+index+1} key={index} src={URL.createObjectURL(file)} alt={file.name} />
+          ))}
+        </div>: null}
         <div className="PostOptions">
           <button onClick={openTopicModal}>Add Topic</button>
           <button onClick={ResolveMake}>Post</button>
