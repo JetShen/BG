@@ -139,7 +139,7 @@ function Home() {
     console.log(event.dataTransfer.files);
     setFiles(event.dataTransfer.files);
   };
-
+  //TODO: Add a function to handle the file upload
   return (
     <>
       <div className="makePost">
