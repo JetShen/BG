@@ -10,6 +10,7 @@ import FetchPostFn from '@/client/fetchpostfn';
 import MakePostFn from '@/client/makepostfn';
 import TopicFn from '@/client/topicfn';
 import Image from 'next/image'
+import MiniIMG from '@/component/uploadIMG';
 
 const queryClient = new QueryClient()
 
@@ -55,7 +56,8 @@ function Home() {
   const [topic, setTopic] = useState({name: '', description: '', id: 0});
   const makeTopic = useMakeTopic(topic); // this hook is used to make a topic and return the topicId
   const makePost = useMakePost(); // this hook is used to make a post
-  const [files, setFiles] = useState<FileList | null>(null);
+  const [files, setFiles] = useState<File[] | null>(null);
+
   
   const handleScroll = () => {
     const mainElement = document.querySelector('.main');
@@ -135,10 +137,24 @@ function Home() {
 
   const handleDrop = (event: any) => {
     event.preventDefault();
-    console.log('dropped');
-    console.log(event.dataTransfer.files);
-    setFiles(event.dataTransfer.files);
+    const droppedFiles = Array.from(event.dataTransfer.files) as File[];
+    const MAX_IMAGES = 4; 
+    // Check if the number of images is greater than the maximum allowed if so remove the first images to make space for the new ones
+    // [1,2,3,4] + 2 IMG = [3,4,5,6]
+    const currentImageCount = files ? files.length : 0;
+    const imagesToRemove = Math.max(0, currentImageCount + droppedFiles.length - MAX_IMAGES);
+    const newFiles = files ? files.slice(imagesToRemove) : [];
+    const finalFiles = [...newFiles, ...droppedFiles];
+  
+    setFiles(finalFiles);
   };
+  
+
+  const deleteIMG = (index: number) => {
+    const newFiles = files ? files.filter((_, i) => i !== index) : [];
+    setFiles(newFiles);
+  }
+
   //TODO: Add a function to handle the file upload
   return (
     <>
@@ -158,8 +174,7 @@ function Home() {
         </textarea>
         {files?.length ?? 0 > 0 ? <div className="Galery">
           {files &&  Array.from(files).map((file, index) => (
-            <img 
-            className={'GaleryImg-'+index+1} key={index} src={URL.createObjectURL(file)} alt={file.name} />
+            <MiniIMG key={index} index={index} deleteIMG={deleteIMG} file={file} />
           ))}
         </div>: null}
         <div className="PostOptions">
