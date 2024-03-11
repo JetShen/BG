@@ -102,7 +102,10 @@
     border: solid 2px black;
     border-radius: 0.5em;
     padding: 0.5em;
+    justify-content: space-evenly;
 }
+
+
 
 .contentInput{
     display: flex;
@@ -113,8 +116,13 @@
     scrollbar-width: none; /* 'firefox' solution  */
     resize: none;
     border: none;
-    padding: 0.5em;
 }
+
+/* .contentInput:hover{
+    border-color: blue;
+    border-style: dashed;
+    border-width: 2px;
+} */
 
 .contentInput::-webkit-scrollbar{  /* temporary 'google' solution  */
     display: none;
@@ -125,6 +133,9 @@
 }
 .contentInput:is(:focus)::placeholder {
     opacity: 0;
+}
+.contentInput:is(:focus){
+    height: 5em;
 }
 
 .Galery{
@@ -140,6 +151,24 @@
     width: 100%;
     height: auto;
 }
+
+.IMG-box{
+    position: relative;
+    width: 7em;
+    height: auto;
+    padding: .2em;
+}
+
+.Bttn-rm {
+    position: absolute;
+    cursor: pointer;
+    z-index: 1;
+    color: white;
+    font-weight: bold;
+    padding: .2em;
+    text-shadow: 0 0 .2em black;
+}
+  
 
 .makePost textarea:focus{
     outline: none;

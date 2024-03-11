@@ -57,7 +57,9 @@ function Home() {
   const makeTopic = useMakeTopic(topic); // this hook is used to make a topic and return the topicId
   const makePost = useMakePost(); // this hook is used to make a post
   const [files, setFiles] = useState<File[] | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
+  const element = document.querySelector('.contentInput') as HTMLTextAreaElement;
   
   const handleScroll = () => {
     const mainElement = document.querySelector('.main');
@@ -83,6 +85,29 @@ function Home() {
       mainElement.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const handleDragStart = () => setIsDragging(true);
+    const handleDragEnd = () => setIsDragging(false);
+  
+    window.addEventListener("dragstart", handleDragStart);
+    window.addEventListener("dragend", handleDragEnd);
+  
+    return () => {
+      window.removeEventListener("dragstart", handleDragStart);
+      window.removeEventListener("dragend", handleDragEnd);
+    };
+  }, []);
+
+  const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+  
+    element.style.borderColor = "blue";
+    element.style.borderStyle = "dashed";
+    element.style.borderWidth = "2px";
+  };
 
 
   const {
@@ -129,11 +154,6 @@ function Home() {
     setTopicModal(false);
   };
 
-  const handleDragOver = (event: any) => {
-    event.preventDefault();
-    // console.log('dragging over');
-    // console.log(event);
-  };
 
   const handleDrop = (event: any) => {
     event.preventDefault();
@@ -147,6 +167,8 @@ function Home() {
     const finalFiles = [...newFiles, ...droppedFiles];
   
     setFiles(finalFiles);
+
+    element.style.border = "none";
   };
   
 
