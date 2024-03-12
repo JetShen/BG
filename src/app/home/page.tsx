@@ -11,6 +11,8 @@ import MakePostFn from '@/client/makepostfn';
 import TopicFn from '@/client/topicfn';
 import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
+import { type PutBlobResult } from '@vercel/blob';
+import { upload } from '@vercel/blob/client';
 
 const queryClient = new QueryClient()
 
@@ -59,7 +61,11 @@ function Home() {
   const [files, setFiles] = useState<File[] | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const element = document.querySelector('.contentInput') as HTMLTextAreaElement;
+  //uploading images
+  const [images, setImages] = useState<PutBlobResult[] | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadErrors, setUploadErrors] = useState<string[]>([]);
+
   
   const handleScroll = () => {
     const mainElement = document.querySelector('.main');
@@ -102,6 +108,7 @@ function Home() {
   const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    const element = document.querySelector('.contentInput') as HTMLTextAreaElement;
 
   
     element.style.borderColor = "blue";
@@ -133,28 +140,28 @@ function Home() {
     const postData = { userid: 1, content: ContentData, topicId };
     
     const status = await makePost(postData);
-  
+
+    if(files?.length ?? 0 > 0){
+      handleUpload(event);
+    }
+    
     if (status.status === 200) {
       setContentData('');
       inputElement.value = '';
       setTopic({ name: '', description: '', id: 0 });
     }
   }
-  
-  
 
   const openTopicModal = (event: any ) => {
     event.stopPropagation();
     setTopicModal(true);
   };
-  
-
   const closeTopicModal = (event:any) => {
     event.stopPropagation()
     setTopicModal(false);
   };
 
-
+  // img function section
   const handleDrop = (event: any) => {
     event.preventDefault();
     const droppedFiles = Array.from(event.dataTransfer.files) as File[];
@@ -167,8 +174,41 @@ function Home() {
     const finalFiles = [...newFiles, ...droppedFiles];
   
     setFiles(finalFiles);
-
+    console.log(finalFiles);
+    const element = document.querySelector('.contentInput') as HTMLTextAreaElement;
     element.style.border = "none";
+  };
+
+  const handleUpload = async (event: any) => {
+    event.preventDefault();
+
+    setUploading(true);
+    setUploadErrors([]); // Clear any previous errors
+
+    if (!files) {
+      setUploadErrors(['Please select at least one image.']);
+      setUploading(false);
+      return;
+    }
+
+    const uploadedImages: PutBlobResult[] = [];
+    for (const file of Array.from(files)){
+      try {
+        const newBlob = await upload(file?.name, file, {
+          access: 'public', // Adjust access level as needed
+          handleUploadUrl: '/api/post/image', // API endpoint for handling multiple uploads
+        });
+        uploadedImages.push(newBlob);
+      } catch (error: any) {
+        setUploadErrors([...uploadErrors, `Error uploading ${file.name}: ${error.message}`]);
+      }
+    }
+
+    setUploading(false);
+    setImages(uploadedImages.length > 0 ? uploadedImages : null); // Set images only if successful
+    if (uploadedImages.length > 0) {
+      setFiles(null);
+    }
   };
   
 
