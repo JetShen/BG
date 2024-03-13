@@ -135,21 +135,23 @@ function Home() {
     event.stopPropagation();
   
     const inputElement = document.querySelector('.contentInput') as HTMLInputElement;
-  
-    const topicId = topic.name !== '' ? await makeTopic() : 0;
-    const postData = { userid: 1, content: ContentData, topicId };
-    
-    const status = await makePost(postData);
-
     if(files?.length ?? 0 > 0){
+      console.log('Uploading images');
       handleUpload(event);
     }
+
+    // const topicId = topic.name !== '' ? await makeTopic() : 0;
+    // const postData = { userid: 1, content: ContentData, topicId };
     
-    if (status.status === 200) {
-      setContentData('');
-      inputElement.value = '';
-      setTopic({ name: '', description: '', id: 0 });
-    }
+    // const status = await makePost(postData);
+
+    
+    
+    // if (status.status === 200) {
+    //   setContentData('');
+    //   inputElement.value = '';
+    //   setTopic({ name: '', description: '', id: 0 });
+    // }
   }
 
   const openTopicModal = (event: any ) => {
@@ -194,11 +196,13 @@ function Home() {
     const uploadedImages: PutBlobResult[] = [];
     for (const file of Array.from(files)){
       try {
-        const newBlob = await upload(file?.name, file, {
-          access: 'public', // Adjust access level as needed
-          handleUploadUrl: '/api/post/image', // API endpoint for handling multiple uploads
-        });
-        uploadedImages.push(newBlob);
+        const formData = new FormData();
+        formData.append("file", file as Blob)
+
+        const res = await fetch('api/post/image', {
+          method: "POST",
+          body: formData
+        })
       } catch (error: any) {
         setUploadErrors([...uploadErrors, `Error uploading ${file.name}: ${error.message}`]);
       }
