@@ -5,15 +5,25 @@ import { PostType } from '@/type/post';
 import LikeFn from '@/client/likefn';
 import { useRouter } from 'next/navigation';
 import ModalReply from './ModalReply';
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
 export default function Post({props, KeyMutation}: {props: PostType, KeyMutation: string}) {
-    const { UserID, PostID } = props;
+    const { UserID, PostID, urls_images } = props;
     const mutationFN = LikeFn({UserID, PostID, Key: KeyMutation})
     const [showModal, setShowModal] = useState(false);
+    const [imgs, setImgs] = useState<string[]>([])
     const router = useRouter()
+
+    useEffect(() => {
+        if (urls_images) {
+            const urls = urls_images.split(', ')
+            setImgs(urls)
+        }
+    }, [urls_images])
+    
+    
 
     async function sendlike(event:any) {
         event?.stopPropagation()
@@ -60,6 +70,20 @@ export default function Post({props, KeyMutation}: {props: PostType, KeyMutation
                 </div>
                 <div className="innerContent" >
                     <p>{props.Content}</p>
+                    <div className="images">
+                        {urls_images ? imgs.map((url, index) => (
+                            <Image
+                                key={index}
+                                src={url}
+                                alt="Media of the post"
+                                width={0}
+                                height={0}
+                                sizes="10vw"
+                                style={{ width: 'auto', height: 'auto', border: '1px solid black'}}
+                                className={'image'+index}
+                            />
+                        )): null}
+                    </div>
                 </div>
                 <div className="interactions">
                     <button className="button comment" onClick={openModal}>

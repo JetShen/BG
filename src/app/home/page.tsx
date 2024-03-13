@@ -11,8 +11,6 @@ import MakePostFn from '@/client/makepostfn';
 import TopicFn from '@/client/topicfn';
 import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
-import { type PutBlobResult } from '@vercel/blob';
-import { upload } from '@vercel/blob/client';
 
 const queryClient = new QueryClient()
 

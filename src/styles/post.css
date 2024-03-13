@@ -1,7 +1,7 @@
 .PostObject {
     display: flex;
     flex-direction: row;
-    width: 60vw; /* Cambiado a 60% del 100vw */
+    width: 80%;
     height: auto;
     max-height: 60vh; /* Cambiado a maxHeight */
     border: solid 1px black;
@@ -34,6 +34,30 @@
     grid-template-columns: 1fr;
     grid-template-rows: 0.3fr auto 0.5fr;
 }
+
+
+.images {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, auto);
+    gap: 1%;
+    justify-content: start;
+    align-items: center;
+}
+  
+.image-0 {
+    grid-area: 1 / 1 / 2 / 2; 
+}
+.image-1 {
+    grid-area: 1 / 2 / 2 / 3; 
+}
+.image-2 {
+    grid-area: 2 / 1 / 3 / 2; 
+}
+.image-3 {
+    grid-area: 2 / 2 / 3 / 3; 
+}
+
 
 .minisection {
     display: flex;

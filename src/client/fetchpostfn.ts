@@ -20,7 +20,7 @@ export default function FetchPostFn(){
     getPreviousPageParam: (firstPage, pages) => firstPage.previousId,
     })
 
-
+    // console.log(data) // logs the data of the first page
     return {
         data,
         isFetching,

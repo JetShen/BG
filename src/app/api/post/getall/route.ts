@@ -29,7 +29,8 @@ export async function GET(request: NextRequest){
                 user.Name,
                 user.Username,
                 COUNT(respuestas.PostID) AS cantidad_respuestas,
-                COUNT(likes.LikeID) AS cantidad_likes
+                COUNT(likes.LikeID) AS cantidad_likes,
+                GROUP_CONCAT(media.Url SEPARATOR ', ') AS urls_images
             FROM 
                 Post post
             JOIN 
@@ -38,6 +39,8 @@ export async function GET(request: NextRequest){
                 Likes likes ON post.PostID = likes.PostID
             LEFT JOIN 
                 Post respuestas ON post.PostID = respuestas.ParentPostID
+            LEFT JOIN 
+                Media media ON post.PostID = media.PostId
             WHERE
                 post.ParentPostID IS NULL
             GROUP BY 

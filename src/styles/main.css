@@ -95,7 +95,7 @@
 .makePost{
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 80%;
     height: auto;
     max-height: 20em;
     margin: 0.5em 0 0 0.1em;

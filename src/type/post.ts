@@ -7,6 +7,7 @@ export type PostType = {
     Username: string
     cantidad_likes: number,
     cantidad_respuestas: number,
+    urls_images: string
 };
 
 
