@@ -18,10 +18,12 @@ export async function POST(request: Request): Promise<NextResponse> {
         }
         if (topicId !== 0 ) {
             const result = await client.query('INSERT INTO post (content, userid, topicId) VALUES (?, ?, ?)', [content, userid, topicId]);
-            return NextResponse.json({ result }, { status: 200 });
+            const id = result[0] as { insertId: number };
+            return NextResponse.json({ result: result, id: id }, { status: 200 });
         }
         const result = await client.query('INSERT INTO post (content, userid) VALUES (?, ?)', [content, userid]);
-        return NextResponse.json({ result }, { status: 200 });
+        const id = result[0] as { insertId: number };
+        return NextResponse.json({ result: result, id: id }, { status: 200 });
     } catch (error: any ) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });

@@ -62,7 +62,6 @@ function Home() {
   const [isDragging, setIsDragging] = useState(false);
 
   //uploading images
-  const [images, setImages] = useState<PutBlobResult[] | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadErrors, setUploadErrors] = useState<string[]>([]);
 
@@ -135,23 +134,19 @@ function Home() {
     event.stopPropagation();
   
     const inputElement = document.querySelector('.contentInput') as HTMLInputElement;
-    if(files?.length ?? 0 > 0){
-      console.log('Uploading images');
-      handleUpload(event);
+    const topicId = topic.name !== '' ? await makeTopic() : 0;
+    const postData = { userid: 1, content: ContentData, topicId };
+    const status = await makePost(postData);
+    const id = status.data.id.insertId;
+    if (status.status === 200) {
+      setContentData('');
+      inputElement.value = '';
+      setTopic({ name: '', description: '', id: 0 });
+      if(files?.length ?? 0 > 0){
+        handleUpload(event, id);
+        setFiles(null);
+      }
     }
-
-    // const topicId = topic.name !== '' ? await makeTopic() : 0;
-    // const postData = { userid: 1, content: ContentData, topicId };
-    
-    // const status = await makePost(postData);
-
-    
-    
-    // if (status.status === 200) {
-    //   setContentData('');
-    //   inputElement.value = '';
-    //   setTopic({ name: '', description: '', id: 0 });
-    // }
   }
 
   const openTopicModal = (event: any ) => {
@@ -181,11 +176,10 @@ function Home() {
     element.style.border = "none";
   };
 
-  const handleUpload = async (event: any) => {
+  const handleUpload = async (event: any, id: number) => {
     event.preventDefault();
 
     setUploading(true);
-    setUploadErrors([]); // Clear any previous errors
 
     if (!files) {
       setUploadErrors(['Please select at least one image.']);
@@ -193,11 +187,11 @@ function Home() {
       return;
     }
 
-    const uploadedImages: PutBlobResult[] = [];
     for (const file of Array.from(files)){
       try {
         const formData = new FormData();
         formData.append("file", file as Blob)
+        formData.append("id", id.toString());
 
         const res = await fetch('api/post/image', {
           method: "POST",
@@ -207,12 +201,7 @@ function Home() {
         setUploadErrors([...uploadErrors, `Error uploading ${file.name}: ${error.message}`]);
       }
     }
-
     setUploading(false);
-    setImages(uploadedImages.length > 0 ? uploadedImages : null); // Set images only if successful
-    if (uploadedImages.length > 0) {
-      setFiles(null);
-    }
   };
   
 
