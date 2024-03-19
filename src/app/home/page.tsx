@@ -11,6 +11,7 @@ import MakePostFn from '@/client/makepostfn';
 import TopicFn from '@/client/topicfn';
 import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
+import MakeImg from '@/client/makeImg';
 
 const queryClient = new QueryClient()
 
@@ -22,7 +23,8 @@ export default function App(){
   )
 }
 
-
+const mediaType = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp', 'image/svg+xml', 'image/bmp', 'image/tiff', 'image/x-icon' ];
+const mp4Type = ['video/mp4', 'video/quicktime', 'video/webm', 'video/x-msvideo', 'video/x-flv', 'video/3gpp', 'video/x-matroska', 'video/avi', 'video/mpeg', 'video/ogg'];
 //idk if this is the best way to do this but it works
 function useMakeTopic(topic: {name: string, description: string}) {
   const mutationTopic = TopicFn({name: topic.name, description: topic.description, Key: 'post'});
@@ -37,13 +39,23 @@ function useMakeTopic(topic: {name: string, description: string}) {
   return makeTopic;
 }
 
-function useMakePost() {
-  const mutationPost = MakePostFn({ key: 'post'});
+function useMakePost(WaitImg:boolean) {
+  const mutationPost = MakePostFn({ key: 'post', WaitImg});
   const makePost = async (postData: { userid: number, content: string, topicId?: number }) => {
     const status = await mutationPost.mutateAsync(postData);
     return status;
   };
   return makePost;
+}
+
+function useMakeImg(key: string) {
+  const mutationImg = MakeImg({ key });
+  const makeImg = async (fileData: FormData) => {
+    const status = await mutationImg.mutateAsync(fileData);
+    return status;
+  };
+  return makeImg;
+
 }
 
 
@@ -54,8 +66,10 @@ function Home() {
   const [ContentData, setContentData] = useState<string>('');
   const [topicModal, setTopicModal] = useState<boolean>(false);
   const [topic, setTopic] = useState({name: '', description: '', id: 0});
+  const [WaitImg, setWaitImg] = useState(false);
   const makeTopic = useMakeTopic(topic); // this hook is used to make a topic and return the topicId
-  const makePost = useMakePost(); // this hook is used to make a post
+  const makePost = useMakePost(WaitImg); // this hook is used to make a post
+  const makeImg = useMakeImg('post'); // this hook is used to upload images
   const [files, setFiles] = useState<File[] | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -63,7 +77,12 @@ function Home() {
   const [uploading, setUploading] = useState(false);
   const [uploadErrors, setUploadErrors] = useState<string[]>([]);
 
-  
+  useEffect(() => {
+    files?.length ?? 0 > 0 ? setWaitImg(true) : setWaitImg(false);
+  }
+  , [files]);
+
+
   const handleScroll = () => {
     const mainElement = document.querySelector('.main');
     if (!mainElement) return;
@@ -167,9 +186,26 @@ function Home() {
     const imagesToRemove = Math.max(0, currentImageCount + droppedFiles.length - MAX_IMAGES);
     const newFiles = files ? files.slice(imagesToRemove) : [];
     const finalFiles = [...newFiles, ...droppedFiles];
+
+    for (const file of finalFiles) {
+      if (!mediaType.includes(file.type) && !mp4Type.includes(file.type)){
+        setUploadErrors([...uploadErrors, `${file.name} is not an image.`]);
+        finalFiles.splice(finalFiles.indexOf(file), 1);
+        continue;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        setUploadErrors([...uploadErrors, `${file.name} is too large.`]);
+        finalFiles.splice(finalFiles.indexOf(file), 1);
+        continue;
+      }
+      if (file.size === 0) {
+        setUploadErrors([...uploadErrors, `${file.name} is empty.`]);
+        finalFiles.splice(finalFiles.indexOf(file), 1);
+        continue;
+      }
+    }
   
     setFiles(finalFiles);
-    console.log(finalFiles);
     const element = document.querySelector('.contentInput') as HTMLTextAreaElement;
     element.style.border = "none";
   };
@@ -191,10 +227,11 @@ function Home() {
         formData.append("file", file as Blob)
         formData.append("id", id.toString());
 
-        const res = await fetch('api/post/image', {
-          method: "POST",
-          body: formData
-        })
+        const status = await makeImg(formData);
+        if (status.status !== 200) {
+          setUploadErrors([...uploadErrors, `Error uploading ${file.name}: ${status.data.error}`]);
+        }
+
       } catch (error: any) {
         setUploadErrors([...uploadErrors, `Error uploading ${file.name}: ${error.message}`]);
       }
