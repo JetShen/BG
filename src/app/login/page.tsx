@@ -4,8 +4,9 @@ import login from '@/client/loginFn';
 import '@/styles/login.css';
 import Image from 'next/image';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-const googleLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png';
+import { cookies } from "next/headers";
 
+const googleLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png';
 const queryClient = new QueryClient()
 
 export default function App(){
@@ -33,11 +34,6 @@ function LoginPage(){
         e.preventDefault();
         const username = e.target[0].value;
         const password = e.target[1].value;
-        if(username === "admin" && password === "admin"){
-            console.log("Logged in");
-        } else {
-            console.log("Invalid credentials");
-        }
 
         const credentials = {
             username: username,
@@ -46,6 +42,7 @@ function LoginPage(){
 
         const status = await loginUser(credentials);
         if(status.status === 200){
+
             router.push('/home')
         } else {
             console.log("Failed to login");

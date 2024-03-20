@@ -4,14 +4,14 @@
 - [x] User can Post
 - [x] User can Post Media 
 - [x] User can Like a Post 
-- [ ] User can Reply to a Post
+- [x] User can Reply to a Post
 - [ ] User can Share a Post <- Follow Section Needs to be finished for this step
 - [ ] User can Save a Post
 
 ### Account Section
 - [x] Register/Login
-- [ ] User password is encrypted
-- [ ] Email verification
+- [x] User password is encrypted
+- [x] Email verification
 - [ ] User can Delete their account
 - [ ] User can Make their account private
 - [ ] User receives notifications

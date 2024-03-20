@@ -12,6 +12,7 @@ import TopicFn from '@/client/topicfn';
 import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
 import MakeImg from '@/client/makeImg';
+import ProtectedRoute from '@/client/protectedRoute';
 
 const queryClient = new QueryClient()
 
@@ -247,7 +248,7 @@ function Home() {
 
   //TODO: Add a function to handle the file upload
   return (
-    <>
+    <ProtectedRoute>
       <div className="makePost">
         <span>Topic:{topic.name}</span>
         <textarea
@@ -289,6 +290,6 @@ function Home() {
         {isFetching && !isFetchingNextPage ? 'Background Updating...' : null}
       </div>
       {topicModal && <ModalTopic close={closeTopicModal} topic={setTopic} />}
-    </>
+    </ProtectedRoute>
   );
 }

@@ -4,6 +4,7 @@ import Image from 'next/image';
 const googleLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png';
 import Register from '@/client/registerFn';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import bcrypt from "bcryptjs";
 
 
 const queryClient = new QueryClient()
@@ -28,6 +29,12 @@ function useRegister(){
 function RegisterPage(){
     const registerUser = useRegister();
 
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    function isValidEmailFormat(email: string): boolean {
+        return emailRegex.test(email);
+    }
+
     async function regisUser(e: any) {
         e.preventDefault();
         const name = e.target[0].value;
@@ -37,13 +44,20 @@ function RegisterPage(){
         const confirmPassword = e.target[4].value;
         if(!password === confirmPassword){
             console.warn("Passwords do not match");
+            return;
         }
+        if(!isValidEmailFormat(email)){
+            console.warn("Invalid email format");
+            return;
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const credentials = {
             name: name,
             username: username,
             email: email,
-            password: password
+            password: hashedPassword
         }
 
         const status = await registerUser(credentials);

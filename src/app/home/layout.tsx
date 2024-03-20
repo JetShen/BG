@@ -4,13 +4,13 @@ import Option from '@/component/option'
 const ulrTest = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Anime_Girl_with_cat.svg/1200px-Anime_Girl_with_cat.svg.png'
 
 
-
-
 export default function RootLayout({
     children,
   }: {
     children: React.ReactNode
   }) {
+
+
     return (
         <>
         <div className="homeContainer">

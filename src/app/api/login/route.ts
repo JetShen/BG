@@ -1,7 +1,8 @@
+"use server";
 import { GetClient } from "@/client/mysql";
-import { ResultSetHeader } from "mysql2";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+import bcrypt from "bcryptjs";
 
 // This is the route for the register page
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -18,8 +19,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         }
         const result = await client.query('SELECT * FROM user WHERE user.username = ?', [ username]);
         const data = result[0] as any;
-        const match = data[0]?.Password === password;
-
+        const passwordHashed = data[0]?.Password;
+        const match = await bcrypt.compare(password, passwordHashed);
 
         return NextResponse.json({ result: match  }, { status: 200 });
     } catch (error: any ) {
