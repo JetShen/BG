@@ -7,7 +7,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      router.push('/home');
+      router.push('/login');
     }
   }, []);
 

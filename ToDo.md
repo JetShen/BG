@@ -9,7 +9,7 @@
 - [ ] User can Save a Post
 
 ### Account Section
-- [ ] Register/Login
+- [x] Register/Login
 - [ ] User password is encrypted
 - [ ] Email verification
 - [ ] User can Delete their account
