@@ -2,12 +2,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import FetchTopicByfn from "@/client/fetchTopicByfn";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
-import { PostType } from "@/type/post";
+import { useEffect, useState } from "react";
+import { PostType, UserType } from "@/type/post";
 import Post from "@/component/Post";
 import FetchTopicFn from "@/client/fetchTopicFn";
 import Image from 'next/image'
 import '@/styles/topicPageOne.css'
+import useUser from "@/client/useUser";
 
 const queryClient = new QueryClient()
 
@@ -26,6 +27,23 @@ function TopicPage({ topicname, username }: { topicname: string, username: strin
     const { ref, inView } = useInView()
     const { data, fetchNextPage, fetchPreviousPage } = FetchTopicByfn(username, topicname);
     const TopicData = FetchTopicFn(topicname, username);
+    const [userNM, setUsername] = useState('')
+    const [user, setUser] = useState<UserType>()
+    const getUser = useUser()
+
+    async function checkUser(username: string) {
+        const result = await getUser(username)
+        setUser(result.data.user)
+    }
+
+    useEffect(() => {
+        setUsername(sessionStorage.getItem('session-id') || '')
+    }, [])
+
+    useEffect(() => {
+        if (username === '') return
+        checkUser(username)
+    }, [username])
 
     const trackScrolling = () => {
         const wrappedElement = document.getElementsByClassName('TopicContainter')[0]
@@ -58,6 +76,7 @@ function TopicPage({ topicname, username }: { topicname: string, username: strin
         }
     }, [fetchNextPage, inView])
 
+    if(user === undefined) return (<div>Loading...</div>)
 
     return (
         <div className="TopicContainter">
@@ -82,7 +101,7 @@ function TopicPage({ topicname, username }: { topicname: string, username: strin
                 {data?.pages.map((page, index) => (
                     <div key={index}>
                         {page.topics.map((post: PostType, indexj: number) => (
-                            <Post KeyMutation="Topicpost" key={indexj} props={post} />
+                            <Post KeyMutation="Topicpost" key={indexj} props={post} user={user} />
                         ))}
                     </div>
                 ))}
