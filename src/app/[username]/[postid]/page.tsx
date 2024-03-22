@@ -1,13 +1,15 @@
 "use client"
 import Image from "next/image"
-import axios from "axios"
 import '@/styles/selectedPost.css'
-import LikeFn from "@/client/likefn"
-import { QueryClient, QueryClientProvider, useQuery, useMutation } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useRouter } from 'next/navigation';
 import Post from "@/component/Post"
+import { useEffect, useState } from "react"
+import { UserType } from "@/type/post"
+import useUser from "@/client/useUser"
+import FetchPost from "@/client/fetchPost"
+import FetchReplys from "@/client/fetchReplys";
 
-const ulrTest = 'https://img.freepik.com/premium-vector/anime-cat-motorcycle-helmet-futuristic-cat-print-your-design-vector-illustration-eps_380711-475.jpg'
 const queryClient = new QueryClient()
 
 export default function Page({params}:any){
@@ -21,46 +23,40 @@ export default function Page({params}:any){
 }
 
 
+
 function PostPage({params}:any){
     const { username, postid } = params;
     const router = useRouter()
+    const [userNM, setUsername] = useState('')
+    const [user, setUser] = useState<UserType>()
+    const getUser = useUser()
+    const { data, isLoading, isError, error } = FetchPost(postid)
+    const reply = FetchReplys(postid)
 
-    async function fetchOnePost(){
-        const result = await axios.get(`/api/post/getOne?postId=${postid}`)
-        console.log(result.data.post)
-        return result.data.post
+    async function checkUser(username: string) {
+        const result = await getUser(username)
+        setUser(result.data.user)
     }
-    
-    const { isPending, isError, data, error, isSuccess } = useQuery({ 
-        queryKey: ['getone'], 
-        queryFn: fetchOnePost,
-    })
-    
-    
-    const mutationFN= LikeFn({UserID: data?.UserID, PostID: data?.PostID, Key: 'getone'});
 
-    if(isPending){
+    useEffect(() => {
+        setUsername(sessionStorage.getItem('session-id') || '')
+    }, [])
+
+    useEffect(() => {
+        if (userNM === '') return
+        checkUser(userNM)
+    }, [userNM])
+    // wait to get user data 
+    if(!user){
+        return <div>loading</div>
+    }
+
+    if(isLoading){
         console.log('loading')
     }
     if(isError){
         console.log(error)
     }
-    // if(isSuccess){
-    //     mutationFN = LikeFn({UserID: data.UserID, PostID: data.PostID})
-    // }
-    
-    async function fetchAllReplys(){
-        const result = await axios.get(`/api/post/getreplys?postid=${postid}&cursor=${0}`)
-        return result.data?.posts
-    }
-
-    const reply = useQuery({ 
-        queryKey: ['getreplys'], 
-        queryFn: fetchAllReplys,
-    })
-
-
-
 
     return(
     <div className="mainTest">
@@ -70,20 +66,26 @@ function PostPage({params}:any){
                     key={index}
                     props={post}
                     KeyMutation="getone"
+                    user={user}
                 />
             ))}
         </div>
-        <div className="BoxReply">
-            <div className="BoxReplyHeader">
+        <div className="BoxReplyHeader">
                 <strong>Replys</strong>
             </div>
+        <div className="BoxReply">
             <div className="BoxReplyContent">
-                {reply.data?.map((post: any, index: number) => (
-                    <Post
-                        key={index}
-                        props={post}
-                        KeyMutation="getreplys"
-                    />
+                {reply.data?.pages.map((page, index) => (
+                    <div key={index}>
+                        {page.map((post: any, index: number) => (
+                            <Post
+                                key={index}
+                                props={post}
+                                KeyMutation="replys"
+                                user={user}
+                            />
+                        ))}
+                    </div>
                 ))}
             </div>
         </div>

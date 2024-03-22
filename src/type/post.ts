@@ -17,3 +17,9 @@ export type TopicType = {
     Description: string,
     PostCount: number,
 };
+
+export type UserType = {
+    UserId: number,
+    Name: string,
+    Username: string,
+};

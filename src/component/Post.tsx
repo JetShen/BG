@@ -1,7 +1,7 @@
 "use client"
 import '@/styles/post.css';
 import Image from 'next/image'
-import { PostType } from '@/type/post';
+import { PostType, UserType } from '@/type/post';
 import LikeFn from '@/client/likefn';
 import { useRouter } from 'next/navigation';
 import ModalReply from './ModalReply';
@@ -9,9 +9,11 @@ import { use, useEffect, useState } from 'react';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
-export default function Post({props, KeyMutation}: {props: PostType, KeyMutation: string}) {
-    const { UserID, PostID, urls_images } = props;
-    const mutationFN = LikeFn({UserID, PostID, Key: KeyMutation})
+export default function Post({props, KeyMutation, user}: {props: PostType, KeyMutation: string, user: UserType}) {
+    
+    const { PostID, urls_images } = props;
+    const { UserId } = user;
+    const mutationFN = LikeFn({UserID: UserId, PostID, Key: KeyMutation})
     const [showModal, setShowModal] = useState(false);
     const [imgs, setImgs] = useState<string[]>([])
     const router = useRouter()
@@ -97,7 +99,7 @@ export default function Post({props, KeyMutation}: {props: PostType, KeyMutation
                     </button>
                 </div>
             </div>
-            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} KeyMutation={KeyMutation} />} 
+            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} KeyMutation={KeyMutation} UserId={UserId} />} 
         </div>
     );
 }

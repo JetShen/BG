@@ -3,7 +3,7 @@ import { useEffect, Fragment } from 'react';
 import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import { useState } from 'react';
 import Post from '@/component/Post';
-import { PostType } from '@/type/post';
+import { PostType, UserType } from '@/type/post';
 import { useInView } from 'react-intersection-observer'
 import ModalTopic from '@/component/ModalTopic';
 import FetchPostFn from '@/client/fetchpostfn';
@@ -13,6 +13,7 @@ import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
 import MakeImg from '@/client/makeImg';
 import ProtectedRoute from '@/client/protectedRoute';
+import useUser from '@/client/useUser';
 
 const queryClient = new QueryClient()
 
@@ -73,6 +74,9 @@ function Home() {
   const makeImg = useMakeImg('post'); // this hook is used to upload images
   const [files, setFiles] = useState<File[] | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [username, setUsername] = useState('')
+  const [user, setUser] = useState<UserType>()
+  const getUser = useUser()
 
   //uploading images
   const [uploading, setUploading] = useState(false);
@@ -82,6 +86,23 @@ function Home() {
     files?.length ?? 0 > 0 ? setWaitImg(true) : setWaitImg(false);
   }
   , [files]);
+  async function checkUser(username: string) {
+    const result = await getUser(username)
+    setUser(result.data.user)
+  }
+
+  async function getuser(){
+    return user;
+  }
+
+  useEffect(() => {
+    setUsername(sessionStorage.getItem('session-id') || '')
+  }, [])
+
+  useEffect(() => {
+    if (username === '') return
+    checkUser(username)
+  }, [username])
 
 
   const handleScroll = () => {
@@ -150,10 +171,14 @@ function Home() {
 
   async function ResolveMake(event: any) {
     event.stopPropagation();
+    const dummyUser = await getuser();
+    const userId = dummyUser?.UserId;
+    console.log(dummyUser, userId);
+    if (dummyUser === undefined || userId === undefined) return alert(`please login user: ${dummyUser} userId: ${userId}`);
   
     const inputElement = document.querySelector('.contentInput') as HTMLInputElement;
     const topicId = topic.name !== '' ? await makeTopic() : 0;
-    const postData = { userid: 1, content: ContentData, topicId };
+    const postData = { userid: userId, content: ContentData, topicId };
     const status = await makePost(postData);
     const id = status.data.id.insertId;
     if (status.status === 200) {
@@ -246,6 +271,7 @@ function Home() {
     setFiles(newFiles);
   }
 
+  if ( user === undefined) return <div>Loading...</div>;
   //TODO: Add a function to handle the file upload
   return (
     <ProtectedRoute>
@@ -281,6 +307,7 @@ function Home() {
             key={post.PostID}
             props={post}
             KeyMutation="post"
+            user={user}
           />
           ))}
         </Fragment>

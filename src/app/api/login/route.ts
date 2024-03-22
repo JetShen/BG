@@ -22,7 +22,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         const passwordHashed = data[0]?.Password;
         const match = await bcrypt.compare(password, passwordHashed);
 
-        return NextResponse.json({ result: match  }, { status: 200 });
+        return NextResponse.json({ result: {match: match, username: username}  }, { status: 200 });
     } catch (error: any ) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });

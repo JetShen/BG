@@ -11,8 +11,7 @@ export default function Login() {
         mutationKey: ['login'],
         mutationFn: async (credentials: {username: string,  password: string}) => await axios.get('/api/login', {params: credentials}),
         onSuccess: () => {
-            sessionStorage.setItem('session-id', 'true');
-            mutation.data?.data?.match ? router.push('/home') : router.push('/login');
+            console.log('Login successful');
         },
         onError: (error) => {
             console.log(error);

@@ -1,5 +1,6 @@
 .mainTest{
     display: flex;
+    align-items: center;
     flex-direction: column;
     gap: 0.5em;
     width: 100%;
@@ -8,10 +9,22 @@
 
 .BoxPost{
     display: flex;
+    align-items: center;
+
     flex-direction: column;
     width: 100%;
     height: auto;
-    border: solid 1px black;
+}
+
+.BoxReplyHeader{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 0.5em;
+    width: 100%;
+    height: auto;
+    border-top: 1px solid black;
 }
 
 .BoxIMG{

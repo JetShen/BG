@@ -9,8 +9,13 @@ export default function ReplyFn({UserID, PostID, Key, content}:{UserID: number, 
         mutationKey: ['replyPost'],
         mutationFn: async () =>  await axios.post('/api/post/reply', { UserID: UserID, PostID: PostID, content: content}),
         onSuccess: () => {
-            console.log('Reply added successfully in ', keyPost);
-            queryClient.invalidateQueries({ queryKey: [keyPost], refetchType: 'active', });
+            if ( keyPost === 'getone') {
+                queryClient.invalidateQueries({ queryKey: [keyPost], refetchType: 'active', })
+                queryClient.invalidateQueries({ queryKey: ['replys'], refetchType: 'active', })
+            }
+            else {
+                queryClient.invalidateQueries({ queryKey: [keyPost], refetchType: 'active', })
+            }
         },
         onError: (error) => {
             console.log(error)

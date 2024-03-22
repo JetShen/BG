@@ -4,7 +4,6 @@ import login from '@/client/loginFn';
 import '@/styles/login.css';
 import Image from 'next/image';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { cookies } from "next/headers";
 
 const googleLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png';
 const queryClient = new QueryClient()
@@ -20,8 +19,8 @@ export default function App(){
 function useLogin(){
     const loginMutation = login();
     const loginUser = async (credentials: {username: string, password: string}) => {
-        const status = await loginMutation.mutateAsync(credentials);
-        return status;
+        const result = await loginMutation.mutateAsync(credentials);
+        return result;
     };
     return loginUser;
 }
@@ -39,13 +38,15 @@ function LoginPage(){
             username: username,
             password: password
         };
-
-        const status = await loginUser(credentials);
-        if(status.status === 200){
-
-            router.push('/home')
-        } else {
-            console.log("Failed to login");
+        
+        const result = await loginUser(credentials);
+        const match: boolean = result.data.result.match;
+        if(match){
+            sessionStorage.setItem('session-id', username);
+            router.push('/home');
+        }
+        else{
+            alert('Invalid credentials');
         }
     }
 
