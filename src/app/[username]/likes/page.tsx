@@ -1,12 +1,13 @@
 'use client';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import Post from '@/component/Post';
-import { PostType } from '@/type/post';
+import { PostType, UserType } from '@/type/post';
 import { useInView } from 'react-intersection-observer'
 import Navbar from '@/component/Navbar';
 import '@/styles/postpage.css'
 import FetchLikeFn from '@/client/fetchLikeFn';
+import useUser from '@/client/useUser';
 
 const queryClient = new QueryClient()
 
@@ -24,7 +25,23 @@ function Home({username}: {username: string} ) {
   const { ref, inView } = useInView()
   const userId:number = 1; // test user id
   const { data, fetchNextPage, fetchPreviousPage } = FetchLikeFn(userId);
+  const [userNM, setUsername] = useState('')
+  const [user, setUser] = useState<UserType>()
+  const getUser = useUser()
 
+  async function checkUser(username: string) {
+      const result = await getUser(username)
+      setUser(result.data.user)
+  }
+
+  useEffect(() => {
+      setUsername(sessionStorage.getItem('session-id') || '')
+  }, [])
+
+  useEffect(() => {
+      if (userNM === '') return
+      checkUser(userNM)
+  }, [userNM])
   
 
   const trackScrolling = () => {
@@ -62,6 +79,7 @@ function Home({username}: {username: string} ) {
     }
   }, [fetchNextPage, inView])
 
+  if(!user) return <div>Loading...</div>
 
   return (
     <>
@@ -76,6 +94,7 @@ function Home({username}: {username: string} ) {
             key={indexj}
             props={post}
             KeyMutation='postLikes'
+            user={user}
           />
           ))}
         </Fragment>

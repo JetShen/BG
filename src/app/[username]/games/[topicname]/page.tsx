@@ -41,9 +41,9 @@ function TopicPage({ topicname, username }: { topicname: string, username: strin
     }, [])
 
     useEffect(() => {
-        if (username === '') return
-        checkUser(username)
-    }, [username])
+        if (userNM === '') return
+        checkUser(userNM)
+    }, [userNM])
 
     const trackScrolling = () => {
         const wrappedElement = document.getElementsByClassName('TopicContainter')[0]
