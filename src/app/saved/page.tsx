@@ -5,12 +5,12 @@ import { Fragment, useEffect, useState } from "react";
 import FetchSavedPost from "@/client/fetchSaved";
 import { useInView } from "react-intersection-observer";
 import Post from "@/component/Post";
-import getUser from "@/client/getUser";
+import GetUser from "@/client/getUser";
 
 const queryClient = new QueryClient()
 
 export default function App() {
-  const data = getUser() as any
+  const data = GetUser() as any
   if (!data) {
     return null
   }

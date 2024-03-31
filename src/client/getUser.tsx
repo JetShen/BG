@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import { UserType } from '@/type/post';
 
-export default function getUser() {
+export default function GetUser() {
     const [user, setUser] = useState<UserType>();
     const username = sessionStorage.getItem('session-id') || '';
 
