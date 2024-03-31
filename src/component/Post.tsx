@@ -5,7 +5,8 @@ import { PostType, UserType } from '@/type/post';
 import LikeFn from '@/client/likefn';
 import { useRouter } from 'next/navigation';
 import ModalReply from './ModalReply';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import SavePost from '@/client/savePost';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
@@ -17,6 +18,7 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
     const [showModal, setShowModal] = useState(false);
     const [imgs, setImgs] = useState<string[]>([])
     const router = useRouter()
+    const savePost = SavePost({key: KeyMutation})
 
     useEffect(() => {
         if (urls_images) {
@@ -51,6 +53,12 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
         event.stopPropagation()
         setShowModal(false);
     };
+
+    async function save(event:any){
+        event.stopPropagation()
+        await savePost.mutateAsync({userid: UserId, postId: PostID})
+
+    }
 
     return (
         <div className="PostObject" onClick={redirectToPost}>
@@ -96,6 +104,9 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
                     </button>
                     <button className="button like" onClick={sendlike} >
                         {props.cantidad_likes} - Like
+                    </button>
+                    <button className="button save" onClick={save}>
+                        {props.cantidad_saved} - Save
                     </button>
                 </div>
             </div>

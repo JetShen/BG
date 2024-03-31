@@ -13,6 +13,7 @@ async function getPostById(postId: number, client: any, posts: any[] = []) {
             p.ParentPostId,
             (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
             (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
+            (SELECT COUNT(*) FROM Saved AS s WHERE s.PostId = p.PostId) AS cantidad_saved,
             GROUP_CONCAT(media.Url SEPARATOR ', ') AS urls_images
         FROM 
             Post p

@@ -5,9 +5,14 @@ import { PostType } from '@/type/post';
 
 
 export async function GET(request: NextRequest){
+    console.log('GET /api/save/posts');
     try {
         const client = await GetClient();
         const cursor = request.nextUrl.searchParams.get("cursor")
+        const userid = request.nextUrl.searchParams.get("userid")
+        if (userid === undefined || userid === null) {
+            return NextResponse.json({ error: 'Missing "userid" parameter' }, { status: 500 });
+        }
 
         if (cursor === undefined || cursor === null) {
             return NextResponse.json({ error: 'Missing "cursor" parameter' }, { status: 500 });
@@ -38,14 +43,16 @@ export async function GET(request: NextRequest){
                 User u ON p.UserId = u.UserId
             LEFT JOIN 
                 Media media ON p.PostId = media.PostId
+            INNER JOIN
+                Saved s ON p.PostId = s.PostId
             WHERE 
-                p.ParentPostId IS NULL
+                s.UserId = ?
             GROUP BY 
-                p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes
-            ORDER BY 
-                p.PostID DESC        
+                p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes, s.SavedId
+            ORDER BY
+                s.SavedId DESC        
             LIMIT ? OFFSET ?
-            `, [pageSize, pageParam]);
+            `, [userid, pageSize, pageParam]);
         const posts: Array<PostType> = result[0] as Array<PostType>;
         const len = Object.keys(posts);
         const ln: number = len.length;

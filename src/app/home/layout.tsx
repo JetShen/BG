@@ -17,7 +17,7 @@ export default function RootLayout({
           <div className="navegation">
             <ProfileData />
             <ul className="options">
-              <Option username='usuario1' />
+              <Option />
             </ul>
           </div>
           <div className="main">

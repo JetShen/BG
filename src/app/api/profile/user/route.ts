@@ -18,7 +18,7 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT
-                UserId, Name, Username
+                UserId, Name, Username, Private
             FROM 
                 user
             WHERE

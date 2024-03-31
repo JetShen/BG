@@ -272,7 +272,6 @@ function Home() {
   }
 
   if ( user === undefined) return <div>Loading...</div>;
-  //TODO: Add a function to handle the file upload
   return (
     <ProtectedRoute>
       <div className="makePost">

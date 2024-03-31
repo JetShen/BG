@@ -6,14 +6,14 @@
 - [x] User can Like a Post 
 - [x] User can Reply to a Post
 - [ ] User can Share a Post <- Follow Section Needs to be finished for this step
-- [ ] User can Save a Post
+- [x] User can Save a Post
 
 ### Account Section
 - [x] Register/Login
 - [x] User password is encrypted
 - [x] Email verification
-- [ ] User can Delete their account
-- [ ] User can Make their account private
+- [x] User can Delete their account
+- [x] User can Make their account private
 - [ ] User receives notifications
   
 ### Follow Section

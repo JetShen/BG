@@ -7,6 +7,7 @@ export type PostType = {
     Username: string
     cantidad_likes: number,
     cantidad_respuestas: number,
+    cantidad_saved: number,
     urls_images: string
 };
 
@@ -22,4 +23,5 @@ export type UserType = {
     UserId: number,
     Name: string,
     Username: string,
+    Private: number,
 };
