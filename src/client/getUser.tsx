@@ -5,7 +5,7 @@ import { UserType } from '@/type/post';
 
 export default function GetUser() {
     const [user, setUser] = useState<UserType>();
-    const username = sessionStorage.getItem('session-id') || '';
+    const username = (sessionStorage as Storage).getItem('session-id') || '';
 
     useEffect(() => {
         console.log(`fetching user data for ${username}...`)
