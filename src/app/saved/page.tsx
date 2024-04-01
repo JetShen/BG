@@ -3,9 +3,8 @@ import { PostType, UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Fragment, useEffect, useState } from "react";
 import FetchSavedPost from "@/client/fetchSaved";
-import { useInView } from "react-intersection-observer";
 import Post from "@/component/Post";
-import GetUser from "@/client/getUser";
+import GetUser from "@/app/saved/getUser";
 
 const queryClient = new QueryClient()
 
