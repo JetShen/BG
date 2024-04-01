@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Fragment, useEffect, useState } from "react";
 import FetchSavedPost from "@/client/fetchSaved";
 import Post from "@/component/Post";
-import GetUser from "@/app/saved/getUser";
+import GetUser from "@/client/getUser";
 
 const queryClient = new QueryClient()
 
