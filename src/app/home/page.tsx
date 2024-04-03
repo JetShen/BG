@@ -13,14 +13,19 @@ import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
 import MakeImg from '@/client/makeImg';
 import ProtectedRoute from '@/client/protectedRoute';
-import useUser from '@/client/useUser';
+import GetUser from '@/client/getUser';
 
 const queryClient = new QueryClient()
 
 export default function App(){
+  const dataUser = GetUser() as any
+  if (!dataUser) {
+      return null
+  }
+  const user = dataUser.user
   return (
     <QueryClientProvider client={queryClient}>
-      <Home />
+      <Home user={user}/>
     </QueryClientProvider>
   )
 }
@@ -63,7 +68,7 @@ function useMakeImg(key: string) {
 
 // Todo: Add postState to the Home component this will be used to store the post data and make the code more readable. 
 // idk what i want to say with the above comment
-function Home() {
+function Home({user}: {user: UserType}) {
   const { ref, inView } = useInView()
   const [ContentData, setContentData] = useState<string>('');
   const [topicModal, setTopicModal] = useState<boolean>(false);
@@ -74,9 +79,7 @@ function Home() {
   const makeImg = useMakeImg('post'); // this hook is used to upload images
   const [files, setFiles] = useState<File[] | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [username, setUsername] = useState('')
-  const [user, setUser] = useState<UserType>()
-  const getUser = useUser()
+  
 
   //uploading images
   const [uploading, setUploading] = useState(false);
@@ -86,23 +89,7 @@ function Home() {
     files?.length ?? 0 > 0 ? setWaitImg(true) : setWaitImg(false);
   }
   , [files]);
-  async function checkUser(username: string) {
-    const result = await getUser(username)
-    setUser(result.data.user)
-  }
 
-  async function getuser(){
-    return user;
-  }
-
-  useEffect(() => {
-    setUsername(sessionStorage.getItem('session-id') || '')
-  }, [])
-
-  useEffect(() => {
-    if (username === '') return
-    checkUser(username)
-  }, [username])
 
 
   const handleScroll = () => {
@@ -171,10 +158,9 @@ function Home() {
 
   async function ResolveMake(event: any) {
     event.stopPropagation();
-    const dummyUser = await getuser();
-    const userId = dummyUser?.UserId;
-    console.log(dummyUser, userId);
-    if (dummyUser === undefined || userId === undefined) return alert(`please login user: ${dummyUser} userId: ${userId}`);
+    const userId = user.UserId;
+    console.log(user.UserId, userId);
+    if (userId === undefined || userId === undefined) return alert(`please login user: ${userId} userId: ${userId}`);
   
     const inputElement = document.querySelector('.contentInput') as HTMLInputElement;
     const topicId = topic.name !== '' ? await makeTopic() : 0;

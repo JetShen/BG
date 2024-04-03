@@ -8,42 +8,31 @@ import Post from "@/component/Post";
 import FetchTopicFn from "@/client/fetchTopicFn";
 import Image from 'next/image'
 import '@/styles/topicPageOne.css'
-import useUser from "@/client/useUser";
+import GetUser from "@/client/getUser";
 
 const queryClient = new QueryClient()
 
 export default function App({ params }: any) {
     const { username, topicname } = params;
+    const dataUser = GetUser() as any
+    if (!dataUser) {
+        return null
+    }
+    const user = dataUser.user
 
     return (
         <QueryClientProvider client={queryClient}>
-            <TopicPage topicname={topicname} username={username} />
+            <TopicPage topicname={topicname} username={username} user={user} />
         </QueryClientProvider>
     )
 }
 const dsUrl = 'https://myhotposters.com/cdn/shop/products/mL1833_1024x1024.jpg?v=1571445492' // img test url
 
-function TopicPage({ topicname, username }: { topicname: string, username: string }) {
+function TopicPage({ topicname, username, user }: { topicname: string, username: string, user: UserType}) {
     const { ref, inView } = useInView()
     const { data, fetchNextPage, fetchPreviousPage } = FetchTopicByfn(username, topicname);
     const TopicData = FetchTopicFn(topicname, username);
-    const [userNM, setUsername] = useState('')
-    const [user, setUser] = useState<UserType>()
-    const getUser = useUser()
-
-    async function checkUser(username: string) {
-        const result = await getUser(username)
-        setUser(result.data.user)
-    }
-
-    useEffect(() => {
-        setUsername(sessionStorage.getItem('session-id') || '')
-    }, [])
-
-    useEffect(() => {
-        if (userNM === '') return
-        checkUser(userNM)
-    }, [userNM])
+    
 
     const trackScrolling = () => {
         const wrappedElement = document.getElementsByClassName('TopicContainter')[0]

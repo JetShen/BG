@@ -6,50 +6,37 @@ import { useRouter } from 'next/navigation';
 import Post from "@/component/Post"
 import { useEffect, useState } from "react"
 import { UserType } from "@/type/post"
-import useUser from "@/client/useUser"
+
 import FetchPost from "@/client/fetchPost"
 import FetchReplys from "@/client/fetchReplys";
+import GetUser from "@/client/getUser";
 
 const queryClient = new QueryClient()
 
 export default function Page({params}:any){
     const { username, postid } = params;
-
+    const dataUser = GetUser() as any
+    if (!dataUser) {
+        return null
+    }
+    const user = dataUser.user
     return(
         <QueryClientProvider client={queryClient}>
-            <PostPage params={{username, postid}}/>
+            <PostPage params={{username, postid}} user={user}/>
         </QueryClientProvider>
     )
 }
 
 
 
-function PostPage({params}:any){
+function PostPage({params,user}:{params:any,user:UserType}){
     const { username, postid } = params;
     const router = useRouter()
-    const [userNM, setUsername] = useState('')
-    const [user, setUser] = useState<UserType>()
-    const getUser = useUser()
+    
     const { data, isLoading, isError, error } = FetchPost(postid)
     const reply = FetchReplys(postid)
 
-    async function checkUser(username: string) {
-        const result = await getUser(username)
-        setUser(result.data.user)
-    }
-
-    useEffect(() => {
-        setUsername(sessionStorage.getItem('session-id') || '')
-    }, [])
-
-    useEffect(() => {
-        if (userNM === '') return
-        checkUser(userNM)
-    }, [userNM])
-    // wait to get user data 
-    if(!user){
-        return <div>loading</div>
-    }
+   
 
     if(isLoading){
         console.log('loading')

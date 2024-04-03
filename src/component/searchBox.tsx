@@ -5,39 +5,27 @@ import { Fragment, useEffect, useState } from "react";
 import { PostType, UserType } from "@/type/post";
 import Post from "./Post";
 import { useInView } from "react-intersection-observer";
-import useUser from "@/client/useUser";
+import GetUser from "@/client/getUser";
 
 const queryClient = new QueryClient();
 export default function App({query}:{query:string}){
-
-    return (
-        <QueryClientProvider client={queryClient}>
-          <SearchPage query={query}  />
-        </QueryClientProvider>
-      );
+  const dataUser = GetUser() as any
+  if (!dataUser) {
+      return null
+  }
+  const user = dataUser.user
+  return (
+      <QueryClientProvider client={queryClient}>
+        <SearchPage query={query} user={user} />
+      </QueryClientProvider>
+    );
 }
 
 
-function SearchPage({query }:{query:string}){
+function SearchPage({query,user}:{query:string,user:UserType}){
     const {data, isFetching, isFetchingNextPage, fetchNextPage, fetchPreviousPage, refetch, isLoading, isFetched, isError} = FetchSearchFn(query);
     const [ref, isView] = useInView();
-    const [userNM, setUsername] = useState('')
-    const [user, setUser] = useState<UserType>()
-    const getUser = useUser()
-  
-    async function checkUser(username: string) {
-        const result = await getUser(username)
-        setUser(result.data.user)
-    }
-  
-    useEffect(() => {
-        setUsername(sessionStorage.getItem('session-id') || '')
-    }, [])
-  
-    useEffect(() => {
-        if (userNM === '') return
-        checkUser(userNM)
-    }, [userNM])
+    
 
     const handleScroll = () => {
         const mainElement = document.querySelector('.searchDiv');

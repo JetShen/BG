@@ -7,40 +7,28 @@ import { useInView } from 'react-intersection-observer'
 import Navbar from '@/component/Navbar';
 import '@/styles/postpage.css'
 import FetchPostByFn from '@/client/fetchPostByfn'
-import useUser from '@/client/useUser';
+import GetUser from '@/client/getUser';
 
 const queryClient = new QueryClient()
 
 export default function App({params}:any){
   const { username } = params;
+  const dataUser = GetUser() as any
+  if (!dataUser) {
+      return null
+  }
+  const user = dataUser.user
   return (
     <QueryClientProvider client={queryClient}>
-      <Home username={username}/>
+      <Home username={username} user={user}/>
     </QueryClientProvider>
   )
 }
 
 
-function Home({username}: {username: string} ) {
+function Home({username, user}: {username: string, user:UserType} ) {
   const { ref, inView } = useInView()
   const { data, fetchNextPage, fetchPreviousPage } = FetchPostByFn(username);
-  const [userNM, setUsername] = useState('')
-  const [user, setUser] = useState<UserType>()
-  const getUser = useUser()
-
-  async function checkUser(username: string) {
-      const result = await getUser(username)
-      setUser(result.data.user)
-  }
-
-  useEffect(() => {
-      setUsername(sessionStorage.getItem('session-id') || '')
-  }, [])
-
-  useEffect(() => {
-      if (userNM === '') return
-      checkUser(userNM)
-  }, [userNM])
   
 
   const trackScrolling = () => {

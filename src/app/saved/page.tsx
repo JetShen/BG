@@ -13,10 +13,6 @@ export default function App() {
   if (!data) {
     return null
   }
-  console.log("user\n",data.user)
-  if (!data.user) {
-    return null
-  }
   return (
     <QueryClientProvider client={queryClient}>
       <Saved user={data.user}/>

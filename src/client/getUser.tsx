@@ -7,11 +7,9 @@ export default function GetUser() {
     const [user, setUser] = useState<UserType>();
 
     useEffect(() => {
-        console.log(`fetching user data for ${sessionStorage.getItem('session-id') || ''}...`)
         const fetchUser = async () => {
             try {
                 const res = await axios.get(`/api/profile/user?username=${sessionStorage.getItem('session-id') || ''}`);
-                console.log(res.data)
                 setUser(res.data);
             } catch (err) {
                 console.log(err);

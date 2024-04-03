@@ -1,10 +1,10 @@
 "use client"
 import DeleteAcc from "@/client/deletAcc"
-import useUser from "@/client/useUser";
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import PrivateAcc from "@/client/privateAcc";
+import GetUser from "@/client/getUser";
 
 
 
@@ -12,9 +12,14 @@ import PrivateAcc from "@/client/privateAcc";
 const queryClient = new QueryClient()
 
 export default function App(){
+    const dataUser = GetUser() as any
+    if (!dataUser) {
+        return null
+    }
+    const user = dataUser.user
   return (
     <QueryClientProvider client={queryClient}>
-      <Settings />
+      <Settings user={user}/>
     </QueryClientProvider>
   )
 }
@@ -37,27 +42,11 @@ function usePrivateAcc(){
     return accPrivate
 }
 
-function Settings(){
-    const [username, setUsername] = useState('')
-    const [user, setUser] = useState<UserType>()
-    const getUser = useUser()
+function Settings({user}: {user: UserType}){
+    
     const mutationDelete = useDeleteAcc()
     const mutationPrivate = usePrivateAcc()
    
-
-    async function checkUser(username: string) {
-        const result = await getUser(username)
-        setUser(result.data.user)
-    }
-
-    useEffect(() => {
-        setUsername(sessionStorage.getItem('session-id') || '')
-    }, [])
-
-    useEffect(() => {
-        if (username === '') return
-        checkUser(username)
-    }, [username])
 
     async function handleDeleteAccount(){
         const status = await mutationDelete(user?.Username || '')
@@ -72,13 +61,8 @@ function Settings(){
     async function handlePrivate(){
         const status = await mutationPrivate(user?.Username || '')
         if ( status.status === 200 ){
-            setUser((prevUser) => {
-                if (prevUser) {
-                    return {...prevUser, Private: prevUser.Private === 0 ? 1 : 0};
-                }
-                return prevUser;
-            });
-        } else {
+            window.location.reload();
+            } else {
             alert('Error making account private');
         }
     }
