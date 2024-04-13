@@ -70,7 +70,6 @@ function RegisterPage(){
         credentials.append('email', email);
         credentials.append('password', hashedPassword);
         credentials.append('pfp', pfp as Blob);
-        console.log(credentials);
         const status = await registerUser(credentials);
         if(status.status === 200){
             console.log("Registered successfully");

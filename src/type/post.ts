@@ -24,4 +24,5 @@ export type UserType = {
     Name: string,
     Username: string,
     Private: number,
+    ProfilePicture: string,
 };

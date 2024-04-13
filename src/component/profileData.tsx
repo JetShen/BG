@@ -30,8 +30,8 @@ function ProfileData({user}: {user: UserType}){
     
     return(
         <div className="miniN">
-            <Image src={ulrTest}
-            alt="Picture of the author"
+            <Image src={user.ProfilePicture ? user.ProfilePicture : ulrTest}
+            alt="user pfp"
             width={0}
             height={0}
             sizes="100vw"
