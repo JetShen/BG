@@ -32,7 +32,7 @@ function Optionsub({user}: {user: UserType}) {
             <li className="option" onClick={() => router.push('/home/search')}>Search</li>
             <li className="option" onClick={() => router.push(`/${user?.Username}/posts`)}>Profile</li>
             <li className="option" onClick={() => router.push(`/saved`)}>Saved Post</li>
-            <li className="option" onClick={() => router.push('/home/settings')}>Settings</li>
+            <li className="option" onClick={() => router.push('/settings')}>Settings</li>
         </>
     )
 }

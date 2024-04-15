@@ -2,9 +2,10 @@
 import DeleteAcc from "@/client/deletAcc"
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import PrivateAcc from "@/client/privateAcc";
 import GetUser from "@/client/getUser";
+import { useRouter } from "next/navigation";
+
 
 
 
@@ -43,7 +44,7 @@ function usePrivateAcc(){
 }
 
 function Settings({user}: {user: UserType}){
-    
+    const router = useRouter()    
     const mutationDelete = useDeleteAcc()
     const mutationPrivate = usePrivateAcc()
    
@@ -67,6 +68,15 @@ function Settings({user}: {user: UserType}){
         }
     }
 
+    function handlePassword(){
+        router.push('/settings/password')
+    }
+
+    function handleUsername(){
+        router.push('/settings/username')
+    }
+
+
     if (user === undefined) return null;
 
 
@@ -74,11 +84,11 @@ function Settings({user}: {user: UserType}){
         <>
             <h2>Settings</h2>
             <ul className="settingsOptions">
-                <li><button onClick={handleDeleteAccount}>Delete Acount</button></li>
-                <li><button>Change Password</button></li>
                 <li><button>Change Email</button></li>
-                <li><button>Change Username</button></li>
+                <li><button onClick={handlePassword}>Change Password</button></li>
+                <li><button onClick={handleUsername}>Change Username</button></li>
                 <li><button onClick={handlePrivate}>{user.Private == 0 ? "Make Acc Private" : "Make Acc Public"}</button></li>
+                <li><button onClick={handleDeleteAccount}>Delete Acount</button></li>
             </ul>
         </>
     )
