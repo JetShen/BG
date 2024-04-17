@@ -76,6 +76,10 @@ function Settings({user}: {user: UserType}){
         router.push('/settings/username')
     }
 
+    function handlePicture(){
+        router.push('/settings/picture')
+    }
+
 
     if (user === undefined) return null;
 
@@ -85,6 +89,7 @@ function Settings({user}: {user: UserType}){
             <h2>Settings</h2>
             <ul className="settingsOptions">
                 <li><button>Change Email</button></li>
+                <li><button onClick={handlePicture}>Change Profile Picture</button></li>
                 <li><button onClick={handlePassword}>Change Password</button></li>
                 <li><button onClick={handleUsername}>Change Username</button></li>
                 <li><button onClick={handlePrivate}>{user.Private == 0 ? "Make Acc Private" : "Make Acc Public"}</button></li>

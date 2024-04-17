@@ -21,11 +21,11 @@
 - [ ] User can See their followers
 
 ### Settings
-- [ ] Change username/password
+- [x] Change username/password
 - [ ] Change style
 
 ### Profile
-- [ ] Change profile picture
+- [x] Change profile picture
 - [x] See posts
 - [x] See likes
 - [ ] See reposts (shares)
