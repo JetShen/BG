@@ -1,10 +1,33 @@
+import { UserType } from '@/type/post'
 import Image from 'next/image'
-const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
+import FollowFn from '@/client/follow'
 
-export default function Person() {
+
+function useFollow(){
+    const followMutation = FollowFn({key: 'user'})
+    const follow = async (FollowData: FormData) => {
+        const result = await followMutation.mutateAsync(FollowData)
+        return result
+    }
+    return follow
+}
+
+export default function Person({user, userid}: {user: UserType, userid: number}) {
+    const followMutation = useFollow()
+    
+    async function HandleFollow() {
+        console.log('Follow')
+        const FollowData = new FormData()
+        FollowData.append('userid', userid.toString())
+        FollowData.append('followid', user.UserId.toString())
+        const result = await followMutation(FollowData)
+        console.log(result)
+        
+    }
+    
     return (
         <li className="person">
-            <Image src={ulrTest}
+            <Image src={user.ProfilePicture}
                 alt="Picture of the author"
                 width={0}
                 height={0}
@@ -12,8 +35,9 @@ export default function Person() {
                 style={{ width: '50%', height: 'auto' }}
                 className='profilePostImg' />
             <div className="section">
-                <h4 className="name">Name</h4>
-                <p className="username">@username</p>
+                <h4 className="name">{user.Name}</h4>
+                <p className="username">@{user.Username}</p>
+                <button onClick={HandleFollow}>Follow</button>
             </div>
         </li>
     )
