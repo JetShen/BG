@@ -1,11 +1,11 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import FetchSearchFn from "@/client/fetchSearchFn";
+import FetchSearchFn from "@/client/GET/fetchSearchFn";
 import { Fragment, useEffect, useState } from "react";
 import { PostType, UserType } from "@/type/post";
 import Post from "./Post";
 import { useInView } from "react-intersection-observer";
-import GetUser from "@/client/getUser";
+import GetUser from "@/client/GET/getUser";
 
 const queryClient = new QueryClient();
 export default function App({query}:{query:string}){

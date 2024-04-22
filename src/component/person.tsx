@@ -1,6 +1,6 @@
 import { UserType } from '@/type/post'
 import Image from 'next/image'
-import FollowFn from '@/client/follow'
+import FollowFn from '@/client/POST/follow'
 
 
 function useFollow(){

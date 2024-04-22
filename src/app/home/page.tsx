@@ -6,14 +6,14 @@ import Post from '@/component/Post';
 import { PostType, UserType } from '@/type/post';
 import { useInView } from 'react-intersection-observer'
 import ModalTopic from '@/component/ModalTopic';
-import FetchPostFn from '@/client/fetchpostfn';
-import MakePostFn from '@/client/makepostfn';
-import TopicFn from '@/client/topicfn';
+import FetchPostFn from '@/client/GET/fetchpostfn';
+import MakePostFn from '@/client/POST/makepostfn';
+import TopicFn from '@/client/POST/topicfn';
 import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
-import MakeImg from '@/client/makeImg';
+import MakeImg from '@/client/POST/makeImg';
 import ProtectedRoute from '@/client/protectedRoute';
-import GetUser from '@/client/getUser';
+import GetUser from '@/client/GET/getUser';
 
 const queryClient = new QueryClient()
 

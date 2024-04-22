@@ -7,9 +7,9 @@ import Post from "@/component/Post"
 import { useEffect, useState } from "react"
 import { UserType } from "@/type/post"
 
-import FetchPost from "@/client/fetchPost"
-import FetchReplys from "@/client/fetchReplys";
-import GetUser from "@/client/getUser";
+import FetchPost from "@/client/GET/fetchPost"
+import FetchReplys from "@/client/GET/fetchReplys";
+import GetUser from "@/client/GET/getUser";
 
 const queryClient = new QueryClient()
 

@@ -1,4 +1,4 @@
-import GetUser from '@/client/fetchUser'
+import GetUser from '@/client/GET/fetchUser'
 
 export default function useUser() {
     const userMutation = GetUser()

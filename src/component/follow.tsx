@@ -4,8 +4,8 @@ import '@/styles/follow.css'
 import Person from './person'
 import { UserType } from '@/type/post'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import GetUser from '@/client/getUser'
-import GetUsers from '@/client/getUsers'
+import GetUser from '@/client/GET/getUser'
+import GetUsers from '@/client/GET/getUsers'
 import { useEffect, useState } from 'react'
 
 

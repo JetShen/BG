@@ -2,7 +2,7 @@
 import '@/styles/login.css';
 import Image from 'next/image';
 const googleLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png';
-import Register from '@/client/registerFn';
+import Register from '@/client/POST/registerFn';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import bcrypt from "bcryptjs";
 import { useRouter } from 'next/navigation';

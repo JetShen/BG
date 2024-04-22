@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import login from '@/client/loginFn';
+import login from '@/client/GET/loginFn';
 import '@/styles/login.css';
 import Image from 'next/image';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

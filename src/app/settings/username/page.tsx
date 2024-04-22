@@ -1,10 +1,10 @@
 "use client"
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import GetUser from "@/client/getUser";
+import GetUser from "@/client/GET/getUser";
 import { useRouter } from "next/navigation";
-import ChangeUsername from "@/client/changeusername";
-import login from '@/client/loginFn';
+import ChangeUsername from "@/client/PUT/changeusername";
+import login from '@/client/GET/loginFn';
 import { useState } from "react";
 
 

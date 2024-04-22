@@ -1,10 +1,10 @@
 "use client"
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import GetUser from "@/client/getUser";
+import GetUser from "@/client/GET/getUser";
 import { useState } from "react";
-import ChangePassword from "@/client/changepassword";
-import login from '@/client/loginFn';
+import ChangePassword from "@/client/PUT/changepassword";
+import login from '@/client/GET/loginFn';
 import bcrypt from "bcryptjs";
 
 

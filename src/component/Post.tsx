@@ -2,11 +2,11 @@
 import '@/styles/post.css';
 import Image from 'next/image'
 import { PostType, UserType } from '@/type/post';
-import LikeFn from '@/client/likefn';
+import LikeFn from '@/client/POST/likefn';
 import { useRouter } from 'next/navigation';
 import ModalReply from './ModalReply';
 import { useEffect, useState } from 'react';
-import SavePost from '@/client/savePost';
+import SavePost from '@/client/POST/savePost';
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 

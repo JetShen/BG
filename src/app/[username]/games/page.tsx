@@ -3,7 +3,7 @@ import '@/styles/topicPage.css';
 import Topic from "@/component/topic";
 import { Fragment, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import FetchTopicsFn from '@/client/fetchTopicsFn';
+import FetchTopicsFn from '@/client/GET/fetchTopicsFn';
 import { useInView } from 'react-intersection-observer';
 import { TopicType } from '@/type/post';
 import Navbar from '@/component/Navbar';

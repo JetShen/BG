@@ -1,14 +1,14 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import FetchTopicByfn from "@/client/fetchTopicByfn";
+import FetchTopicByfn from "@/client/GET/fetchTopicByfn";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import { PostType, UserType } from "@/type/post";
 import Post from "@/component/Post";
-import FetchTopicFn from "@/client/fetchTopicFn";
+import FetchTopicFn from "@/client/GET/fetchTopicFn";
 import Image from 'next/image'
 import '@/styles/topicPageOne.css'
-import GetUser from "@/client/getUser";
+import GetUser from "@/client/GET/getUser";
 
 const queryClient = new QueryClient()
 

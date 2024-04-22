@@ -1,9 +1,9 @@
 "use client"
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import GetUser from "@/client/getUser";
+import GetUser from "@/client/GET/getUser";
 import { useState } from "react";
-import ChangePicture from "@/client/changepicture";
+import ChangePicture from "@/client/PUT/changepicture";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 

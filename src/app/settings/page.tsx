@@ -1,9 +1,9 @@
 "use client"
-import DeleteAcc from "@/client/deletAcc"
+import DeleteAcc from "@/client/DELETE/deletAcc"
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import PrivateAcc from "@/client/privateAcc";
-import GetUser from "@/client/getUser";
+import PrivateAcc from "@/client/PUT/privateAcc";
+import GetUser from "@/client/GET/getUser";
 import { useRouter } from "next/navigation";
 
 

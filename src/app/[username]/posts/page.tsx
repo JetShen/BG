@@ -6,8 +6,8 @@ import { PostType, UserType } from '@/type/post';
 import { useInView } from 'react-intersection-observer'
 import Navbar from '@/component/Navbar';
 import '@/styles/postpage.css'
-import FetchPostByFn from '@/client/fetchPostByfn'
-import GetUser from '@/client/getUser';
+import FetchPostByFn from '@/client/GET/fetchPostByfn'
+import GetUser from '@/client/GET/getUser';
 
 const queryClient = new QueryClient()
 

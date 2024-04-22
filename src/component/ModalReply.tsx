@@ -1,6 +1,6 @@
 import { useState } from "react";
 import '@/styles/modalreply.css'
-import ReplyFn from "@/client/replyfn";
+import ReplyFn from "@/client/POST/replyfn";
 
 
 

@@ -4,7 +4,7 @@ const ulrTest = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Anime
 import { useState, useEffect } from 'react'
 import { UserType } from '@/type/post'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import GetUser from '@/client/getUser'
+import GetUser from '@/client/GET/getUser'
 const queryClient = new QueryClient()
 
 

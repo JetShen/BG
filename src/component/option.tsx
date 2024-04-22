@@ -1,5 +1,5 @@
 "use client";
-import GetUser from "@/client/getUser";
+import GetUser from "@/client/GET/getUser";
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/navigation"
