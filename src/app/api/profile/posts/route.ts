@@ -44,7 +44,7 @@ export async function GET(request: NextRequest){
             LEFT JOIN 
                 Media media ON p.PostId = media.PostId
             WHERE 
-                u.Username = ?
+                u.Username = ? AND p.ParentPostId is null
             GROUP BY 
                 p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes
             ORDER BY 

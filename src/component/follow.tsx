@@ -42,7 +42,6 @@ function MiniFollow({ user }: { user: UserType }) {
 
   async function handleGetUsers() {
     const result = await mutationUsers(user.UserId)
-    console.log(result)
     setList(result.data.users)
   }
 

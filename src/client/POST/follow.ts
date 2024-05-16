@@ -7,8 +7,8 @@ export default function FollowFn({ key }: { key: string }) {
         mutationKey: ['follow'],
         mutationFn: async (FollowData: FormData) => await axios.post('/api/profile/follow', FollowData),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [key], refetchType: 'active', });
-            
+            queryClient.invalidateQueries({ queryKey: ['userList'], refetchType: 'active', });
+            console.log('Followed');
         },
         onError: (error) => {
             console.log(error);

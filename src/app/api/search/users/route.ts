@@ -16,18 +16,20 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT 
-                UserId, 
-                Name, 
-                Username, 
-                ProfilePicture 
+                u.UserId, 
+                u.Name, 
+                u.Username, 
+                u.ProfilePicture 
             FROM 
-                user 
+                User u
+            LEFT JOIN 
+                Follow f ON u.UserId = f.FollowedId AND f.UserId = ?
             WHERE 
-                Private is false 
-            AND
-                UserID != ?
-            limit 3
-            `, [userid]);
+                u.Private = false
+                AND u.UserId != ?
+                AND f.UserId IS NULL
+            LIMIT 3
+            `, [userid, userid]);
         const users: Array<UserType> = result[0] as Array<UserType>;
 
         return NextResponse.json({ users,  }, { status: 200, headers: { 'Content-Type': 'application/json' } });
