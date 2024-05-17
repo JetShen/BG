@@ -37,8 +37,11 @@ function ProfileData({user}: {user: UserType}){
             sizes="100vw"
             style={{ width: '50%', height: 'auto' }}
             className='profilePostImg' />
-            <strong>{user?.Name}</strong>
-            <p>@{user?.Username}</p>
+            <p><strong>{user?.Name}</strong>@{user?.Username}</p>
+            <div className='MiniFollow-box'>
+                <strong>Following {user.Following}</strong>
+                <strong>Followers {user.Followers}</strong>
+            </div>
         </div>
     )
 }

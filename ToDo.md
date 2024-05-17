@@ -17,7 +17,7 @@
 - [ ] User receives notifications
   
 ### Follow Section
-- [ ] User can Follow/Unfollow
+- [x] User can Follow/Unfollow
 - [ ] User can See their followers
 
 ### Settings

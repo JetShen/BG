@@ -2,6 +2,7 @@ import { GetClient } from "@/client/mysql";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request): Promise<NextResponse> {
+    console.log('POST /api/profile/follow');
     try {
         const client = await GetClient();
         if (!client) {

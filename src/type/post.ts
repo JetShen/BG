@@ -25,4 +25,7 @@ export type UserType = {
     Username: string,
     Private: number,
     ProfilePicture: string,
+    Followers: number,
+    Following: number,
+    FollowedBy: number,
 };

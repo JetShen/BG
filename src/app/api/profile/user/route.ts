@@ -18,9 +18,15 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT
-                UserId, Name, Username, Private, ProfilePicture
+                u.UserId, 
+                u.Name, 
+                u.Username, 
+                u.Private, 
+                u.ProfilePicture,
+                (select count(UserId) from follow f where f.userid = u.UserId) as Following,
+                (select count(FollowedId) from follow f where f.FollowedId = u.UserId) as Followers
             FROM 
-                user
+                user u
             WHERE
                 Username = ?
             `, [username]);
