@@ -18,7 +18,7 @@
   
 ### Follow Section
 - [x] User can Follow/Unfollow
-- [ ] User can See their followers
+- [x] User can See their followers
 
 ### Settings
 - [x] Change username/password
