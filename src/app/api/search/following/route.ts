@@ -5,7 +5,7 @@ import { UserType } from '@/type/post';
 
 
 export async function GET(request: NextRequest){
-    console.log('GET /api/search/followers');
+    console.log('GET /api/search/following');
     try {
         const client = await GetClient();
         const userid = request.nextUrl.searchParams.get("userid")
@@ -24,13 +24,16 @@ export async function GET(request: NextRequest){
                 u.UserId, 
                 u.Name, 
                 u.Username, 
-                u.ProfilePicture
+                u.ProfilePicture,
+                f.UserId as FollowedBy
             FROM 
-                user u
-            INNER JOIN 
-                follow f ON f.UserId = u.UserId
+                User u
+            LEFT JOIN 
+                Follow f ON u.UserId = f.FollowedId
             WHERE
-                f.FollowedId = ?
+                f.UserId = ?
+            GROUP BY 
+                u.UserId, u.Name, u.Username, u.ProfilePicture, FollowedBy
             ORDER BY 
                 f.FollowId DESC
             LIMIT ? OFFSET ?

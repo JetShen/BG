@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { UserType } from '@/type/post'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import GetUser from '@/client/GET/getUser'
+import { useRouter } from 'next/navigation'
 const queryClient = new QueryClient()
 
 
@@ -24,7 +25,7 @@ export default function ProfileDataClient(){
 
 
 function ProfileData({user}: {user: UserType}){
-    
+    const router = useRouter()
 
 
     
@@ -39,8 +40,8 @@ function ProfileData({user}: {user: UserType}){
             className='profilePostImg' />
             <p><strong>{user?.Name}</strong>@{user?.Username}</p>
             <div className='MiniFollow-box'>
-                <strong>Following {user.Following}</strong>
-                <strong>Followers {user.Followers}</strong>
+                <strong onClick={() => router.replace(`/${user?.Username}/following`)}>Following {user.Following}</strong>
+                <strong onClick={() => router.replace(`/${user?.Username}/followers`)}>Followers {user.Followers}</strong>
             </div>
         </div>
     )

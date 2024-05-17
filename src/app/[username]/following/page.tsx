@@ -4,9 +4,10 @@ import { QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import {  UserType } from '@/type/post';
 import { useInView } from 'react-intersection-observer'
 import '@/styles/postpage.css'
-import FetchFollowersFn from '@/client/GET/fetchFollowersFn';
+import FetchFollowingFn from '@/client/GET/fetchFollowingFn';
 import GetUser from '@/client/GET/getUser';
 import Person from '@/component/person';
+import { useRouter } from 'next/navigation';
 
 const queryClient = new QueryClient()
 
@@ -27,8 +28,8 @@ export default function App({params}:any){
 
 function Home({username, userClient}: {username: string, userClient:UserType} ) {
   const { ref, inView } = useInView()
-  const { data, fetchNextPage, fetchPreviousPage } = FetchFollowersFn(userClient.UserId);
-  
+  const { data, fetchNextPage, fetchPreviousPage } = FetchFollowingFn(userClient.UserId);
+  const router = useRouter()
 
   const trackScrolling = () => {
     const wrappedElement = document.getElementsByClassName('main')[0]
@@ -66,8 +67,8 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
   return (
     <>
       <div className="pfNav">
-        <button>Following</button>
-        <button>Followers</button>
+      <button onClick={() => router.replace(`/${userClient.Username}/following`)} >Following</button>
+        <button onClick={() => router.replace(`/${userClient.Username}/followers`)}>Followers</button>
       </div>
       <div className='testbox'>
       {data?.pages.map((page, index) => (
