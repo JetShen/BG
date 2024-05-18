@@ -25,23 +25,33 @@ export async function GET(request: NextRequest){
             `SELECT
                 p.PostID, 
                 p.Content, 
-                p.UserID, 
-                u.Name, 
-                u.Username,
+                ou.UserID,
+                ou.Name, 
+                ou.Username,
+                ou.ProfilePicture,
+                IFNULL(u.Username, null) AS RepostBy,
                 (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
                 (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
-                (SELECT COUNT(*) FROM Saved AS s WHERE s.PostId = p.PostId) AS cantidad_saved,
+                (SELECT COUNT(*) FROM Saved AS sv WHERE sv.PostId = p.PostId) AS cantidad_saved,
+                (SELECT COUNT(*) FROM Share AS s WHERE s.PostId = p.PostId) AS cantidad_share,
                 GROUP_CONCAT(media.Url SEPARATOR ', ') AS urls_images
             FROM 
                 Post p
             INNER JOIN 
-                User u ON p.UserId = u.UserId
+                User ou ON p.UserId = ou.UserId
             LEFT JOIN 
                 Media media ON p.PostId = media.PostId
+            LEFT JOIN 
+                Share s ON p.PostId = s.PostId
+            LEFT JOIN 
+                User u ON s.UserId = u.UserId
+            LEFT JOIN 
+                Follow f ON (ou.UserId = f.FollowedId OR u.UserId = f.FollowedId)
             WHERE 
-                p.ParentPostId IS NULL
+                f.UserId = 2
             GROUP BY 
-                p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes
+                p.PostId, p.Content, ou.UserId, ou.Name, ou.Username, ou.ProfilePicture,
+                u.UserId, u.Name, u.Username, u.ProfilePicture, s.UserId
             ORDER BY 
                 p.PostID DESC        
             LIMIT ? OFFSET ?

@@ -4,10 +4,13 @@ export type PostType = {
     Content: string,
     UserID: number,
     Name: string,
-    Username: string
+    Username: string,
+    ProfilePicture: string,
+    RepostBy: string,
     cantidad_likes: number,
     cantidad_respuestas: number,
     cantidad_saved: number,
+    cantidad_share: number,
     urls_images: string
 };
 

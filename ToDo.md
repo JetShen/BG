@@ -5,7 +5,7 @@
 - [x] User can Post Media 
 - [x] User can Like a Post 
 - [x] User can Reply to a Post
-- [ ] User can Share a Post <- Follow Section Needs to be finished for this step
+- [x] User can Share a Post <- Follow Section Needs to be finished for this step
 - [x] User can Save a Post
 
 ### Account Section
@@ -28,7 +28,7 @@
 - [x] Change profile picture
 - [x] See posts
 - [x] See likes
-- [ ] See reposts (shares)
+- [x] See reposts (shares)
 - [ ] Media section 
 
 ### Search
