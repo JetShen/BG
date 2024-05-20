@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 
-
+// FetchLikeFn is a function that fetches the likes of a user
 export default function FetchLikeFn(userid:number){
     const {
         data,

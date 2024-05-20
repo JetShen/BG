@@ -4,9 +4,9 @@ import ReplyFn from "@/client/POST/replyfn";
 
 
 
-export default function ModalReply({ closeModal, PostId, KeyMutation, UserId }: { closeModal: any, PostId: number, KeyMutation: string, UserId: number}){
+export default function ModalReply({ closeModal, PostId, KeyMutation, UserId, OriginalUser }: { closeModal: any, PostId: number, KeyMutation: string, UserId: number, OriginalUser: number}){
     const [ContentData, setContentData] = useState<string>('');
-    const MakePostMutated = ReplyFn({content: ContentData, PostID: PostId, UserID: UserId, Key: KeyMutation})
+    const MakePostMutated = ReplyFn({content: ContentData, PostID: PostId, UserID: UserId, OriginalUser: OriginalUser, Key: KeyMutation})
 
     const update = (event: any) => {
         setContentData(event.target.value);

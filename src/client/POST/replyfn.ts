@@ -2,12 +2,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 
-export default function ReplyFn({UserID, PostID, Key, content}:{UserID: number, PostID: number, Key: any, content: any}){
+export default function ReplyFn({OriginalUser, UserID, PostID, Key, content}:{OriginalUser:number, UserID: number, PostID: number, Key: any, content: any}){
     const keyPost = Key;
     const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationKey: ['replyPost'],
-        mutationFn: async () =>  await axios.post('/api/post/reply', { UserID: UserID, PostID: PostID, content: content}),
+        mutationFn: async () =>  {
+            const result = await axios.post('/api/post/reply', { UserID: UserID, PostID: PostID, content: content});
+            if (result.status){
+                await axios.post('/api/profile/notification', {UserId: UserID, Type: 'Reply', PostId: PostID, DestinationId: OriginalUser});
+            }
+            return result;
+        
+        },
         onSuccess: () => {
             if ( keyPost === 'getone') {
                 queryClient.invalidateQueries({ queryKey: [keyPost], refetchType: 'active', })

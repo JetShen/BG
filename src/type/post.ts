@@ -32,3 +32,14 @@ export type UserType = {
     Following: number,
     FollowedBy: number,
 };
+
+export type NotificationType = {
+    NotificationId: number,
+    UserId: number, // User Id Who sends the notification
+    Username: string,
+    PostId: number,
+    ProfilePicture: string,
+    Type: string,
+    Seen: boolean,
+    DestinationId: number, // User Id Who receives the notification
+};

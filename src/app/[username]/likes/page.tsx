@@ -26,7 +26,7 @@ export default function App({params}:any){
   )
 }
 
-
+// ToDo: refactor this component to use a real user and rewrite the query
 function Home({username, user}: {username: string, user:UserType} ) {
   const { ref, inView } = useInView()
   const userId:number = 1; // test user id

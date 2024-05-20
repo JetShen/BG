@@ -148,7 +148,7 @@ function Home({user}: {user: UserType}) {
     isFetchingNextPage,
     fetchNextPage,
     fetchPreviousPage,
-  } = FetchPostFn();
+  } = FetchPostFn(user.UserId);
 
   useEffect(() => {
     if (inView) {

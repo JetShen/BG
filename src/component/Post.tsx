@@ -15,7 +15,7 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
     
     const { PostID, urls_images } = props;
     const { UserId } = user;
-    const mutationFN = LikeFn({UserID: UserId, PostID, Key: KeyMutation})
+    const mutationFN = LikeFn({UserId: UserId, OriginalUser: props.UserID , PostID: PostID, Key: KeyMutation})
     const [showModal, setShowModal] = useState(false);
     const [imgs, setImgs] = useState<string[]>([])
     const router = useRouter()
@@ -120,7 +120,7 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
                     </button>
                 </div>
             </div>
-            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} KeyMutation={KeyMutation} UserId={UserId} />} 
+            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} KeyMutation={KeyMutation} UserId={UserId} OriginalUser={props.UserID}/>} 
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 
-export default function FetchPostFn(){
+export default function FetchPostFn(userid:number){
     const {
         data,
         isFetching,
@@ -12,7 +12,7 @@ export default function FetchPostFn(){
     } = useInfiniteQuery({
     queryKey: ['post'],
     queryFn: async ({ pageParam }) => {
-        const res = await axios.get('/api/post/getall?cursor=' + pageParam)
+        const res = await axios.get('/api/post/getall?cursor=' + pageParam + '&userid=' + userid)
         return res.data
     },
     initialPageParam: 0,
