@@ -4,7 +4,7 @@ import  { Fragment, useEffect } from 'react';
 import { QueryClient, QueryClientProvider,} from '@tanstack/react-query';
 import { NotificationType, UserType } from '@/type/post';
 import { useInView } from 'react-intersection-observer'
-import fetchNotification from '@/client/GET/fetchNotificationFn';
+import FetchNotification from '@/client/GET/fetchNotificationFn';
 import GetUser from '@/client/GET/getUser';
 import { useRouter } from 'next/navigation';
 import Alert from '@/component/alert';
@@ -28,7 +28,7 @@ export default function App({params}:any){
 
 function Home({username, userClient}: {username: string, userClient:UserType} ) {
   const { ref, inView } = useInView()
-  const { data, fetchNextPage, fetchPreviousPage } = fetchNotification(userClient.UserId);
+  const { data, fetchNextPage, fetchPreviousPage } = FetchNotification(userClient.UserId);
   const router = useRouter()
 
   const trackScrolling = () => {

@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 
-export default function fetchNotification(userid:number) {
+export default function FetchNotification(userid:number) {
     const {
         data,
         isFetching,
