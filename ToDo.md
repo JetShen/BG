@@ -14,7 +14,7 @@
 - [x] Email verification
 - [x] User can Delete their account
 - [x] User can Make their account private
-- [ ] User receives notifications
+- [X] User receives notifications
   
 ### Follow Section
 - [x] User can Follow/Unfollow
@@ -29,7 +29,7 @@
 - [x] See posts
 - [x] See likes
 - [x] See reposts (shares)
-- [ ] Media section 
+- [X] Media section 
 
 ### Search
 - [x] Search posts

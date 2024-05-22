@@ -28,7 +28,7 @@ export default function App({params}:any){
 
 function Home({username, user}: {username: string, user:UserType} ) {
   const { ref, inView } = useInView()
-  const { data, fetchNextPage, fetchPreviousPage } = FetchPostByFn(username);
+  const { data, fetchNextPage, fetchPreviousPage } = FetchPostByFn(user.UserId);
   
 
   const trackScrolling = () => {

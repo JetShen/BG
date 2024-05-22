@@ -50,7 +50,7 @@ export async function GET(request: NextRequest){
             LEFT JOIN 
                 Follow f ON (ou.UserId = f.FollowedId OR u.UserId = f.FollowedId)
             WHERE 
-                f.UserId = ?
+                f.UserId = ? AND p.ParentPostId is null
             GROUP BY 
                 p.PostId, p.Content, ou.UserId, ou.Name, ou.Username, ou.ProfilePicture,
                 u.UserId, u.Name, u.Username, u.ProfilePicture, s.UserId

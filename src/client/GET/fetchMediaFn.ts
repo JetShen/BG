@@ -3,15 +3,15 @@ import axios from 'axios'
 
 
 
-export default function FetchPostByfn(userid:number) {
+export default function FetchMediaFn(userid:number) {
     const {
         data,
         fetchNextPage,
         fetchPreviousPage,
     } = useInfiniteQuery({
-        queryKey: ['post'],
+        queryKey: ['MediaView'],
         queryFn: async ({ pageParam }) => {
-            const res = await axios.get('/api/profile/posts?cursor='+pageParam+'&userid='+ userid)
+            const res = await axios.get('/api/profile/media?userid='+userid+'&cursor='+ pageParam)
             return res.data
         },
         initialPageParam: 0,

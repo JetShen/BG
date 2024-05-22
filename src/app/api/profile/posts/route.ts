@@ -9,8 +9,8 @@ export async function GET(request: NextRequest){
     try {
         const client = await GetClient();
         const cursor = request.nextUrl.searchParams.get("cursor")
-        const username = request.nextUrl.searchParams.get("username")
-        if (username === undefined || username === null) {
+        const userid = request.nextUrl.searchParams.get("userid")
+        if (userid === undefined || userid === null) {
             return NextResponse.json({ error: 'Missing "username" parameter' }, { status: 500 });
         }
 
@@ -19,6 +19,7 @@ export async function GET(request: NextRequest){
         }
 
         const cursorValue = parseInt(cursor as string) || 0;
+        const useridValue = parseInt(userid as string) || 0;
         const pageSize = 7;
         const pageParam = cursorValue * pageSize;
 
@@ -28,29 +29,36 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT
-                p.PostID, 
-                p.Content, 
-                p.UserID, 
-                u.Name, 
-                u.Username,
+                p.PostID,
+                p.Content,
+                ou.UserID,
+                ou.Name,
+                ou.Username,
+                ou.ProfilePicture,
+                IF(MAX(s.UserId) IS NOT NULL AND MAX(s.UserId) != ?, NULL, MAX(u.Username)) AS RepostBy,
                 (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
                 (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
-                (SELECT COUNT(*) FROM Saved AS s WHERE s.PostId = p.PostId) AS cantidad_saved,
-                GROUP_CONCAT(media.Url SEPARATOR ', ') AS urls_images
+                (SELECT COUNT(*) FROM Saved AS sv WHERE sv.PostId = p.PostId) AS cantidad_saved,
+                (SELECT COUNT(*) FROM Share AS s WHERE s.PostId = p.PostId) AS cantidad_share,
+                GROUP_CONCAT(DISTINCT media.Url SEPARATOR ', ') AS urls_images
             FROM 
                 Post p
             INNER JOIN 
-                User u ON p.UserId = u.UserId
+                User ou ON p.UserId = ou.UserId
             LEFT JOIN 
                 Media media ON p.PostId = media.PostId
+            LEFT JOIN 
+                Share s ON p.PostId = s.PostId
+            LEFT JOIN 
+                User u ON s.UserId = u.UserId
             WHERE 
-                u.Username = ? AND p.ParentPostId is null
+                ou.UserId = ? OR s.UserId = ?
             GROUP BY 
-                p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes
+                p.PostId, p.Content, ou.UserId, ou.Name, ou.Username, ou.ProfilePicture
             ORDER BY 
-                p.PostID DESC        
+                p.PostID DESC
             LIMIT ? OFFSET ?
-            `, [username, pageSize, pageParam]);
+            `, [useridValue, useridValue, useridValue, pageSize, pageParam]);
         const posts: Array<PostType> = result[0] as Array<PostType>;
         const len = Object.keys(posts);
         const ln: number = len.length;
