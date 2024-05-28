@@ -1,0 +1,28 @@
+.personSearch{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    border: solid 1px black;
+    border-radius: 0.5em;
+    margin: 0.5em 0 0 0.1em;
+    font-size: 0.8em;
+
+    min-width: 23em;
+    height: 8em;
+}
+
+.personSearchInfo{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5em;
+}
+.miniPersonInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.5em;
+}

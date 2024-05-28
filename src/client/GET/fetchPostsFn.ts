@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-// Get all posts of a user
-export default function FetchPostFn(userid:number){
+// Get all post by query of a user
+export default function FetchPostFn(query:string){
     const {
         data,
         isFetching,
@@ -10,9 +10,9 @@ export default function FetchPostFn(userid:number){
         fetchNextPage,
         fetchPreviousPage,
     } = useInfiniteQuery({
-    queryKey: ['post'],
+    queryKey: ['PostQuery'],
     queryFn: async ({ pageParam }) => {
-        const res = await axios.get('/api/post/getall?cursor=' + pageParam + '&userid=' + userid)
+        const res = await axios.get('/api/search/post?cursor=' + pageParam + '&query=' + query)
         return res.data
     },
     initialPageParam: 0,

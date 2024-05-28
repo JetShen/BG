@@ -28,24 +28,31 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT 
-                post.PostID,
-                post.Content,
-                user.UserID,
-                user.Name,
-                user.Username,
-                COUNT(likes.LikeID) AS cantidad_likes
+                p.PostID, 
+                p.Content, 
+                u.UserID,
+                u.Name, 
+                u.Username,
+                u.ProfilePicture,
+                (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
+                (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
+                (SELECT COUNT(*) FROM Saved AS sv WHERE sv.PostId = p.PostId) AS cantidad_saved,
+                (SELECT COUNT(*) FROM Share AS s WHERE s.PostId = p.PostId) AS cantidad_share,
+                GROUP_CONCAT(m.Url SEPARATOR ', ') AS urls_images
             FROM 
-                post
+                post p
             JOIN 
-                user ON post.UserID = user.UserID
+                user u ON p.UserID = u.UserID
             LEFT JOIN 
-                likes ON post.PostID = likes.PostID
+                likes ON p.PostID = likes.PostID
+            LEFT JOIN
+                Media m ON m.PostId = p.PostId
             WHERE
-                post.Content LIKE CONCAT('%', ?, '%')
+                p.Content LIKE CONCAT('%', ?, '%')
             GROUP BY 
-                post.PostID, post.Content, user.UserID, user.Name, user.Username
+                p.PostID, p.Content, u.UserID, u.Name, u.Username
             ORDER BY 
-                post.PostID DESC
+                p.PostID DESC
             LIMIT ? OFFSET ?
             `, [query, pageSize, pageParam]);
         const posts: Array<PostType> = result[0] as Array<PostType>;
