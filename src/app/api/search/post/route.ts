@@ -8,12 +8,14 @@ export async function GET(request: NextRequest){
     console.log('GET /api/search/post');
     try {
         const client = await GetClient();
-        const cursor = request.nextUrl.searchParams.get("cursor")
-        const query = request.nextUrl.searchParams.get("query")
-        if (query === undefined || query === null || query === '') {
-            return NextResponse.json({ error: 'Missing "query" parameter' }, { status: 500 });
-        }
+        const cursor = request.nextUrl.searchParams.get("cursor");
+        let query = request.nextUrl.searchParams.get("query");
 
+        if (query === undefined || query === null) {
+            query = '';
+        }
+        
+        
         if (cursor === undefined || cursor === null) {
             return NextResponse.json({ error: 'Missing "cursor" parameter' }, { status: 500 });
         }
@@ -43,8 +45,6 @@ export async function GET(request: NextRequest){
                 post p
             JOIN 
                 user u ON p.UserID = u.UserID
-            LEFT JOIN 
-                likes ON p.PostID = likes.PostID
             LEFT JOIN
                 Media m ON m.PostId = p.PostId
             WHERE

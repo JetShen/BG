@@ -4,8 +4,9 @@ import '@/styles/selectedPost.css'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useRouter } from 'next/navigation';
 import Post from "@/component/Post"
-import { useEffect, useState } from "react"
-import { UserType } from "@/type/post"
+import PostReply from "@/component/postReply";
+import { Fragment, useEffect, useState } from "react"
+import { PostType, UserType } from "@/type/post"
 
 import FetchPost from "@/client/GET/fetchPost"
 import FetchReplys from "@/client/GET/fetchReplys";
@@ -36,7 +37,6 @@ function PostPage({params,user}:{params:any,user:UserType}){
     const { data, isLoading, isError, error } = FetchPost(postid)
     const reply = FetchReplys(postid)
 
-   
 
     if(isLoading){
         console.log('loading')
@@ -57,24 +57,19 @@ function PostPage({params,user}:{params:any,user:UserType}){
                 />
             ))}
         </div>
-        <div className="BoxReplyHeader">
-                <strong>Replys</strong>
-            </div>
         <div className="BoxReply">
-            <div className="BoxReplyContent">
-                {reply.data?.pages.map((page, index) => (
-                    <div key={index}>
-                        {page.map((post: any, index: number) => (
-                            <Post
-                                key={index}
-                                props={post}
-                                KeyMutation="replys"
-                                user={user}
-                            />
-                        ))}
-                    </div>
+        {reply.data?.pages.map((page, index) => (
+            <Fragment key={index}>
+                {page.map((post: PostType, index: number) => (
+                    <PostReply
+                        key={index}
+                        props={post}
+                        KeyMutation="getone"
+                        user={user}
+                    />
                 ))}
-            </div>
+            </Fragment>
+        ))}
         </div>
     </div>
     )

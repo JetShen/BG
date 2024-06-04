@@ -10,6 +10,7 @@ export default function FetchUsers(username:string) {
         isFetchingNextPage,
         fetchNextPage,
         fetchPreviousPage,
+        refetch
     } = useInfiniteQuery({
         queryKey: ['UserSearch'],
         queryFn: async ({ pageParam }) => {
@@ -27,5 +28,6 @@ export default function FetchUsers(username:string) {
         isFetchingNextPage,
         fetchNextPage,
         fetchPreviousPage,
+        refetch
     }
 }

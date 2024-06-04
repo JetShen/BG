@@ -61,10 +61,12 @@ function Picture({user}: {user: UserType}){
     }
 
     return (
-        <div>
+        <form className="SettingsForm">
             <h1>Change Picture</h1>
-            <input type="file" onChange={handleFileChange}/>
+            <label htmlFor="">
+                <input type="file" onChange={handleFileChange}/>
+            </label>
             <button onClick={handlePictureChange}>Change Picture</button>
-        </div>
+        </form>
     )
 }

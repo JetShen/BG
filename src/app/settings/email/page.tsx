@@ -1,11 +1,9 @@
 "use client"
-import '@/styles/settings.css'
-
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import GetUser from "@/client/GET/getUser";
+import ChangeEmail from '@/client/PUT/changeemail';
 import { useRouter } from "next/navigation";
-import ChangeUsername from "@/client/PUT/changeusername";
 import login from '@/client/GET/loginFn';
 import { useState } from "react";
 
@@ -25,13 +23,13 @@ export default function App(){
   )
 }
 
-function useChangeUsername(){
-    const mutation = ChangeUsername()
-    const changeUsername = async (Credential: {UserId:number, Username:string}) => {
+function useChangeEmail(){
+    const mutation = ChangeEmail()
+    const changeEmail = async (Credential: {UserId:number, Email:string}) => {
         const result = await mutation.mutateAsync(Credential)
         return result
     };
-    return changeUsername
+    return changeEmail
 
 }
 
@@ -46,10 +44,9 @@ function useLogin(){
 
 function Username({user}: {user: UserType}){
     const router = useRouter()
-    const [Username, setUsername] = useState('')
     const [Password, setPassword] = useState('')
-    const [ConfirmPassword, setConfirmPassword] = useState('')
-    const mutationUsername = useChangeUsername()
+    const [newEmail, setEmail] = useState('')
+    const mutationEmail = useChangeEmail()
     const loginUser = useLogin()
     async function handleSubmit(e: any){
         e.preventDefault()
@@ -57,37 +54,30 @@ function Username({user}: {user: UserType}){
             username: user.Username,
             password: Password
         }
-        if(Password !== ConfirmPassword){
-            alert('Password does not match')
-            return
-        }
+        
         const result = await loginUser(credentials)
         const match: boolean = result.data.result.match
         if(match){
-            const result = await mutationUsername({UserId: user.UserId, Username})
+            const result = await mutationEmail({UserId: user.UserId, Email: newEmail})
             if(result.status === 200){
                 router.push('/settings')
-                alert('Username changed successfully')
+                alert('Email changed successfully')
             }else{
-                alert('Username change failed')
+                alert('Email change failed')
             }                
         }
     }
     return (
         <form onSubmit={handleSubmit} className="SettingsForm">
             <label >
-                Username
-                <input type="text" value={Username} onChange={(e) => setUsername(e.target.value)}/>
+                Email
+                <input type="email" placeholder="New Email" value={newEmail} onChange={(e) => setEmail(e.target.value)}/>
             </label>
             <label>
                 Password
                 <input type="password" value={Password} onChange={(e) => setPassword(e.target.value)}/>
             </label>
-            <label>
-                Confirm Password
-                <input type="password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-            </label>
-            <button type="submit">Submit</button>
+            <button type="submit">Change Email</button>
         </form>
     )
 }

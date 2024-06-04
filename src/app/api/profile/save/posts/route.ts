@@ -27,29 +27,31 @@ export async function GET(request: NextRequest){
         }
 
         const result = await client.query(
-            `SELECT
+            `SELECT 
                 p.PostID, 
                 p.Content, 
-                p.UserID, 
+                u.UserID,
                 u.Name, 
                 u.Username,
+                u.ProfilePicture,
                 (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
                 (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
-                (SELECT COUNT(*) FROM Saved AS s WHERE s.PostId = p.PostId) AS cantidad_saved,
-                GROUP_CONCAT(media.Url SEPARATOR ', ') AS urls_images
+                (SELECT COUNT(*) FROM Saved AS sv WHERE sv.PostId = p.PostId) AS cantidad_saved,
+                (SELECT COUNT(*) FROM Share AS s WHERE s.PostId = p.PostId) AS cantidad_share,
+                GROUP_CONCAT(m.Url SEPARATOR ', ') AS urls_images
             FROM 
-                Post p
-            INNER JOIN 
-                User u ON p.UserId = u.UserId
+                post p
+            JOIN 
+                user u ON p.UserID = u.UserID
             LEFT JOIN 
-                Media media ON p.PostId = media.PostId
-            INNER JOIN
-                Saved s ON p.PostId = s.PostId
-            WHERE 
+                Saved s ON p.PostId = s.PostId 
+            LEFT JOIN
+                Media m ON m.PostId = p.PostId
+            WHERE
                 s.UserId = ?
             GROUP BY 
-                p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes, s.SavedId
-            ORDER BY
+                p.PostID, p.Content, u.UserID, u.Name, u.Username
+            ORDER BY 
                 s.SavedId DESC        
             LIMIT ? OFFSET ?
             `, [userid, pageSize, pageParam]);

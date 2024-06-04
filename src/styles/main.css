@@ -1,3 +1,5 @@
+@import url(global.css);
+
 body{
     display: flex;
     justify-content: center;
@@ -13,8 +15,6 @@ body{
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    border: solid 1px red;
-    gap: 1%;
 }
 
 .navegation{
@@ -23,32 +23,12 @@ body{
     align-items: center;
     width: 20%;
     height: 100%;
-    border: solid 1px blue;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(7, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    background-color: var(--primary-color) ;
 }
 
-.miniN{
-    display: flex;
-    grid-area: 1 / 1 / 3 / 2;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
 
-.MiniFollow-box{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-
-}
 
 .section{
     display: flex;
@@ -64,35 +44,7 @@ body{
     height: 65%;
 }
 
-.options{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    grid-area: 3 / 1 / 8 / 2; 
-    width: 100%;
-    height: 90%;
-    margin: 0;
-    list-style: none;
-    gap: 5%;
-    margin: 4em 0 0 0;
-}
 
-.options li{
-    width: 60%;
-    height: 10%;
-    border: solid 1px red;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.8em;
-    border-radius: 0.5em;
-}
-
-.options li:hover{
-    background-color: #e6e6e6;
-    cursor: pointer;
-}
 
 .main{
     display: flex;
@@ -100,9 +52,9 @@ body{
     align-items: center;
     width: 60%;
     height: 100%;
-    border: solid 1px green;
     overflow-y: auto;
     scrollbar-width: none; /* 'firefox' solution  */
+    background-color: var(--tertiary-color);
 }
 
 .main::-webkit-scrollbar{  /* temporary 'google' solution  */
@@ -110,149 +62,5 @@ body{
 }
 
 
-.makePost{
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    height: auto;
-    max-height: 20em;
-    margin: 0.5em 0 0 0.1em;
-    border: solid 2px black;
-    border-radius: 0.5em;
-    padding: 0.5em;
-    justify-content: space-evenly;
-}
 
-
-
-.contentInput{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: auto;
-    width: 100%;
-    scrollbar-width: none; /* 'firefox' solution  */
-    resize: none;
-    border: none;
-}
-
-/* .contentInput:hover{
-    border-color: blue;
-    border-style: dashed;
-    border-width: 2px;
-} */
-
-.contentInput::-webkit-scrollbar{  /* temporary 'google' solution  */
-    display: none;
-}
-
-.contentInput:not(:focus):is(:empty){
-    padding-top: 2.5em;
-}
-.contentInput:is(:focus)::placeholder {
-    opacity: 0;
-}
-.contentInput:is(:focus){
-    height: 5em;
-}
-
-.Galery{
-    overflow: hidden;
-    flex-direction: row;
-    display: flex;
-    height: 50em;
-    width: 45em;
-    gap: 0.5em;
-}
-
-.GaleryImg-1, .GaleryImg-2, .GaleryImg-3, .GaleryImg-4 {
-    width: 100%;
-    height: auto;
-}
-
-.IMG-box{
-    position: relative;
-    width: 7em;
-    height: auto;
-    padding: .2em;
-}
-
-.Bttn-rm {
-    position: absolute;
-    cursor: pointer;
-    z-index: 1;
-    color: white;
-    font-weight: bold;
-    padding: .2em;
-    text-shadow: 0 0 .2em black;
-}
-  
-
-.makePost textarea:focus{
-    outline: none;
-    border: solid 1px #1da1f2;
-}
-
-input {
-    width: 100%;
-    height: 100%;
-    border: none;
-    outline: none;
-  }
-  
-input::placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 10px; 
-    color: gray;
-}
-
-.testbox{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    height: 80%;
-    gap: 1em;
-}
-
-
-.PostOptions{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-end;
-    border-top: solid 2px gray;
-    width: 100%;
-    height: 20%;
-}
-
-.PostOptions button{
-    width: 10%;
-    height: 100%;
-    background-color: rgb(32, 32, 255);
-    color: white;
-    font-size: 1em;
-    border-radius: 0.5em;
-    margin: 0 0.5em 0 0;
-}
-
-
-.PostOptions button:hover{
-    background-color: rgb(32, 32, 200);
-    cursor: pointer;
-}
-
-.follow{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    align-items: center;
-    width: 20%;
-    height: 100%;
-    border: solid 1px yellow;
-}
 

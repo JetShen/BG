@@ -13,11 +13,11 @@ import { PostType, UserType } from '@/type/post';
 const queryClient = new QueryClient();
 
 export default function SearchPage() {
-  const dataUser = GetUser() as any
+  const dataUser = GetUser() as any;
   if (!dataUser) {
-      return null
+    return null;
   }
-  const user = dataUser.user
+  const user = dataUser.user;
   return (
     <QueryClientProvider client={queryClient}>
       <Search userClient={user} />
@@ -25,36 +25,7 @@ export default function SearchPage() {
   );
 }
 
-
-const examplePost: PostType = {
-  PostID: 1,
-  Content: "This is an example post content.",
-  UserID: 123,
-  Name: "John Doe",
-  Username: "johndoe",
-  ProfilePicture: "",
-  RepostBy: "janedoe",
-  cantidad_likes: 150,
-  cantidad_respuestas: 20,
-  cantidad_saved: 30,
-  cantidad_share: 10,
-  urls_images: ""
-};
-
-const exampleUser: UserType = {
-  UserId: 123,
-  Name: "John Doe",
-  Username: "johndoe",
-  Private: 0,
-  ProfilePicture: "",
-  Followers: 500,
-  Following: 150,
-  FollowedBy: 50
-};
-
-
-
-function Search({userClient}: {userClient: UserType}) {
+function Search({ userClient }: { userClient: UserType }) {
   const [query, setQuery] = useState('');
   const { ref: refUsers, inView: inViewUsers } = useInView();
   const { ref: refPosts, inView: inViewPosts } = useInView();
@@ -63,25 +34,34 @@ function Search({userClient}: {userClient: UserType}) {
     data: userData,
     fetchNextPage: fetchNextPageUsers,
     fetchPreviousPage: fetchPreviousPageUsers,
+    refetch: refetchUsers
   } = FetchUsers(query);
 
   const {
     data: postData,
     fetchNextPage: fetchNextPagePosts,
     fetchPreviousPage: fetchPreviousPagePosts,
+    refetch: refetchPosts
   } = FetchPostFn(query);
+
+  useEffect(() => {
+    if (query !== '') {
+      refetchUsers();
+      refetchPosts();
+    }
+  }, [query]);
 
   useEffect(() => {
     if (inViewUsers) {
       fetchNextPageUsers();
     }
-  }, [fetchNextPageUsers, inViewUsers, query]);
+  }, [inViewUsers]);
 
   useEffect(() => {
     if (inViewPosts) {
       fetchNextPagePosts();
     }
-  }, [fetchNextPagePosts, inViewPosts, query]);
+  }, [inViewPosts]);
 
   function activateSearch(event: any) {
     event.preventDefault();
@@ -99,20 +79,19 @@ function Search({userClient}: {userClient: UserType}) {
       <div className="resultPeople">
         <div className="PeopleGrid">
           {userData?.pages.map((page, index) => (
-          <Fragment key={index}>
-            {page.users.map((user: UserType, userIndex:number) => (
-              <PersonSearch key={userIndex} user={user} userid={userClient.UserId}  />
-            ))}
-          </Fragment>
-        ))}
-
+            <Fragment key={index}>
+              {page.users.map((user: UserType, userIndex: number) => (
+                <PersonSearch key={userIndex} user={user} userid={userClient.UserId} />
+              ))}
+            </Fragment>
+          ))}
+          <div ref={refUsers} />
         </div>
-        <div ref={refUsers} />
       </div>
-      <div className="resultPosts">  {/* Fix Style */}
+      <div className="resultPosts">
         {postData?.pages.map((page, index) => (
           <Fragment key={index}>
-            {page.posts.map((post: PostType, postIndex:number) => (
+            {page.posts.map((post: PostType, postIndex: number) => (
               <Post key={postIndex} props={post} user={userClient} KeyMutation='PostSearch' />
             ))}
           </Fragment>

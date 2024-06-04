@@ -1,7 +1,7 @@
 'use client'
+import '@/styles/ProfileData.css'
 import Image from 'next/image'
 const ulrTest = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Anime_Girl_with_cat.svg/1200px-Anime_Girl_with_cat.svg.png'
-import { useState, useEffect } from 'react'
 import { UserType } from '@/type/post'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import GetUser from '@/client/GET/getUser'
@@ -30,18 +30,31 @@ function ProfileData({user}: {user: UserType}){
 
     
     return(
-        <div className="miniN">
-            <Image src={user.ProfilePicture ? user.ProfilePicture : ulrTest}
-            alt="user pfp"
-            width={0}
-            height={0}
-            sizes="100vw"
-            style={{ width: '50%', height: 'auto' }}
-            className='profilePostImg' />
-            <p><strong>{user?.Name}</strong>@{user?.Username}</p>
-            <div className='MiniFollow-box'>
-                <strong onClick={() => router.replace(`/${user?.Username}/following`)}>Following {user.Following}</strong>
-                <strong onClick={() => router.replace(`/${user?.Username}/followers`)}>Followers {user.Followers}</strong>
+        <div className="ProfileDataBox">
+            <div className="ProfileCard">
+                <Image src={user.ProfilePicture ? user.ProfilePicture : ulrTest}
+                alt="user pfp"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '65%', height: 'auto', borderRadius: '10%', objectFit: 'cover', marginRight: '-10px'}}
+                className='profilePostImg' />
+                <div className="DataCard">
+                    <div>
+                        <span id='primary'><p>{user.Name}</p></span>
+                        <span id='secondary'><p>@{user.Username}</p></span>
+                    </div>
+                    <div>
+                        <span onClick={() => router.replace(`/${user?.Username}/following`)}>
+                            <p id='secondary'>Following</p>
+                            <p id='primary'>{user.Following}</p>
+                        </span>
+                        <span onClick={() => router.replace(`/${user?.Username}/followers`)}>
+                            <p id='secondary'>Followers</p>
+                            <p id='primary'>{user.Followers}</p>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     )

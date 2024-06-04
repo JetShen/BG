@@ -1,3 +1,4 @@
+@import url(global.css);
 .mainTest{
     display: flex;
     align-items: center;
@@ -9,22 +10,21 @@
 
 .BoxPost{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--primary-color);
+    height: auto;
+    padding: 0.5em;
+}
 
+.BoxReply{
+    display: flex;
+    align-items: center;
     flex-direction: column;
     width: 100%;
     height: auto;
-}
-
-.BoxReplyHeader{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    gap: 0.5em;
-    width: 100%;
-    height: auto;
-    border-top: 1px solid black;
+    padding: 0.5em;
 }
 
 .BoxIMG{

@@ -8,6 +8,7 @@ async function getPostById(postId: number, client: any, posts: any[] = []) {
             p.PostID, 
             p.Content, 
             p.UserID, 
+            u.ProfilePicture,
             u.Name, 
             u.Username,
             p.ParentPostId,

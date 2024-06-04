@@ -1,4 +1,5 @@
 'use client';
+import "@/styles/home.css";
 import { useEffect, Fragment } from 'react';
 import { QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import { useState } from 'react';
@@ -9,7 +10,6 @@ import ModalTopic from '@/component/ModalTopic';
 import FetchPostFn from '@/client/GET/fetchpostfn';
 import MakePostFn from '@/client/POST/makepostfn';
 import TopicFn from '@/client/POST/topicfn';
-import Image from 'next/image'
 import MiniIMG from '@/component/uploadIMG';
 import MakeImg from '@/client/POST/makeImg';
 import ProtectedRoute from '@/client/protectedRoute';
@@ -133,7 +133,7 @@ function Home({user}: {user: UserType}) {
   const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    const element = document.querySelector('.contentInput') as HTMLTextAreaElement;
+    const element = document.querySelector('.post-textarea') as HTMLTextAreaElement;
 
   
     element.style.borderColor = "blue";
@@ -162,7 +162,7 @@ function Home({user}: {user: UserType}) {
     console.log(user.UserId, userId);
     if (userId === undefined || userId === undefined) return alert(`please login user: ${userId} userId: ${userId}`);
   
-    const inputElement = document.querySelector('.contentInput') as HTMLInputElement;
+    const inputElement = document.querySelector('.post-textarea') as HTMLInputElement;
     const topicId = topic.name !== '' ? await makeTopic() : 0;
     const postData = { userid: userId, content: ContentData, topicId };
     const status = await makePost(postData);
@@ -218,7 +218,7 @@ function Home({user}: {user: UserType}) {
     }
   
     setFiles(finalFiles);
-    const element = document.querySelector('.contentInput') as HTMLTextAreaElement;
+    const element = document.querySelector('.post-textarea') as HTMLTextAreaElement;
     element.style.border = "none";
   };
 
@@ -261,12 +261,10 @@ function Home({user}: {user: UserType}) {
   return (
     <ProtectedRoute>
       <div className="makePost">
-        <span>Topic:{topic.name}</span>
-        <textarea
-          typeof='testbox'
-          className='contentInput'
-          contentEditable={true}
-          placeholder='What is on your mind?'
+       <div className="TopicBox"></div>
+        <textarea 
+          className="post-textarea" 
+          placeholder="What is on your mind?"
           onChange={(event) => setContentData(event.target.value)}
           onDragOver={handleDragOver}
           onDrop={handleDrop}

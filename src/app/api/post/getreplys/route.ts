@@ -28,6 +28,9 @@ export async function GET(request: NextRequest){
                 p.UserID, 
                 u.Name, 
                 u.Username,
+                u.ProfilePicture,
+                p.ParentPostId,
+                (SELECT Username FROM User u2 WHERE u2.UserId = Parent.UserId) AS ParentPostUsername,
                 (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
                 (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
                 (SELECT COUNT(*) FROM Saved AS s WHERE s.PostId = p.PostId) AS cantidad_saved,
@@ -38,12 +41,14 @@ export async function GET(request: NextRequest){
                 User u ON p.UserId = u.UserId
             LEFT JOIN 
                 Media media ON p.PostId = media.PostId
+            LEFT JOIN 
+                Post Parent ON p.ParentPostId = Parent.PostId
             WHERE 
                 p.ParentPostId = ?
             GROUP BY 
-                p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes
+                p.PostId, p.Content, p.UserID, u.Name, u.Username, p.ParentPostId
             ORDER BY 
-                p.PostID DESC        
+                p.PostID DESC
             LIMIT ? OFFSET ?
             `, [postId, pageSize, pageParam]);
         const posts: Array<PostType> = result[0] as Array<PostType>;

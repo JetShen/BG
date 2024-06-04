@@ -38,14 +38,14 @@ export default function PersonSearch({ user, userid }: { user: UserType, userid:
                 alt="Picture of the author"
                 width={0}
                 height={0}
-                sizes="100vw"
-                style={{ width: 'auto', height: '100%' }}
-                className="profilePostImg"
+                sizes="12vh"
+                style={{ width: 'auto', height: '100%', fill: 'cover'}}
+                className="PersonPfp"
             />
             <div className="personSearchInfo">
                 <div className="miniPersonInfo">
-                    <h4 className="PersonName">{user.Name}</h4>
-                    <p className="PersonUsername">@{user.Username}</p>
+                    <h4 className="PersonName" id='primary'>{user.Name}</h4>
+                    <p className="PersonUsername" id='secondary'>@{user.Username}</p>
                 </div>
                 <button onClick={handleFollow}>
                     {isFollowing ? 'Unfollow' : 'Follow'}

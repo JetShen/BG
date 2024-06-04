@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { UserType } from '@/type/post';
 import Image from 'next/image';
 import FollowFn from '@/client/POST/follow';
+import { UserIcon } from '@/svg/icons';
 
 function useFollow() {
     const followMutation = FollowFn({ key: 'user' });
@@ -32,20 +33,23 @@ export default function Person({ user, userid }: { user: UserType, userid: numbe
 
     return (
         <li className="person">
-            <Image
-                src={user.ProfilePicture}
-                alt="Picture of the author"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: '50%', height: 'auto' }}
-                className="profilePostImg"
-            />
-            <div className="section">
-                <h4 className="name">{user.Name}</h4>
-                <p className="username">@{user.Username}</p>
+            <div className="PfpContainer">
+                <Image
+                    src={user.ProfilePicture}
+                    alt="Picture of the author"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '80%', height: 'auto' }}
+                />
+            </div>
+            <div className="personData">
+                <p className="name" id='primary'>{user.Name}</p>
+                <p className="username" id='secondary'>@{user.Username}</p>
+            </div>
+            <div className="BtnPerson">
                 <button onClick={handleFollow}>
-                    {isFollowing ? 'Unfollow' : 'Follow'}
+                    <UserIcon/> {isFollowing ? 'Unfollow' : 'Follow'}
                 </button>
             </div>
         </li>

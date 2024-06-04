@@ -58,16 +58,8 @@ function Saved({ user }: { user: UserType}) {
   }, []);
 
 
-  // useEffect(() => {
-  //   if (inView) {
-  //     fetchNextPage()
-  //   }
-  // }, [fetchNextPage, inView])
-
-
   return (
     <>
-      <h2>Saved Post Page</h2>
       <div className='testbox'>
       {user && data?.pages.map((page, index) => (
         <Fragment key={index}>

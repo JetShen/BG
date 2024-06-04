@@ -9,6 +9,7 @@ export default function FetchPostFn(query:string){
         isFetchingNextPage,
         fetchNextPage,
         fetchPreviousPage,
+        refetch
     } = useInfiniteQuery({
     queryKey: ['PostQuery'],
     queryFn: async ({ pageParam }) => {
@@ -27,5 +28,6 @@ export default function FetchPostFn(query:string){
         isFetchingNextPage,
         fetchNextPage,
         fetchPreviousPage,
+        refetch
     }
 }

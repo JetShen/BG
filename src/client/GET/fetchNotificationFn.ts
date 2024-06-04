@@ -11,7 +11,7 @@ export default function FetchNotification(userid:number) {
         fetchNextPage,
         fetchPreviousPage,
     } = useInfiniteQuery({
-        queryKey: ['saved'],
+        queryKey: ['NotificationList'],
         queryFn: async ({ pageParam }) => {
             const res = await axios.get('/api/profile/notification/get?cursor='+pageParam+'&userid='+ userid)
             return res.data

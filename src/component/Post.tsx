@@ -8,6 +8,7 @@ import ModalReply from './ModalReply';
 import { useEffect, useState } from 'react';
 import SavePost from '@/client/POST/savePost';
 import Repost from '@/client/POST/repostfn';
+import { ReplyIcon, ShareIcon, LikeIcon, SaveIcon, ShareIconColor} from '@/svg/icons'
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
@@ -20,7 +21,7 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
     const [imgs, setImgs] = useState<string[]>([])
     const router = useRouter()
     const savePost = SavePost({key: KeyMutation})
-    const repostPost = Repost({UserID: UserId, PostID, Key: KeyMutation})
+    const repostPost = Repost({OriginalUser: props.UserID, UserId: UserId, PostID, Key: KeyMutation})
 
     useEffect(() => {
         if (urls_images) {
@@ -81,12 +82,14 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
                 />
             </div>
             <div className="PostContent">
-                <div className="minisection">
-                    <div>
-                        <strong className="username" onClick={redirecToUser}>{props.Name}</strong>
-                        <p className="userid">{props.Username}</p>
+                <div className="minisection" style={{display:'flex', width:'100%' ,flexDirection:'row', justifyContent:'space-between'}}>
+                    <div style={{display:'flex', flexDirection:'column',}}>
+                        <div style={{display:'flex', flexDirection:'row'}}>
+                            <p id='primary'>{props.Name}</p>
+                            <p id='secondary' onClick={redirecToUser}>@{props.Username}</p>
+                        </div>
                     </div>
-                    {props.RepostBy ? <p className="repost">Reposted by {props.RepostBy}</p> : null}
+                    {props.RepostBy ? <p className="repost" id='secondary'>{props.RepostBy} <ShareIconColor/></p> : null}
                 </div>
                 <div className="innerContent" >
                     <p>{props.Content}</p>
@@ -107,16 +110,16 @@ export default function Post({props, KeyMutation, user}: {props: PostType, KeyMu
                 </div>
                 <div className="interactions">
                     <button className="button comment" onClick={openModal}>
-                        {props.cantidad_respuestas} - Reply
+                        <ReplyIcon/> {props.cantidad_respuestas}
                     </button>
                     <button className="button share" onClick={repost}>
-                        {props.cantidad_share} - Share
+                        <ShareIcon/> {props.cantidad_share}
                     </button>
                     <button className="button like" onClick={sendlike} >
-                        {props.cantidad_likes} - Like
+                        <LikeIcon/> {props.cantidad_likes}
                     </button>
                     <button className="button save" onClick={save}>
-                        {props.cantidad_saved} - Save
+                        <SaveIcon/> {props.cantidad_saved}
                     </button>
                 </div>
             </div>

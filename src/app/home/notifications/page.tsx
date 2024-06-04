@@ -2,12 +2,14 @@
 import '@/styles/notifications.css'
 import  { Fragment, useEffect } from 'react';
 import { QueryClient, QueryClientProvider,} from '@tanstack/react-query';
-import { NotificationType, UserType } from '@/type/post';
+import { NotificationFollow, NotificationPost, NotificationType, UserType } from '@/type/post';
 import { useInView } from 'react-intersection-observer'
 import FetchNotification from '@/client/GET/fetchNotificationFn';
 import GetUser from '@/client/GET/getUser';
 import { useRouter } from 'next/navigation';
-import Alert from '@/component/alert';
+import { SettingsIcon } from '@/svg/icons';
+import AlertPost from '@/component/alert';
+import AlertFollow from '@/component/alertFollow';
 
 const queryClient = new QueryClient()
 
@@ -49,7 +51,7 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
   useEffect(() => {
     const scrollElement = document.getElementsByClassName('main')[0]
     scrollElement?.addEventListener('scroll', trackScrolling);
-
+    
     return () => {
       scrollElement?.removeEventListener('scroll', trackScrolling);
     };
@@ -59,6 +61,8 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
   useEffect(() => {
     if (inView) {
       fetchNextPage()
+      console.log(data)
+
     }
   }, [fetchNextPage, inView])
 
@@ -66,14 +70,20 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
 
   return (
     <>
-      <div className="pfNav">
+      <div className="Header">
+        <p>Notifications</p>
+        <button><SettingsIcon/></button>
       </div>
-      <div className='testbox'>
+      <div className='NotificationMain'>
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
-            {page.notifications.map((alert:NotificationType) => (
-                <Alert key={alert.NotificationId} props={alert} userid={userClient.UserId}/>
-            ))}
+          {page.notifications.map((notification: NotificationType | NotificationFollow) => {
+            if (notification.Type === 'Follow') {
+              return <AlertFollow key={notification.NotificationId} props={notification as NotificationFollow}/>
+            } else {
+              return <AlertPost key={notification.NotificationId} props={notification as NotificationPost} KeyMutation={"NotificationList"} user={userClient}/>
+            }
+          })}
         </Fragment>
       ))}
       </div>

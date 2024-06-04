@@ -8,7 +8,7 @@ export async function GET(request: NextRequest){
     console.log('GET /api/search/user');
     try {
         const client = await GetClient();
-        const username = request.nextUrl.searchParams.get("username")
+        let username = request.nextUrl.searchParams.get("username")
         const cursor = request.nextUrl.searchParams.get("cursor")
 
         if (!client) {
@@ -18,8 +18,8 @@ export async function GET(request: NextRequest){
         if (cursor === undefined || cursor === null) {
             return NextResponse.json({ error: 'Missing "cursor" parameter' }, { status: 500 });
         }
-        if (username === undefined || username === null || username === '') {
-            return NextResponse.json({ error: 'Missing "username" parameter' }, { status: 500 });
+        if (username === undefined || username === null) {
+            username = '';
         }
 
         const cursorValue = parseInt(cursor as string) || 0;

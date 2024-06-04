@@ -1,4 +1,5 @@
 "use client"
+import '@/styles/settings.css'
 import DeleteAcc from "@/client/DELETE/deletAcc"
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -80,15 +81,18 @@ function Settings({user}: {user: UserType}){
         router.push('/settings/picture')
     }
 
+    function handleEmail(){
+        router.push('/settings/email')
+    }
+
 
     if (user === undefined) return null;
 
 
     return (
         <>
-            <h2>Settings</h2>
             <ul className="settingsOptions">
-                <li><button>Change Email</button></li>
+                <li><button onClick={handleEmail}>Change Email</button></li>
                 <li><button onClick={handlePicture}>Change Profile Picture</button></li>
                 <li><button onClick={handlePassword}>Change Password</button></li>
                 <li><button onClick={handleUsername}>Change Username</button></li>

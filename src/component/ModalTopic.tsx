@@ -7,7 +7,15 @@ export default function ModalTopic({close, topic}: { close: Function, topic: Fun
 
     async function AddTopic(event: any){
         event.preventDefault();
-        topic({name: name, description: description});
+        const topicContainer = document.querySelector('.TopicBox');
+        if (topicContainer?.querySelector('.Topic')){
+            topicContainer?.querySelector('.Topic')?.remove();
+        }
+        const topicBtn= document.createElement('button');
+        topicBtn.className = 'Topic';
+        topicBtn.innerHTML = name;
+        topicContainer?.appendChild(topicBtn);
+        // topic({name: name, description: description});
         close(event)
     }
 

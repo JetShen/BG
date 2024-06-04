@@ -1,4 +1,5 @@
 'use client'
+import "@/styles/follow.css"
 import { useRouter } from 'next/navigation'
 import '@/styles/follow.css'
 import Person from './person'
@@ -54,18 +55,20 @@ function MiniFollow({ user }: { user: UserType }) {
   }
 
   return (
-    <>
+    <div className="follow">
       <div className="logoSection">
         <button type="button" onClick={() => router.replace('/home')}>
           Home
         </button>
 
       </div>
-      <ul className="people">
-        {list.map((person) => (
-          <Person key={person.UserId} user={person} userid={user.UserId} />
-        ))}
-      </ul>
-    </>
+      <div className="people">
+        <div className="PeopleBox">
+          {list.map((person) => (
+            <Person key={person.UserId} user={person} userid={user.UserId} />
+          ))}
+        </div>
+      </div>  
+    </div>
   )
 }

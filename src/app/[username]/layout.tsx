@@ -16,16 +16,12 @@ export default function RootLayout({
         <div className="homeContainer">
           <div className="navegation">
             <ProfileData />
-            <ul className="options">
-              <Option />
-            </ul>
+            <Option />
           </div>
           <div className="main">
             {children}
           </div>
-          <div className="follow">
-            <Follow />
-          </div>
+          <Follow />
         </div>
         </>
     );

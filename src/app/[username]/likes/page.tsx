@@ -72,10 +72,8 @@ function Home({username, user}: {username: string, user:UserType} ) {
 
   return (
     <>
-      <div className="pfNav">
-        <Navbar username={username} />
-      </div>
-      <div className='testbox'>
+      <Navbar username={username} />
+      <div className='Profile-children'>
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post: PostType, indexj:number) => (

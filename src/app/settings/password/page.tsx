@@ -1,4 +1,5 @@
 "use client"
+import '@/styles/settings.css'
 import { UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import GetUser from "@/client/GET/getUser";
@@ -81,23 +82,21 @@ function Password({user}: {user: UserType}){
     
 
     return (
-        <div>
+        <form onSubmit={handleSubmit} className="SettingsForm">
             <h1>Change Password</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Old Password:
-                    <input type="password" value={OldPassword} onChange={(e) => setOldPassword(e.target.value)}/>
-                </label>
-                <label>
-                    New Password:
-                    <input type="password" value={NewPassword} onChange={(e) => setNewPassword(e.target.value)}/>
-                </label>
-                <label>
-                    Confirm Password:
-                    <input type="password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
-                </label>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+            <label>
+                Old Password:
+                <input type="password" value={OldPassword} onChange={(e) => setOldPassword(e.target.value)}/>
+            </label>
+            <label>
+                New Password:
+                <input type="password" value={NewPassword} onChange={(e) => setNewPassword(e.target.value)}/>
+            </label>
+            <label>
+                Confirm Password:
+                <input type="password" value={ConfirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+            </label>
+            <button type="submit">Submit</button>
+        </form>
     )
 }
