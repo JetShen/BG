@@ -30,7 +30,6 @@ export async function POST(request: NextRequest){
         }
 
         if (Type === 'Follow') {
-            // Inserción para Follow
             try {
                 await client.query('INSERT INTO Notification (UserId, Type, DestinationId) VALUES (?, ?, ?)', [useridValue, Type, destinationIdValue]);
                 return NextResponse.json({ message: 'Notification inserted successfully' }, { status: 200 });
@@ -44,7 +43,6 @@ export async function POST(request: NextRequest){
                 }
             }
         } else {
-            // Validación y conversión del PostId
             if (PostId === undefined || PostId === null) {
                 return NextResponse.json({ error: 'PostId is required for this notification type' }, { status: 400 });
             }
@@ -52,7 +50,6 @@ export async function POST(request: NextRequest){
             if (isNaN(postIdValue)) {
                 return NextResponse.json({ error: 'Error parsing PostId' }, { status: 500 });
             }
-            // Inserción para otros tipos de notificación
             try {
                 await client.query('INSERT INTO Notification (UserId, PostId, Type, DestinationId) VALUES (?, ?, ?, ?)', [useridValue, postIdValue, Type, destinationIdValue]);
                 return NextResponse.json({ message: 'Notification inserted successfully' }, { status: 200 });

@@ -61,7 +61,6 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
   useEffect(() => {
     if (inView) {
       fetchNextPage()
-      console.log(data)
 
     }
   }, [fetchNextPage, inView])

@@ -1,20 +1,32 @@
 'use client';
 import '@/styles/alertFollow.css';
-import { NotificationFollow,  UserType } from '@/type/post';
+import { NotificationFollow } from '@/type/post';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image'
+import { useInView } from 'react-intersection-observer';
+import SeeNotification from '@/client/PUT/seeNotification';
+import { useEffect } from 'react';
 
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
 export default function AlertFollow({props,}: {props: NotificationFollow}) {
     const router = useRouter()
+    const { ref, inView } = useInView()
+    const mutationSeen = SeeNotification()
 
     async function redirectToUser(event:any){
         event?.stopPropagation()
         router.push(`/${props.Actor}/posts`)
     }
 
+    async function Seen() {
+        await mutationSeen.mutateAsync(props.NotificationId)
+    }
+
+    useEffect(() => {
+        Seen()
+    }, [inView])
 
     return (
         <div className="AlertObject" onClick={redirectToUser} id={props.Seen ? "" : "NotSeen"}>
@@ -34,3 +46,4 @@ export default function AlertFollow({props,}: {props: NotificationFollow}) {
         </div>
     );
 }
+

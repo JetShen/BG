@@ -9,11 +9,13 @@ import { useEffect, useState } from 'react';
 import SavePost from '@/client/POST/savePost';
 import Repost from '@/client/POST/repostfn';
 import { ReplyIcon, ReplyIconColor, ShareIcon, ShareIconColor, LikeIcon, LikeIconColor, SaveIcon } from '@/svg/icons'
+import SeeNotification from '@/client/PUT/seeNotification';
+import { useInView } from 'react-intersection-observer'
 
 const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
 
 export default function AlertPost({ props, KeyMutation, user }: { props: NotificationPost, KeyMutation: string, user: UserType }) {
-
+    const { ref, inView } = useInView()
     const { PostID, urls_images } = props;
     const { UserId } = user;
     const mutationFN = LikeFn({ UserId: UserId, OriginalUser: props.UserId, PostID: PostID, Key: KeyMutation })
@@ -22,6 +24,7 @@ export default function AlertPost({ props, KeyMutation, user }: { props: Notific
     const router = useRouter()
     const savePost = SavePost({ key: KeyMutation })
     const repostPost = Repost({ OriginalUser: props.UserId, UserId: UserId, PostID, Key: KeyMutation })
+    const mutationSeen = SeeNotification()
 
     useEffect(() => {
         if (urls_images) {
@@ -67,6 +70,15 @@ export default function AlertPost({ props, KeyMutation, user }: { props: Notific
         event.stopPropagation()
         await repostPost.mutateAsync()
     }
+
+    async function Seen() {
+        await mutationSeen.mutateAsync(props.NotificationId)
+    }
+
+    useEffect(() => {
+        Seen()
+        
+    }, [inView])
 
     return (
         <div className="AlertPostObject" onClick={redirectToPost} id={props.Seen ? "" : "NotSeen"}>
