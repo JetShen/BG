@@ -71,7 +71,7 @@ function SearchPage({query,user}:{query:string,user:UserType}){
                 <Fragment key={index}>
                 {page.posts.map((post: PostType) => (
                     <Post
-                    key={post.PostID}
+                    key={post.PostId}
                     props={post}
                     KeyMutation="searchPost"
                     user={user}

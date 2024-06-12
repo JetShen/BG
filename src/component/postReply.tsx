@@ -14,14 +14,14 @@ const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-
 
 export default function PostReply({props, KeyMutation, user}: {props: PostType, KeyMutation: string, user: UserType}) {
     
-    const { PostID, urls_images } = props;
+    const { PostId, urls_images } = props;
     const { UserId } = user;
-    const mutationFN = LikeFn({UserId: UserId, OriginalUser: props.UserID , PostID: PostID, Key: KeyMutation})
+    const mutationFN = LikeFn({UserId: UserId, OriginalUser: props.UserId , PostId: PostId, Key: KeyMutation})
     const [showModal, setShowModal] = useState(false);
     const [imgs, setImgs] = useState<string[]>([])
     const router = useRouter()
     const savePost = SavePost({key: KeyMutation})
-    const repostPost = Repost({OriginalUser: props.UserID, UserId: UserId, PostID, Key: KeyMutation})
+    const repostPost = Repost({OriginalUser: props.UserId, UserId: UserId, PostId, Key: KeyMutation})
 
     useEffect(() => {
         if (urls_images) {
@@ -39,7 +39,7 @@ export default function PostReply({props, KeyMutation, user}: {props: PostType, 
 
     function redirectToPost(event:any){
         event?.stopPropagation()
-        router.push(`/${props.Username}/${props.PostID}`)
+        router.push(`/${props.Username}/${props.PostId}`)
     }
 
     function redirecToUser(event:any){
@@ -59,7 +59,7 @@ export default function PostReply({props, KeyMutation, user}: {props: PostType, 
 
     async function save(event:any){
         event.stopPropagation()
-        await savePost.mutateAsync({userid: UserId, postId: PostID})
+        await savePost.mutateAsync({userid: UserId, postId: PostId})
 
     }
 
@@ -123,7 +123,7 @@ export default function PostReply({props, KeyMutation, user}: {props: PostType, 
                     </button>
                 </div>
             </div>
-            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} KeyMutation={KeyMutation} UserId={UserId} OriginalUser={props.UserID}/>} 
+            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostId} KeyMutation={KeyMutation} UserId={UserId} OriginalUser={props.UserId}/>} 
         </div>
     );
 }

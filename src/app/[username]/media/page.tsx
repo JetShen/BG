@@ -72,7 +72,7 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
       {data?.pages.map((page: any, index: number) => (
         <Fragment key={index}>
             {page.posts.map((post: PostType) => (
-                <Post key={post.PostID} user={userClient} props={post} KeyMutation='MediaView' />
+                <Post key={post.PostId} user={userClient} props={post} KeyMutation='MediaView' />
             ))}
         </Fragment>
       ))}
