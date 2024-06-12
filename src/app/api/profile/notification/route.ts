@@ -1,11 +1,11 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
-export async function POST(request: NextRequest){
+export async function POST(request: NextRequest) {
     console.log('POST /api/profile/notification');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         if (!client) {
             return NextResponse.json({ error: 'Database Connection Failed!' }, { status: 500 });
         }
@@ -31,34 +31,47 @@ export async function POST(request: NextRequest){
 
         if (Type === 'Follow') {
             try {
-                await client.query('INSERT INTO Notification (UserId, Type, DestinationId) VALUES (?, ?, ?)', [useridValue, Type, destinationIdValue]);
+                await client.query('INSERT INTO "Notification" ("UserId", "Type", "DestinationId") VALUES ($1, $2, $3)', [UserId, Type, DestinationId]);
+                client.release();
                 return NextResponse.json({ message: 'Notification inserted successfully' }, { status: 200 });
             } catch (error: any) {
-                if (error.code === 'ER_DUP_ENTRY') {
-                    await client.query('DELETE FROM Notification WHERE UserId = ? AND Type = ? AND DestinationId = ?', [useridValue, Type, destinationIdValue]);
+                if (error.code === '23505') {
+                    await client.query('DELETE FROM "Notification" WHERE "UserId" = $1 AND "Type" = $2 AND "DestinationId" = $3', [UserId, Type, DestinationId]);
+                    client.release();
+
                     return NextResponse.json({ message: 'Notification removed successfully' }, { status: 200 });
                 } else {
-                    await client.rollback();
+                    client.release();
+
                     throw error;
                 }
             }
         } else {
             if (PostId === undefined || PostId === null) {
+                client.release();
+
                 return NextResponse.json({ error: 'PostId is required for this notification type' }, { status: 400 });
             }
             const postIdValue = parseInt(PostId, 10);
             if (isNaN(postIdValue)) {
+                client.release();
+
                 return NextResponse.json({ error: 'Error parsing PostId' }, { status: 500 });
             }
             try {
-                await client.query('INSERT INTO Notification (UserId, PostId, Type, DestinationId) VALUES (?, ?, ?, ?)', [useridValue, postIdValue, Type, destinationIdValue]);
+                await client.query('INSERT INTO "Notification" ("UserId", "PostId", "Type", "DestinationId") VALUES ($1, $2, $3, $4)', [UserId, postIdValue, Type, DestinationId]);
+                client.release();
+
                 return NextResponse.json({ message: 'Notification inserted successfully' }, { status: 200 });
             } catch (error: any) {
-                if (error.code === 'ER_DUP_ENTRY') {
-                    await client.query('DELETE FROM Notification WHERE UserId = ? AND PostId = ? AND Type = ? AND DestinationId = ?', [useridValue, postIdValue, Type, destinationIdValue]);
+                if (error.code === '23505') {
+                    await client.query('DELETE FROM "Notification" WHERE "UserId" = $1 AND "PostId" = $2 AND "Type" = $3 AND "DestinationId" = $4', [UserId, postIdValue, Type, DestinationId]);
+                    client.release();
+
                     return NextResponse.json({ message: 'Notification removed successfully' }, { status: 200 });
                 } else {
-                    await client.rollback();
+                    client.release();
+
                     throw error;
                 }
             }

@@ -58,6 +58,8 @@ function Home({username, user}: {username: string, user:UserType} ) {
 
   useEffect(() => {
     if (inView) {
+      console.log('fetching next page')
+      console.log(data)
       fetchNextPage()
     }
   }, [fetchNextPage, inView])
@@ -70,7 +72,7 @@ function Home({username, user}: {username: string, user:UserType} ) {
       <div className='Profile-children'>
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
-          {page.posts.map((post: PostType, indexj:number) => (
+          {page.posts?.map((post: PostType, indexj:number) => (
             <Post
             key={indexj}
             props={post}

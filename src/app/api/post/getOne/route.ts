@@ -1,34 +1,34 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
 async function getPostById(postId: number, client: any, posts: any[] = []) {
     const result = await client.query(
         `SELECT
-            p.PostID, 
-            p.Content, 
-            p.UserID, 
-            u.ProfilePicture,
-            u.Name, 
-            u.Username,
-            p.ParentPostId,
-            (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
-            (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
-            (SELECT COUNT(*) FROM Saved AS s WHERE s.PostId = p.PostId) AS cantidad_saved,
-            GROUP_CONCAT(media.Url SEPARATOR ', ') AS urls_images
+            p."PostId", 
+            p."Content", 
+            p."UserID", 
+            u."ProfilePicture",
+            u."Name", 
+            u."Username",
+            p."ParentPostId",
+            (SELECT COUNT(*) FROM "Post" AS c WHERE c."ParentPostId" = p."PostId") AS "cantidad_respuestas",
+            (SELECT COUNT(*) FROM "Likes" AS l WHERE l."PostID" = p."PostId") AS "cantidad_likes",
+            (SELECT COUNT(*) FROM "Saved" AS s WHERE s."PostID" = p."PostId") AS "cantidad_saved",
+            STRING_AGG(media."Url", ', ') AS "urls_images"
         FROM 
-            Post p
+            "Post" p
         INNER JOIN 
-            User u ON p.UserId = u.UserId
+            "User" u ON p."UserID" = u."UserID"
         LEFT JOIN 
-            Media media ON p.PostId = media.PostId
+            "Media" media ON p."PostId" = media."PostId"
         WHERE 
-            p.PostID = ?
+            p."PostId" = $1
         GROUP BY 
-            p.PostId, p.Content, p.UserId, u.Name, u.Username, cantidad_respuestas, cantidad_likes
+            p."PostId", p."Content", p."UserID", u."Name", u."Username", u."ProfilePicture"
         `, [postId]);
 
-    const post = result[0];
+    const post = result.rows;
 
     if (post[0] && post[0].ParentPostId !== null) {
         posts.splice(0, 0, post[0]); 
@@ -39,9 +39,9 @@ async function getPostById(postId: number, client: any, posts: any[] = []) {
     }
 }
 
-export async function GET(request: NextRequest){
+export async function GET(request: NextRequest) {
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const postId = Number(request.nextUrl.searchParams.get("postId"));
 
         if (!client) {
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest){
 
         const posts = await getPostById(postId, client);
 
-        return NextResponse.json({ post:posts }, { status: 200, headers: { 'Content-Type': 'application/json' } });
+        return NextResponse.json({ post: posts }, { status: 200, headers: { 'Content-Type': 'application/json' } });
         
     } catch (error: any) {
         console.error('Error:', error);

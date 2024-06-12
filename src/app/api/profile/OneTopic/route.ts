@@ -1,4 +1,4 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { TopicType } from '@/type/post';
@@ -7,7 +7,7 @@ import { TopicType } from '@/type/post';
 export async function GET(request: NextRequest){
     console.log('GET /api/profile/OneTopic');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const username = request.nextUrl.searchParams.get("username")
         const topicname = request.nextUrl.searchParams.get("topicname")
         if (username == null || topicname == null) {
@@ -24,25 +24,27 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT 
-                Post.TopicId,
-                Topic.Name,
-                Topic.Description,
+                Post."TopicId",
+                Topic."Name",
+                Topic."Description",
                 COUNT(*) AS PostCount
             FROM 
-                Post
+                "Post"
             JOIN 
-                Topic ON Post.TopicId = Topic.TopicId
+                "Topic" ON Post."TopicId" = Topic."TopicId"
             JOIN 
-                User ON Post.UserId = User.UserID
+                "User" ON Post."UserId" = User."UserID"
             WHERE 
-                User.Name = ? AND Topic.Name = ?
+                User."Name" = $1 AND Topic."Name" = $2
             GROUP BY 
-                Post.TopicId, Topic.Name
+                Post."TopicId", Topic."Name"
             `, [username, topicname]);
-        const topic = result[0]; 
+        const topic = result.rows[0] as TopicType; 
 
         
-
+        if (client) {
+            client.release();
+        }
         return NextResponse.json({ topic }, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error: any) {
         console.error('Error:', error);

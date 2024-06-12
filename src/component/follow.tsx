@@ -50,9 +50,7 @@ function MiniFollow({ user }: { user: UserType }) {
     handleGetUsers()
   }, [])
 
-  if (!list) {
-    return null
-  }
+  
 
   return (
     <div className="follow">
@@ -64,7 +62,7 @@ function MiniFollow({ user }: { user: UserType }) {
       </div>
       <div className="people">
         <div className="PeopleBox">
-          {list.map((person) => (
+          {list && list.map((person) => (
             <Person key={person.UserId} user={person} userid={user.UserId} />
           ))}
         </div>

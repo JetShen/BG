@@ -1,7 +1,7 @@
 "use client"
 import { PostType, UserType } from "@/type/post";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import FetchSavedPost from "@/client/GET/fetchSaved";
 import Post from "@/component/Post";
 import GetUser from "@/client/GET/getUser";
@@ -22,9 +22,6 @@ export default function App() {
 
 
 function Saved({ user }: { user: UserType}) {
-
-
-
   const {
     isFetching,
     isFetchingNextPage,
@@ -34,7 +31,7 @@ function Saved({ user }: { user: UserType}) {
   } = FetchSavedPost(user.UserId)
 
   const trackScrolling = () => {
-    const wrappedElement = document.getElementsByClassName('testbox')[0]
+    const wrappedElement = document.getElementsByClassName('savedContainer')[0]
     if (wrappedElement === null) {
       return;
     }
@@ -49,7 +46,7 @@ function Saved({ user }: { user: UserType}) {
   };
 
   useEffect(() => {
-    const scrollElement = document.getElementsByClassName('testbox')[0]
+    const scrollElement = document.getElementsByClassName('savedContainer')[0]
     scrollElement?.addEventListener('scroll', trackScrolling);
 
     return () => {
@@ -60,12 +57,18 @@ function Saved({ user }: { user: UserType}) {
 
   return (
     <>
-      <div className='testbox'>
+      <div className='savedContainer' style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: '100vh',
+        width: '100%',
+      }}>
       {user && data?.pages.map((page, index) => (
-        <Fragment key={index}>
+        <Fragment key={`page-${index}`}>
           {page.posts.map((post: PostType, indexj:number) => (
             <Post
-            key={indexj}
+            key={`Saved-${indexj}`}
             props={post}
             KeyMutation='saved'
             user={user}

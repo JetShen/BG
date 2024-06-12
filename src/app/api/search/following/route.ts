@@ -1,4 +1,4 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { UserType } from '@/type/post';
@@ -7,7 +7,7 @@ import { UserType } from '@/type/post';
 export async function GET(request: NextRequest){
     console.log('GET /api/search/following');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const userid = request.nextUrl.searchParams.get("userid")
         const cursor = request.nextUrl.searchParams.get("cursor")
 
@@ -21,24 +21,24 @@ export async function GET(request: NextRequest){
         
         const result = await client.query(
             `SELECT 
-                u.UserId, 
-                u.Name, 
-                u.Username, 
-                u.ProfilePicture,
-                f.UserId as FollowedBy
+                u."UserId", 
+                u."Name", 
+                u."Username", 
+                u."ProfilePicture",
+                f."UserId" as "FollowedBy"
             FROM 
-                User u
+                "User" u
             LEFT JOIN 
-                Follow f ON u.UserId = f.FollowedId
+                "Follow" f ON u."UserId" = f."FollowedId"
             WHERE
-                f.UserId = ?
+                f."UserId" = $1
             GROUP BY 
-                u.UserId, u.Name, u.Username, u.ProfilePicture, FollowedBy
+                u."UserId", u."Name", u."Username", u."ProfilePicture", "FollowedBy", f."FollowId"
             ORDER BY 
-                f.FollowId DESC
-            LIMIT ? OFFSET ?
+                f."FollowId" DESC
+            LIMIT $2 OFFSET $3
             `, [userValue, pageSize, pageParam]);
-        const users: Array<UserType> = result[0] as Array<UserType>;
+        const users: Array<UserType> = result.rows as Array<UserType>;
         const len = Object.keys(users);
         const ln: number = len.length;
         

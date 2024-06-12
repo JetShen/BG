@@ -1,8 +1,8 @@
 
 export type PostType = {
-    PostID: number,
+    PostId: number,
     Content: string,
-    UserID: number,
+    UserId: number,
     Name: string,
     Username: string,
     ProfilePicture: string,
@@ -49,10 +49,10 @@ export type NotificationType = {
 
 export type NotificationFollow = {
     NotificationId: number,
-    UserId: number, // User Id Who sends the notification
-    Username: string,
-    Actor: String, // User Username Who sends the notification
-    ProfilePicture: string,
+    userid: number, // User Id Who sends the notification
+    username: string,
+    actor: String, // User Username Who sends the notification
+    profilepicture: string,
     Type: string,
     Seen: boolean,
     DestinationId: number, // User Id Who receives the notification
@@ -60,16 +60,16 @@ export type NotificationFollow = {
 
 export type NotificationPost = {
     NotificationId: number,
-    UserId: number, // User Id Who sends the notification
+    userid: number, // User Id Who sends the notification
     Type: string,
     Seen: boolean,
     DestinationId: number, // User Id Who receives the notification
-    PostID: number,
+    PostId: number,
     Content: string,
     Name: string,
-    Username: string,
-    Actor: String, // User Username Who sends the notification
-    ProfilePicture: string,
+    username: string,
+    actor: String, // User Username Who sends the notification
+    profilepicture: string,
     cantidad_likes: number,
     cantidad_respuestas: number,
     cantidad_saved: number,

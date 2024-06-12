@@ -159,19 +159,18 @@ function Home({user}: {user: UserType}) {
   async function ResolveMake(event: any) {
     event.stopPropagation();
     const userId = user.UserId;
-    console.log(user.UserId, userId);
     if (userId === undefined || userId === undefined) return alert(`please login user: ${userId} userId: ${userId}`);
   
     const inputElement = document.querySelector('.post-textarea') as HTMLInputElement;
     const topicId = topic.name !== '' ? await makeTopic() : 0;
     const postData = { userid: userId, content: ContentData, topicId };
     const status = await makePost(postData);
-    const id = status.data.id.insertId;
+    const id = status.data.id;
     if (status.status === 200) {
       setContentData('');
       inputElement.value = '';
       setTopic({ name: '', description: '', id: 0 });
-      if(files?.length ?? 0 > 0){
+      if(files !== null){
         handleUpload(event, id);
         setFiles(null);
       }
@@ -224,7 +223,6 @@ function Home({user}: {user: UserType}) {
 
   const handleUpload = async (event: any, id: number) => {
     event.preventDefault();
-
     setUploading(true);
 
     if (!files) {
@@ -283,11 +281,11 @@ function Home({user}: {user: UserType}) {
         </div>
       </div>
       <div className="testbox">
-      {data?.pages.map((page, index) => (
-        <Fragment key={index}>
+      {data?.pages.map((page, pageIndex) => (
+        <Fragment key={`page-${pageIndex}`}>
           {page.posts.map((post: PostType) => (
             <Post
-            key={post.PostID}
+            key={`Post-${post.PostId}`}
             props={post}
             KeyMutation="post"
             user={user}

@@ -1,10 +1,10 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request): Promise<NextResponse> {
     console.log('POST /api/profile/follow');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         if (!client) {
             return NextResponse.json({ error: 'Database Connection Failed!' }, { status: 500 });
         }
@@ -14,34 +14,37 @@ export async function POST(request: Request): Promise<NextResponse> {
         const followid = requestBody.get('followid') as string;
         const userValue = parseInt(userid, 10);
         const followValue = parseInt(followid, 10);
-        if (userValue === undefined || userValue === null || followValue === undefined || followValue === null) {
-            return NextResponse.json({ error: 'Missing parameter' }, { status: 500 });
+        
+        if (isNaN(userValue) || isNaN(followValue)) {
+            return NextResponse.json({ error: 'Missing or invalid parameter' }, { status: 400 });
         }
 
         try {
             const result = await client.query(
                 `INSERT INTO 
-                    Follow (UserID, FollowedId) 
+                    "Follow" ("UserId", "FollowedId") 
                 VALUES 
-                    (?, ?)`, [userValue, followValue]);
+                    ($1, $2)`, [userValue, followValue]);
             return NextResponse.json({ message: 'Followed' }, { status: 200 });
-        }
-        catch (e:any) {
-            if (e.code === 'ER_DUP_ENTRY') {
+        } catch (e: any) {
+            if (e.code === '23505') { // PostgreSQL unique violation error code
                 await client.query(
                     `DELETE FROM 
-                        Follow 
+                        "Follow" 
                     WHERE 
-                        UserID = ? 
+                        "UserId" = $1 
                     AND 
-                        FollowedId = ?`, [userValue, followValue]);
+                        "FollowedId" = $2`, [userValue, followValue]);
                 return NextResponse.json({ message: 'Unfollowed' }, { status: 200 });
             } else {
                 throw e;
             }
+        } finally {
+            if (client) {
+                client.release();
+            }
         }
-    
-    } catch (error: any ) {
+    } catch (error: any) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
     }

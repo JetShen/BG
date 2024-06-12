@@ -1,4 +1,4 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { TopicType } from '@/type/post';
@@ -7,7 +7,7 @@ import { TopicType } from '@/type/post';
 export async function GET(request: NextRequest){
     console.log('GET /api/profile/topics');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const cursor = request.nextUrl.searchParams.get("cursor")
         const username = request.nextUrl.searchParams.get("username")
         if (username === undefined || username === null) {
@@ -28,23 +28,23 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT 
-                Post.TopicId,
-                Topic.Name,
-                Topic.Description,
-                COUNT(*) AS PostCount
+                p."TopicId",
+                t."Name",
+                t."Description",
+                COUNT(p."PostId") AS PostCount
             FROM 
-                Post
+                "Post" p
             JOIN 
-                Topic ON Post.TopicId = Topic.TopicId
+                "Topic" t ON Post.TopicId = Topic.TopicId
             JOIN 
-                User ON Post.UserId = User.UserID
+                "User" u ON Post.UserId = User.UserID
             WHERE 
-                User.Name = ?
+                u."Name" = $1
             GROUP BY 
-                Post.TopicId, Topic.Name
-            LIMIT ? OFFSET ?
+                p."TopicId", t."Name"
+            LIMIT $2 OFFSET $3
             `, [username, pageSize, pageParam]);
-        const topics: Array<TopicType> = result[0] as Array<TopicType>;
+        const topics: Array<TopicType> = result.rows as Array<TopicType>;
         const len = Object.keys(topics);
         const ln: number = len.length;
         
@@ -52,7 +52,9 @@ export async function GET(request: NextRequest){
         const previousId = cursorValue > 0 ? cursorValue -1 : null;
 
         
-
+        if(client){
+            client.release();
+        }
         return NextResponse.json({ topics, nextId, previousId }, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error: any) {
         console.error('Error:', error);

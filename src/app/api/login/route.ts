@@ -1,5 +1,5 @@
 "use server";
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 // This is the route for the register page
 export async function GET(request: NextRequest): Promise<NextResponse> {
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         if (!client) {
             return NextResponse.json({ error: 'Database Connection Failed!' }, { status: 500 });
         }
@@ -17,13 +17,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         if (!username || !password) {
             return NextResponse.json({ error: 'Invalid Request!' }, { status: 400 });
         }
-        const result = await client.query('SELECT * FROM user WHERE user.username = ?', [ username]);
-        const data = result[0] as any;
-        const passwordHashed = data[0]?.Password;
+        const result = await client.query('SELECT * FROM "User" WHERE "Username" = $1', [username]);
+        const data = result.rows;
+
+        if (data.length === 0) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        const passwordHashed = data[0].Password;
         const match = await bcrypt.compare(password, passwordHashed);
 
-        return NextResponse.json({ result: {match: match, username: username}  }, { status: 200 });
-    } catch (error: any ) {
+        return NextResponse.json({ result: { match: match, username: username } }, { status: 200 });
+    } catch (error: any) {
         console.error('Error:', error);
         return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });
     }

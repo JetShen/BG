@@ -4,7 +4,6 @@ import axios from 'axios'
 
 
 export default function FetchSavedPost(userid:number) {
-    console.log(userid)
     const {
         data,
         isFetching,

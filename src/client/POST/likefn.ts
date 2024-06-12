@@ -2,15 +2,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 
-export default function LikeFn({OriginalUser, UserId, PostID, Key}:{OriginalUser: number, UserId: number ,PostID: number, Key: string}){
+export default function LikeFn({OriginalUser, UserId, PostId, Key}:{OriginalUser: number, UserId: number ,PostId: number, Key: string}){
     const keyPost = Key;
     const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationKey: ['likePost'],
         mutationFn: async () =>  {
-            const result = await axios.post('/api/post/like', { UserID: UserId, PostID: PostID});
-            if (result.status){
-                await axios.post('/api/profile/notification', {UserId: UserId, Type: 'Like', DestinationId: OriginalUser, PostId: PostID});
+            const result = await axios.post('/api/post/like', { UserID: UserId, PostID: PostId});
+            if (result.status && UserId !== OriginalUser){
+                await axios.post('/api/profile/notification', {UserId: UserId, Type: 'Like', DestinationId: OriginalUser, PostId: PostId});
             }
             return result;
         },

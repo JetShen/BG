@@ -17,7 +17,7 @@ export default function AlertFollow({props,}: {props: NotificationFollow}) {
 
     async function redirectToUser(event:any){
         event?.stopPropagation()
-        router.push(`/${props.Actor}/posts`)
+        router.push(`/${props.actor}/posts`)
     }
 
     async function Seen() {
@@ -31,7 +31,7 @@ export default function AlertFollow({props,}: {props: NotificationFollow}) {
     return (
         <div className="AlertObject" onClick={redirectToUser} id={props.Seen ? "" : "NotSeen"}>
             <Image
-                src={props.ProfilePicture ? props.ProfilePicture : ulrTest}
+                src={props.profilepicture ? props.profilepicture : ulrTest}
                 alt="Picture of the author"
                 width={0}
                 height={0}
@@ -40,7 +40,7 @@ export default function AlertFollow({props,}: {props: NotificationFollow}) {
                 className='profilePostImg'
             />
             <div style={{padding:'0.2em', display:'flex', flexDirection:'row'}}>
-                <p id='secondary'>@{props.Actor}</p>
+                <p id='secondary'>@{props.actor}</p>
                 <span id='primary'>Followed you</span>
             </div>
         </div>

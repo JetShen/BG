@@ -9,8 +9,8 @@ export default function ReplyFn({OriginalUser, UserID, PostID, Key, content}:{Or
         mutationKey: ['replyPost'],
         mutationFn: async () =>  {
             const result = await axios.post('/api/post/reply', { UserID: UserID, PostID: PostID, content: content});
-            if (result.status){
-                await axios.post('/api/profile/notification', {UserId: UserID, Type: 'Reply', PostId: result.data.result[0].insertId, DestinationId: OriginalUser});
+            if (result.status && UserID !== OriginalUser){
+                await axios.post('/api/profile/notification', {UserId: UserID, Type: 'Reply', PostId: result.data.result[0].PostId, DestinationId: OriginalUser});
             }
             return result;
         

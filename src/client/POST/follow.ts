@@ -7,7 +7,7 @@ export default function FollowFn({ key }: { key: string }) {
         mutationKey: ['follow'],
         mutationFn: async (FollowData: FormData) => {
             const result = await axios.post('/api/profile/follow', FollowData);
-            if (result.status){
+            if (result.status && FollowData.get('userid') !== FollowData.get('followid')) {
                 await axios.post('/api/profile/notification', {UserId: FollowData.get('userid'), Type: 'Follow', DestinationId: FollowData.get('followid')});
             }
             return result;

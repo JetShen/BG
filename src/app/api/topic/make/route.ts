@@ -1,10 +1,9 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
-import {RowDataPacket, ResultSetHeader} from "mysql2/promise";
 
 export async function POST(request: Request): Promise<NextResponse> {
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         if (!client) {
             return NextResponse.json({ error: 'Database Connection Failed!' }, { status: 500 });
         }
@@ -20,19 +19,17 @@ export async function POST(request: Request): Promise<NextResponse> {
         try {
             await client.query('START TRANSACTION');
             const result = await client.query(
-                'INSERT INTO topic(Name, Description) VALUES (?, ?)',
+                'INSERT INTO "Topic" ("Name", "Description") VALUES ($1, $2)',
                 [Name, Description]
             );
             await client.query('COMMIT');
-            const topicId = (result[0] as ResultSetHeader).insertId;
-            return NextResponse.json({ topicId: topicId }, { status: 200 });
+            const {rows}  = await client.query('SELECT * FROM "Topic" WHERE "Name" = $1', [Name]);
+            return NextResponse.json({ topicId: rows }, { status: 200 });
         } catch (error:any) {
-            if (error.code === 'ER_DUP_ENTRY') {
+            if (error.code === '23505') {
                 await client.query('ROLLBACK');
-                const [rows]  = await client.query('SELECT * FROM topic WHERE Name = ?', [Name]);
-                const topocId = (rows as RowDataPacket[])[0].TopicId;
-                console.log('topocId:', topocId);
-                return NextResponse.json({ topicId: topocId }, { status: 200 });
+                const {rows}  = await client.query('SELECT * FROM "Topic" WHERE "Name" = $1', [Name]);
+                return NextResponse.json({ topicId: rows }, { status: 200 });
             }
             await client.query('ROLLBACK');
             return NextResponse.json({ error: 'Internal Server Error', details: error.message }, { status: 500 });

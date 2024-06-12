@@ -6,8 +6,8 @@ import { useInView } from 'react-intersection-observer'
 import '@/styles/postpage.css'
 import FetchFollowingFn from '@/client/GET/fetchFollowingFn';
 import GetUser from '@/client/GET/getUser';
-import Person from '@/component/person';
 import { useRouter } from 'next/navigation';
+import ItemPerson from '@/component/itemPerson';
 
 const queryClient = new QueryClient()
 
@@ -66,15 +66,15 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
 
   return (
     <>
-      <div className="pfNav">
-      <button onClick={() => router.replace(`/${userClient.Username}/following`)} >Following</button>
+      <div className="FollowNav">
+        <button onClick={() => router.replace(`/${userClient.Username}/following`)} >Following</button>
         <button onClick={() => router.replace(`/${userClient.Username}/followers`)}>Followers</button>
       </div>
-      <div className='testbox'>
+      <div className='PersonBox'>
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
             {page.users.map((user:UserType) => (
-                <Person key={user.UserId} user={user} userid={userClient.UserId}/>
+                <ItemPerson key={user.UserId} user={user} userid={userClient.UserId}/>
             ))}
         </Fragment>
       ))}

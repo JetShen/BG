@@ -1,4 +1,4 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { UserType } from '@/type/post';
@@ -7,7 +7,7 @@ import { UserType } from '@/type/post';
 export async function GET(request: NextRequest){
     console.log('GET /api/search/followers');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const userid = request.nextUrl.searchParams.get("userid")
         const cursor = request.nextUrl.searchParams.get("cursor")
 
@@ -21,27 +21,29 @@ export async function GET(request: NextRequest){
         
         const result = await client.query(
             `SELECT 
-                u.UserId, 
-                u.Name, 
-                u.Username, 
-                u.ProfilePicture
+                u."UserId", 
+                u."Name", 
+                u."Username", 
+                u."ProfilePicture"
             FROM 
-                user u
+                "User" u
             INNER JOIN 
-                follow f ON f.UserId = u.UserId
+                "Follow" f ON f."UserId" = u."UserId"
             WHERE
-                f.FollowedId = ?
+                f."FollowedId" = $1
             ORDER BY 
-                f.FollowId DESC
-            LIMIT ? OFFSET ?
+                f."FollowId" DESC
+            LIMIT $2 OFFSET $3
             `, [userValue, pageSize, pageParam]);
-        const users: Array<UserType> = result[0] as Array<UserType>;
+        const users: Array<UserType> = result.rows as Array<UserType>;
         const len = Object.keys(users);
         const ln: number = len.length;
         
         const nextId = ln < pageSize ? null : cursorValue + 1;
         const previousId = cursorValue > 0 ? cursorValue -1 : null;
-
+        if(client){
+            client.release();
+        }
         return NextResponse.json({ users, nextId, previousId }, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error: any) {
         console.error('Error:', error);

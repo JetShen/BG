@@ -1,4 +1,4 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 export async function PUT(request: NextRequest){
     console.log('Private /api/profile/private');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const username = request.nextUrl.searchParams.get("Username")
         if (username === undefined || username === null) {
             return NextResponse.json({ error: 'Missing "username" parameter' }, { status: 500 });
@@ -17,13 +17,13 @@ export async function PUT(request: NextRequest){
 
         const resultUserID = await client.query(
             `SELECT 
-                UserID, Private
+                "UserID", "Private"
             FROM 
-                user
+                "user"
             WHERE
-                Username = ?
+                "Username" = $1
             `, [username]);
-        const userid = resultUserID[0] as any;
+        const userid = resultUserID.rows[0] as any;
         const privateValue = parseInt(userid[0].Private, 10);
         const useridValue = parseInt(userid[0].UserID, 10);
 
@@ -34,21 +34,24 @@ export async function PUT(request: NextRequest){
         if (privateValue === 1) {
             await client.query(
                 `UPDATE 
-                    user
+                    "User"
                 SET
-                    Private = 0
+                    "Private" = 0
                 WHERE
-                    UserID = ?
+                    "UserID" = $1
                 `, [useridValue]);
+            if (client) {
+                client.release();
+            }
             return NextResponse.json({ message: 'User public' }, { status: 200 });
         }
         await client.query(
             `UPDATE 
-                user
+                "User"
             SET
-                Private = 1
+                "Private" = 1
             WHERE
-                UserID = ?
+                "UserID" = $1
             `, [useridValue]);
         return NextResponse.json({ message: 'User public' }, { status: 200 });
         

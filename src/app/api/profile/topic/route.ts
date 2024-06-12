@@ -1,4 +1,4 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { TopicType } from '@/type/post';
@@ -7,7 +7,7 @@ import { TopicType } from '@/type/post';
 export async function GET(request: NextRequest){
     console.log('GET /api/profile/topic');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const cursor = request.nextUrl.searchParams.get("cursor")
         const username = request.nextUrl.searchParams.get("username")
         const topicName = request.nextUrl.searchParams.get("topicName")
@@ -32,32 +32,32 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT 
-                post.PostID,
-                post.Content,
-                user.UserID,
-                user.Name,
-                user.Username,
-                COUNT(likes.LikeID) AS cantidad_likes,
-                COUNT(respuestas.PostID) AS cantidad_respuestas
+                p."PostId",
+                p."Content",
+                u."UserID",
+                u."Name",
+                u."Username",
+                COUNT(L."LikeID") AS cantidad_likes,
+                COUNT(r."PostId") AS cantidad_respuestas
             FROM 
-                post
+                "Post" p
             JOIN 
-                user ON post.UserID = user.UserID
+                "User" u ON p."UserID" = u."UserID"
             LEFT JOIN 
-                likes ON post.PostID = likes.PostID
+                "Likes" l ON p."PostId" = l."PostId"
             LEFT JOIN 
-                Post respuestas ON post.PostID = respuestas.ParentPostID
+                "Post" r ON p."PostId" = r."ParentPostId"
             JOIN
-                Topic ON post.TopicID = Topic.TopicID
+                "Topic" t ON p."TopicID" = t."TopicID"
             WHERE
-                user.Name = ? AND Topic.Name = ?
+                u."Name" = $1 AND t."Name" = $2
             GROUP BY 
-                post.PostID, post.Content, user.UserID, user.Name, user.Username
+                p."PostId", p."Content", u."UserID", u."Name", u."Username"
             ORDER BY 
-                post.PostID DESC     
-            LIMIT ? OFFSET ?
+                p."PostId" DESC     
+            LIMIT $3 OFFSET $4
             `, [username, topicName, pageSize, pageParam]);
-        const topics: Array<TopicType> = result[0] as Array<TopicType>;
+        const topics: Array<TopicType> = result.rows as Array<TopicType>;
         const len = Object.keys(topics);
         const ln: number = len.length;
         
@@ -65,7 +65,9 @@ export async function GET(request: NextRequest){
         const previousId = cursorValue > 0 ? cursorValue -1 : null;
 
         
-
+        if(client){
+            client.release();
+        }
         return NextResponse.json({ topics, nextId, previousId }, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error: any) {
         console.error('Error:', error);

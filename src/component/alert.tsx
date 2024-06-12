@@ -16,14 +16,14 @@ const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-
 
 export default function AlertPost({ props, KeyMutation, user }: { props: NotificationPost, KeyMutation: string, user: UserType }) {
     const { ref, inView } = useInView()
-    const { PostID, urls_images } = props;
+    const { PostId, urls_images } = props;
     const { UserId } = user;
-    const mutationFN = LikeFn({ UserId: UserId, OriginalUser: props.UserId, PostID: PostID, Key: KeyMutation })
+    const mutationFN = LikeFn({ UserId: UserId, OriginalUser: props.userid, PostId: PostId, Key: KeyMutation })
     const [showModal, setShowModal] = useState(false);
     const [imgs, setImgs] = useState<string[]>([])
     const router = useRouter()
     const savePost = SavePost({ key: KeyMutation })
-    const repostPost = Repost({ OriginalUser: props.UserId, UserId: UserId, PostID, Key: KeyMutation })
+    const repostPost = Repost({ OriginalUser: props.userid, UserId: UserId, PostId, Key: KeyMutation })
     const mutationSeen = SeeNotification()
 
     useEffect(() => {
@@ -42,12 +42,12 @@ export default function AlertPost({ props, KeyMutation, user }: { props: Notific
 
     function redirectToPost(event: any) {
         event?.stopPropagation()
-        router.push(`/${props.Username}/${props.PostID}`)
+        router.push(`/${props.username}/${props.PostId}`)
     }
 
     function redirecToUser(event: any) {
         event?.stopPropagation()
-        router.push(`/${props.Username}/posts`)
+        router.push(`/${props.username}/posts`)
     }
 
     const openModal = (event: any) => {
@@ -62,7 +62,7 @@ export default function AlertPost({ props, KeyMutation, user }: { props: Notific
 
     async function save(event: any) {
         event.stopPropagation()
-        await savePost.mutateAsync({ userid: UserId, postId: PostID })
+        await savePost.mutateAsync({ userid: UserId, postId: PostId })
 
     }
 
@@ -84,7 +84,7 @@ export default function AlertPost({ props, KeyMutation, user }: { props: Notific
         <div className="AlertPostObject" onClick={redirectToPost} id={props.Seen ? "" : "NotSeen"}>
             <div className="PostImage">
                 <Image
-                    src={props.ProfilePicture ? props.ProfilePicture : ulrTest}
+                    src={props.profilepicture ? props.profilepicture : ulrTest}
                     alt="Picture of the author"
                     width={0}
                     height={0}
@@ -98,11 +98,11 @@ export default function AlertPost({ props, KeyMutation, user }: { props: Notific
                     <div>
                         <div className="UserData">
                             <p id='primary'>{props.Name}</p>
-                            <p id='secondary' onClick={redirecToUser}>@{props.Username}</p>
+                            <p id='secondary' onClick={redirecToUser}>@{props.username}</p>
                         </div>
-                        {props.Type === 'Reply' ? <span id='secondary' style={{ display: 'flex', flexDirection: 'row', padding: '0.3em' }}>@{props.Actor} <ReplyIconColor /></span> : null}
-                        {props.Type === 'Like' ? <span id='secondary' style={{ display: 'flex', flexDirection: 'row', padding: '0.3em' }}>@{props.Actor}  <LikeIconColor /></span> : null}
-                        {props.Type === 'Repost' ? <span id='secondary' style={{ display: 'flex', flexDirection: 'row', padding: '0.3em' }}>@{props.Actor}  <ShareIconColor /></span> : null}
+                        {props.Type === 'Reply' ? <span id='secondary' style={{ display: 'flex', flexDirection: 'row', padding: '0.3em' }}>@{props.actor} <ReplyIconColor /></span> : null}
+                        {props.Type === 'Like' ? <span id='secondary' style={{ display: 'flex', flexDirection: 'row', padding: '0.3em' }}>@{props.actor}  <LikeIconColor /></span> : null}
+                        {props.Type === 'Repost' ? <span id='secondary' style={{ display: 'flex', flexDirection: 'row', padding: '0.3em' }}>@{props.actor}  <ShareIconColor /></span> : null}
 
                     </div>
                     {props.Type === 'Reply' ? <p className='AlertReply'>Replying to @{user.Username}</p> : null}
@@ -139,7 +139,7 @@ export default function AlertPost({ props, KeyMutation, user }: { props: Notific
                     </button>
                 </div>
             </div>
-            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostID} KeyMutation={KeyMutation} UserId={UserId} OriginalUser={props.UserId} />}
+            {showModal && <ModalReply closeModal={closeModal} PostId={props.PostId} KeyMutation={KeyMutation} UserId={UserId} OriginalUser={props.userid} />}
         </div>
     );
 }

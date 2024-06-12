@@ -76,11 +76,11 @@ function Home({username, userClient}: {username: string, userClient:UserType} ) 
       <div className='NotificationMain'>
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
-          {page.notifications.map((notification: NotificationType | NotificationFollow) => {
+          {page.notifications.map((notification: any) => {
             if (notification.Type === 'Follow') {
               return <AlertFollow key={notification.NotificationId} props={notification as NotificationFollow}/>
             } else {
-              return <AlertPost key={notification.NotificationId} props={notification as NotificationPost} KeyMutation={"NotificationList"} user={userClient}/>
+              return <AlertPost key={notification.NotificationId} props={notification as NotificationPost}  KeyMutation={"NotificationList"} user={userClient}/>
             }
           })}
         </Fragment>

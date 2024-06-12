@@ -1,4 +1,4 @@
-import { GetClient } from "@/client/mysql";
+import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { PostType } from '@/type/post';
@@ -7,11 +7,11 @@ import { PostType } from '@/type/post';
 export async function GET(request: NextRequest){
     console.log('GET /api/save/posts');
     try {
-        const client = await GetClient();
+        const client = await sql.connect();
         const cursor = request.nextUrl.searchParams.get("cursor")
         const userid = request.nextUrl.searchParams.get("userid")
         if (userid === undefined || userid === null) {
-            return NextResponse.json({ error: 'Missing "userid" parameter' }, { status: 500 });
+            return NextResponse.json({ error: 'Missing "UserId" parameter' }, { status: 500 });
         }
 
         if (cursor === undefined || cursor === null) {
@@ -28,34 +28,34 @@ export async function GET(request: NextRequest){
 
         const result = await client.query(
             `SELECT 
-                p.PostID, 
-                p.Content, 
-                u.UserID,
-                u.Name, 
-                u.Username,
-                u.ProfilePicture,
-                (SELECT COUNT(*) FROM Post AS c WHERE c.ParentPostId = p.PostId) AS cantidad_respuestas,
-                (SELECT COUNT(*) FROM Likes AS l WHERE l.PostId = p.PostId) AS cantidad_likes,
-                (SELECT COUNT(*) FROM Saved AS sv WHERE sv.PostId = p.PostId) AS cantidad_saved,
-                (SELECT COUNT(*) FROM Share AS s WHERE s.PostId = p.PostId) AS cantidad_share,
-                GROUP_CONCAT(m.Url SEPARATOR ', ') AS urls_images
+                p."PostId", 
+                p."Content", 
+                u."UserId",
+                u."Name", 
+                u."Username",
+                u."ProfilePicture",
+                (SELECT COUNT(*) FROM "Post" AS c WHERE c."ParentPostId" = p."PostId") AS cantidad_respuestas,
+                (SELECT COUNT(*) FROM "Likes" AS l WHERE l."PostId" = p."PostId") AS cantidad_likes,
+                (SELECT COUNT(*) FROM "Saved" AS sv WHERE sv."PostId" = p."PostId") AS cantidad_saved,
+                (SELECT COUNT(*) FROM "Share" AS s WHERE s."PostId" = p."PostId") AS cantidad_share,
+                STRING_AGG(DISTINCT m."Url", ', ') AS urls_images
             FROM 
-                post p
+                "Post" p
             JOIN 
-                user u ON p.UserID = u.UserID
+                "User" u ON p."UserId" = u."UserId"
             LEFT JOIN 
-                Saved s ON p.PostId = s.PostId 
+                "Saved" s ON p."PostId" = s."PostId" 
             LEFT JOIN
-                Media m ON m.PostId = p.PostId
+                "Media" m ON m."PostId" = p."PostId"
             WHERE
-                s.UserId = ?
+                s."UserId" = $1
             GROUP BY 
-                p.PostID, p.Content, u.UserID, u.Name, u.Username
+                p."PostId", p."Content", u."UserId", u."Name", u."Username", s."SavedId" 
             ORDER BY 
-                s.SavedId DESC        
-            LIMIT ? OFFSET ?
+                s."SavedId" DESC        
+            LIMIT $2 OFFSET $3
             `, [userid, pageSize, pageParam]);
-        const posts: Array<PostType> = result[0] as Array<PostType>;
+        const posts: Array<PostType> = result.rows as Array<PostType>;
         const len = Object.keys(posts);
         const ln: number = len.length;
         
@@ -63,7 +63,9 @@ export async function GET(request: NextRequest){
         const previousId = cursorValue > 0 ? cursorValue -1 : null;
 
         
-
+        if (client) {
+            client.release();
+        }
         return NextResponse.json({ posts, nextId, previousId }, { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error: any) {
         console.error('Error:', error);
