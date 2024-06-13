@@ -31,26 +31,34 @@
 }
 
 .postContainer{
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px; 
     flex-direction: column;
     width: 60%;
+    height: 100%;
     border: solid 1px blue;
     gap: 1%;
 }
 
 .MainContainer{
     display: flex;
+    grid-area: 1 / 1 / 6 / 2;
     flex-direction: column;
     width: 100%;
-    height: 90%;
-    border: solid 1px black;
+    height: 100%;
     gap: 3%;
     overflow-y: scroll;
+    scrollbar-width: none; 
 }
 
 .MainContainer::-webkit-scrollbar{
-    width: 0.5em;
+    display: none;
 }
+
+
 
 .followContainer{
     display: grid;
@@ -64,26 +72,7 @@
     border: solid 1px yellow;
 }
 
-.pfNav{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 10%;
-    border: solid 1px green;
-    gap: 1%;
-    margin: 0.1em;
-    justify-content: center;
-    align-items: center;
-}
-.pfNav button{
-    width: 24.1%;
-    height: 70%;
-    border: solid 1px black;
-}
 
-.pfNav button:hover{
-    cursor: pointer;
-}
 .pfPost{
     width: 100%;
     height: 89%;

@@ -1,20 +1,57 @@
-import Image from 'next/image'
-const ulrTest = 'https://img.freepik.com/premium-photo/anime-girl-shark-costume-holding-stuffed-animal-generative-ai_958124-30525.jpg'
+import { useState } from 'react';
+import { UserType } from '@/type/post';
+import Image from 'next/image';
+import FollowFn from '@/client/POST/follow';
+import { UserIcon } from '@/svg/icons';
 
-export default function Person() {
+function useFollow() {
+    const followMutation = FollowFn({ key: 'user' });
+    const follow = async (FollowData: FormData) => {
+        const result = await followMutation.mutateAsync(FollowData);
+        return result;
+    };
+    return follow;
+}
+
+export default function Person({ user, userid }: { user: UserType, userid: number }) {
+    const followMutation = useFollow();
+    const [isFollowing, setIsFollowing] = useState(user.FollowedBy === userid);
+
+    async function handleFollow() {
+        console.log(isFollowing ? 'Unfollow' : 'Follow');
+        const FollowData = new FormData();
+        FollowData.append('userid', userid.toString());
+        FollowData.append('followid', user.UserId.toString());
+        const result = await followMutation(FollowData);
+        console.log(result);
+
+        // Toggle the follow state based on the result
+        if (result.status) {
+            setIsFollowing(!isFollowing);
+        }
+    }
+
     return (
         <li className="person">
-            <Image src={ulrTest}
-                alt="Picture of the author"
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: '50%', height: 'auto' }}
-                className='profilePostImg' />
-            <div className="section">
-                <h4 className="name">Name</h4>
-                <p className="username">@username</p>
+            <div className="PfpContainer">
+                <Image
+                    src={user.ProfilePicture}
+                    alt="Picture of the author"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: '80%', height: 'auto' }}
+                />
+            </div>
+            <div className="personData">
+                <p className="name" id='primary'>{user.Name}</p>
+                <p className="username" id='secondary'>@{user.Username}</p>
+            </div>
+            <div className="BtnPerson">
+                <button onClick={handleFollow}>
+                    <UserIcon/> {isFollowing ? 'Unfollow' : 'Follow'}
+                </button>
             </div>
         </li>
-    )
+    );
 }
