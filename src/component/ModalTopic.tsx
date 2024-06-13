@@ -1,4 +1,4 @@
-import '@/styles/modaltopic.css';
+import '@/styles/modalreply.css';
 import { useState } from 'react';
 
 export default function ModalTopic({close, topic}: { close: Function, topic: Function}){
@@ -21,15 +21,11 @@ export default function ModalTopic({close, topic}: { close: Function, topic: Fun
 
 
     return (
-        <div className="ModalContent">
-            <div className="ModalHeader">
-                <button onClick={()=>close(event)}>Close</button>
-            </div>
-            <form onSubmit={AddTopic}>
-                <input type="text" onChange={(event) => setName(event.target.value) } placeholder="Name of Topic"/>
-                <label htmlFor="Description">
-                    <textarea name="Description" onChange={(event) => setDescription(event.target.value) } cols={30} rows={10}></textarea>
-                </label>
+        <div className="modal-overlay">
+            <form onSubmit={AddTopic} className='replyBox'>
+                <span onClick={()=>close(topic)}>&times;</span>
+                <input type="text" id='topicName' onChange={(event) => setName(event.target.value) } placeholder="Name of Topic"/>
+                <textarea name="Description" id='topicDesc' placeholder='Description' onChange={(event) => setDescription(event.target.value) }></textarea>
                 <button type="submit">Add</button>
             </form>
         </div>

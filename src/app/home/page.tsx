@@ -182,7 +182,6 @@ function Home({user}: {user: UserType}) {
     setTopicModal(true);
   };
   const closeTopicModal = (event:any) => {
-    event.stopPropagation()
     setTopicModal(false);
   };
 
