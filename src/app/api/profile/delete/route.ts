@@ -14,9 +14,9 @@ export async function DELETE(request: NextRequest) {
 
         const resultUserID = await client.query(
             `SELECT 
-                "UserID"
+                "UserId"
             FROM 
-                "user"
+                "User"
             WHERE
                 "Username" = $1
             `, [username]);
@@ -25,14 +25,14 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        const useridValue = resultUserID.rows[0].UserID;
+        const useridValue = resultUserID.rows[0].UserId;
 
         if (!client) {
             return NextResponse.json({ error: 'Database Connection Failed!' }, { status: 500 });
         }
 
         const result = await client.query(
-            `DELETE FROM "user" WHERE "UserID" = $1`, [useridValue]);
+            `DELETE FROM "User" WHERE "UserId" = $1`, [useridValue]);
         if (client) {
             client.release();
         }
